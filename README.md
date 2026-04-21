@@ -48,6 +48,19 @@ pnpm add "git+ssh://git@gitee.com:hai_long_wang/componentized-library.git#path:/
 
 这样做的优点是马上可用，不需要额外部署私有 registry；代价是版本管理、缓存策略和团队统一升级体验不如 npm registry 模式顺手。
 
+## 推荐的团队接入方式
+
+不建议团队成员每次都手敲很长的 `pnpm add` 命令，推荐直接复用这里的模板：
+
+- 模板目录：[templates/vue-vite-gitee-consumer](./templates/vue-vite-gitee-consumer)
+- 模板文件：[package.json](./templates/vue-vite-gitee-consumer/package.json)
+
+做法是把模板里的公共依赖合并到业务项目自己的 `package.json`，然后直接执行：
+
+```bash
+pnpm install
+```
+
 ## 推荐演进路线
 
 1. 当前阶段：源码放在 Gitee，通过 Git 依赖安装和维护。

@@ -34,6 +34,18 @@ pnpm add "git+ssh://git@gitee.com:hai_long_wang/componentized-library.git#path:/
 pnpm add "git+ssh://git@gitee.com:hai_long_wang/componentized-library.git#path:/packages/ui-energy"
 ```
 
+## 更推荐的短流程
+
+为了避免团队成员反复输入很长的安装命令，仓库里已经提供了接入模板：
+
+- 模板目录：[templates/vue-vite-gitee-consumer](../templates/vue-vite-gitee-consumer)
+- 模板文件：[package.json](../templates/vue-vite-gitee-consumer/package.json)
+
+推荐做法：
+
+1. 把模板里的公共依赖合并到业务项目自己的 `package.json`
+2. 在业务项目根目录执行 `pnpm install`
+
 ## 使用方式
 
 安装完成后，业务项目中仍然按包名导入：
