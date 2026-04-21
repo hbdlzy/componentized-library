@@ -5,8 +5,8 @@
 如果你们希望业务项目最终能直接使用下面这种短命令：
 
 ```bash
-npm install @hbdlzy/ui-core
-pnpm add @hbdlzy/ui-core
+npm install @hbdlzy/ui
+pnpm add @hbdlzy/ui
 ```
 
 那么当前仓库最适合接入的就是 `GitHub Packages`。
@@ -15,6 +15,7 @@ pnpm add @hbdlzy/ui-core
 
 - 每个可发布包都已补齐 `publishConfig.registry`
 - 每个可发布包都已补齐 `repository`
+- 已提供统一入口包 `@hbdlzy/ui`
 - 根目录已提供 [.npmrc.example](../.npmrc.example)
 - 根目录已提供 GitHub Actions 工作流
 - 根目录已提供本地发布脚本
@@ -29,6 +30,7 @@ pnpm add @hbdlzy/ui-core
 @hbdlzy/tokens
 @hbdlzy/ui-core
 @hbdlzy/ui-energy
+@hbdlzy/ui
 ```
 
 这意味着 GitHub 上最好有一个名为 `hbdlzy` 的账号或组织作为发布命名空间。
@@ -75,6 +77,7 @@ GITHUB_PACKAGES_TOKEN=<your-personal-access-token-classic>
 pnpm publish:github:tokens
 pnpm publish:github:ui-core
 pnpm publish:github:ui-energy
+pnpm publish:github:ui
 ```
 
 如果这次三个包都要发布，可以直接执行：
@@ -116,15 +119,13 @@ always-auth=true
 然后就可以使用短命令：
 
 ```bash
-npm install @hbdlzy/ui-core
-npm install @hbdlzy/tokens
+npm install @hbdlzy/ui
 ```
 
 或者：
 
 ```bash
-pnpm add @hbdlzy/ui-core
-pnpm add @hbdlzy/tokens
+pnpm add @hbdlzy/ui
 ```
 
 ## 模板

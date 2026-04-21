@@ -1,0 +1,11 @@
+{
+  "name": "@hbdlzy/ui",
+  "version": "0.1.0",
+  "entry": "@hbdlzy/ui",
+  "installs": [
+    "@hbdlzy/tokens",
+    "@hbdlzy/ui-core",
+    "@hbdlzy/ui-energy"
+  ],
+  "description": "Unified install entry for company UI packages."
+}

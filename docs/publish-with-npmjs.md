@@ -5,8 +5,7 @@
 如果你们希望业务项目真正做到下面这种最短安装方式：
 
 ```bash
-npm install @hbdlzy/ui-core
-npm install @hbdlzy/tokens
+npm install @hbdlzy/ui
 ```
 
 那么当前仓库最适合接入的就是 `npmjs.com`。
@@ -15,6 +14,7 @@ npm install @hbdlzy/tokens
 
 - 三个可发布包都已切换到 `registry.npmjs.org`
 - 三个可发布包都已切换为 `public` 发布
+- 已提供统一入口包 `@hbdlzy/ui`
 - 根目录已提供 [.npmrc.example](../.npmrc.example)
 - 根目录已提供 npmjs 本地发布脚本
 - 根目录已提供 npmjs 业务项目模板
@@ -29,6 +29,7 @@ npm install @hbdlzy/tokens
 @hbdlzy/tokens
 @hbdlzy/ui-core
 @hbdlzy/ui-energy
+@hbdlzy/ui
 ```
 
 这要求你当前 npm 账号或组织确实拥有 `hbdlzy` 这个 scope。
@@ -72,6 +73,7 @@ NPM_TOKEN=<your-npm-access-token>
 pnpm publish:npm:tokens
 pnpm publish:npm:ui-core
 pnpm publish:npm:ui-energy
+pnpm publish:npm:ui
 ```
 
 如果这次三个包都要发布，可以直接执行：
@@ -85,12 +87,14 @@ pnpm publish:npm:all
 发布成功后，业务项目可直接安装：
 
 ```bash
-npm install @hbdlzy/ui-core @hbdlzy/tokens
+npm install @hbdlzy/ui
 ```
 
-如果需要业务域组件：
+如果你们仍然希望分包安装，也可以：
 
 ```bash
+npm install @hbdlzy/tokens
+npm install @hbdlzy/ui-core
 npm install @hbdlzy/ui-energy
 ```
 

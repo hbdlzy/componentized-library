@@ -13,6 +13,7 @@ on:
           - '@hbdlzy/tokens'
           - '@hbdlzy/ui-core'
           - '@hbdlzy/ui-energy'
+          - '@hbdlzy/ui'
 
 jobs:
   publish:
@@ -52,6 +53,7 @@ jobs:
             pnpm run publish:npm:tokens
             pnpm run publish:npm:ui-core
             pnpm run publish:npm:ui-energy
+            pnpm run publish:npm:ui
           else
             pnpm --filter "${{ inputs.target }}" publish --no-git-checks
           fi

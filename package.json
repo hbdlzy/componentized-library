@@ -10,20 +10,23 @@
   "scripts": {
     "install:all": "pnpm install",
     "build": "pnpm packages:build && pnpm docs:build",
-    "packages:build": "pnpm --filter @hbdlzy/tokens build && pnpm --filter @hbdlzy/ui-core build && pnpm --filter @hbdlzy/ui-energy build",
+    "packages:build": "pnpm --filter @hbdlzy/tokens build && pnpm --filter @hbdlzy/ui-core build && pnpm --filter @hbdlzy/ui-energy build && pnpm --filter @hbdlzy/ui build",
     "tokens:build": "pnpm --filter @hbdlzy/tokens build",
     "ui-core:build": "pnpm --filter @hbdlzy/ui-core build",
     "ui-energy:build": "pnpm --filter @hbdlzy/ui-energy build",
+    "ui:build": "pnpm --filter @hbdlzy/ui build",
     "docs:dev": "pnpm --filter @hbdlzy/ui-docs dev",
     "docs:build": "pnpm --filter @hbdlzy/ui-docs build",
     "publish:npm:tokens": "pnpm --filter @hbdlzy/tokens publish --no-git-checks",
     "publish:npm:ui-core": "pnpm --filter @hbdlzy/ui-core publish --no-git-checks",
     "publish:npm:ui-energy": "pnpm --filter @hbdlzy/ui-energy publish --no-git-checks",
-    "publish:npm:all": "pnpm packages:build && pnpm run publish:npm:tokens && pnpm run publish:npm:ui-core && pnpm run publish:npm:ui-energy",
+    "publish:npm:ui": "pnpm --filter @hbdlzy/ui publish --no-git-checks",
+    "publish:npm:all": "pnpm packages:build && pnpm run publish:npm:tokens && pnpm run publish:npm:ui-core && pnpm run publish:npm:ui-energy && pnpm run publish:npm:ui",
     "publish:github:tokens": "pnpm --filter @hbdlzy/tokens publish --no-git-checks",
     "publish:github:ui-core": "pnpm --filter @hbdlzy/ui-core publish --no-git-checks",
     "publish:github:ui-energy": "pnpm --filter @hbdlzy/ui-energy publish --no-git-checks",
-    "publish:github:all": "pnpm packages:build && pnpm run publish:github:tokens && pnpm run publish:github:ui-core && pnpm run publish:github:ui-energy"
+    "publish:github:ui": "pnpm --filter @hbdlzy/ui publish --no-git-checks",
+    "publish:github:all": "pnpm packages:build && pnpm run publish:github:tokens && pnpm run publish:github:ui-core && pnpm run publish:github:ui-energy && pnpm run publish:github:ui"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^2.3.4",

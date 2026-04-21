@@ -47,6 +47,16 @@ pnpm docs:dev
 - [npmjs 发布说明](./docs/publish-with-npmjs.md)
 - [npmjs 业务项目模板](./templates/vue-vite-npmjs-consumer)
 
+## 推荐安装方式
+
+从现在开始，推荐业务项目优先安装统一入口包：
+
+```bash
+npm install @hbdlzy/ui
+```
+
+这样后续无论新增多少公共组件，业务项目都不需要继续增加安装命令。
+
 ## 仅使用 Gitee 时怎么安装
 
 普通 Gitee Git 仓库本身不是 npm registry，所以不能直接把下面这种命令当成“只靠 Gitee 就能成功”的默认方案：
@@ -82,7 +92,7 @@ pnpm install
 当包发布到 npmjs 后，业务项目可以直接使用最短命令：
 
 ```bash
-npm install @hbdlzy/ui-core @hbdlzy/tokens
+npm install @hbdlzy/ui
 ```
 
 不再需要：
@@ -90,6 +100,12 @@ npm install @hbdlzy/ui-core @hbdlzy/tokens
 - 项目级 `.npmrc`
 - `GITHUB_PACKAGES_TOKEN`
 - Jenkins 额外私有包认证配置
+
+推荐导入方式：
+
+```ts
+import { BaseExportButton, companyTokens } from '@hbdlzy/ui'
+```
 
 ## 推荐演进路线
 
@@ -119,5 +135,6 @@ pnpm publish:github:all
 pnpm publish:npm:tokens
 pnpm publish:npm:ui-core
 pnpm publish:npm:ui-energy
+pnpm publish:npm:ui
 pnpm publish:npm:all
 ```

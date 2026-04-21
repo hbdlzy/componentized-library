@@ -21,6 +21,12 @@
         "path": "packages/ui-energy",
         "docs": "packages/ui-energy/README.md",
         "manifest": "packages/ui-energy/components.manifest.json"
+      },
+      {
+        "name": "@hbdlzy/ui",
+        "path": "packages/ui",
+        "docs": "packages/ui/README.md",
+        "manifest": "packages/ui/package.manifest.json"
       }
     ],
     "docsApp": {
