@@ -1,0 +1,33 @@
+{
+  "name": "@hbdlzy/tokens",
+  "version": "0.1.0",
+  "description": "Company design tokens package.",
+  "license": "MIT",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "src/index.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "types": "./src/index.ts"
+    },
+    "./theme.css": "./dist/style.css",
+    "./package.manifest.json": "./package.manifest.json"
+  },
+  "files": [
+    "dist",
+    "src",
+    "README.md",
+    "package.manifest.json"
+  ],
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "scripts": {
+    "build": "vite build"
+  },
+  "publishConfig": {
+    "access": "restricted"
+  }
+}

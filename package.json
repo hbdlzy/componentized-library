@@ -1,0 +1,23 @@
+{
+  "name": "company-ui-library",
+  "private": true,
+  "version": "0.1.0",
+  "packageManager": "pnpm@10.22.0",
+  "scripts": {
+    "install:all": "pnpm install",
+    "build": "pnpm packages:build && pnpm docs:build",
+    "packages:build": "pnpm --filter @hbdlzy/tokens build && pnpm --filter @hbdlzy/ui-core build && pnpm --filter @hbdlzy/ui-energy build",
+    "tokens:build": "pnpm --filter @hbdlzy/tokens build",
+    "ui-core:build": "pnpm --filter @hbdlzy/ui-core build",
+    "ui-energy:build": "pnpm --filter @hbdlzy/ui-energy build",
+    "docs:dev": "pnpm --filter @hbdlzy/ui-docs dev",
+    "docs:build": "pnpm --filter @hbdlzy/ui-docs build"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^2.3.4",
+    "element-plus": "^2.13.7",
+    "typescript": "^4.9.5",
+    "vite": "^2.9.18",
+    "vue": "^3.5.14"
+  }
+}

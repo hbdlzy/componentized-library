@@ -1,0 +1,21 @@
+:root {
+  --company-color-primary: #1d63ff;
+  --company-color-primary-hover: #3b7bff;
+  --company-color-success: #11a36a;
+  --company-color-warning: #d88716;
+  --company-color-danger: #d14343;
+  --company-color-text-main: #183153;
+  --company-color-text-secondary: #526581;
+  --company-color-border: #d7e2f0;
+  --company-color-surface: #ffffff;
+  --company-color-surface-muted: #f5f8fc;
+  --company-radius-sm: 6px;
+  --company-radius-md: 10px;
+  --company-radius-lg: 16px;
+  --company-space-2: 8px;
+  --company-space-3: 12px;
+  --company-space-4: 16px;
+  --company-space-5: 20px;
+  --company-space-6: 24px;
+  --company-shadow-card: 0 10px 24px rgba(24, 49, 83, 0.08);
+}

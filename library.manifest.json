@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "updatedAt": "2026-04-21",
+  "workspace": {
+    "packageManager": "pnpm@10.22.0",
+    "packages": [
+      {
+        "name": "@hbdlzy/tokens",
+        "path": "packages/tokens",
+        "docs": "packages/tokens/README.md",
+        "manifest": "packages/tokens/package.manifest.json"
+      },
+      {
+        "name": "@hbdlzy/ui-core",
+        "path": "packages/ui-core",
+        "docs": "packages/ui-core/README.md",
+        "manifest": "packages/ui-core/components.manifest.json"
+      },
+      {
+        "name": "@hbdlzy/ui-energy",
+        "path": "packages/ui-energy",
+        "docs": "packages/ui-energy/README.md",
+        "manifest": "packages/ui-energy/components.manifest.json"
+      }
+    ],
+    "docsApp": {
+      "name": "@hbdlzy/ui-docs",
+      "path": "apps/ui-docs",
+      "docs": "apps/ui-docs/README.md"
+    }
+  }
+}

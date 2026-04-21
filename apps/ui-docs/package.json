@@ -1,0 +1,17 @@
+{
+  "name": "@hbdlzy/ui-docs",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Docs app for company shared UI packages.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "@hbdlzy/tokens": "workspace:*",
+    "@hbdlzy/ui-core": "workspace:*",
+    "@hbdlzy/ui-energy": "workspace:*",
+    "element-plus": "^2.13.7",
+    "vue": "^3.5.14"
+  }
+}

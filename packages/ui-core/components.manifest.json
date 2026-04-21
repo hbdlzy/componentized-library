@@ -1,0 +1,50 @@
+{
+  "package": "@hbdlzy/ui-core",
+  "version": 1,
+  "updatedAt": "2026-04-21",
+  "components": [
+    {
+      "name": "BaseExportButton",
+      "category": "ui-core",
+      "entry": "@hbdlzy/ui-core",
+      "importName": "BaseExportButton",
+      "docs": "packages/ui-core/src/components/BaseExportButton/README.md",
+      "description": "统一处理前端 Excel 导出和后�?blob 下载的基础导出按钮�?,
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "default": "导出"
+        },
+        {
+          "name": "fileName",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "name": "excelOptions",
+          "type": "ExcelExportOptions",
+          "required": false
+        },
+        {
+          "name": "requestHandler",
+          "type": "() => Promise<ExportResponseLike>",
+          "required": false
+        },
+        {
+          "name": "beforeExport",
+          "type": "() => boolean | Promise<boolean>",
+          "required": false
+        }
+      ],
+      "emits": ["start", "success", "error"]
+    }
+  ],
+  "utilities": [
+    {
+      "name": "exportExcel",
+      "entry": "@hbdlzy/ui-core",
+      "description": "支持多级表头和自动列宽的纯前�?Excel 导出工具�?
+    }
+  ]
+}

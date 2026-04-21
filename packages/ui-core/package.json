@@ -1,0 +1,41 @@
+{
+  "name": "@hbdlzy/ui-core",
+  "version": "0.1.0",
+  "description": "Company shared Vue UI core package.",
+  "license": "MIT",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "src/index.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "types": "./src/index.ts"
+    },
+    "./components.manifest.json": "./components.manifest.json"
+  },
+  "files": [
+    "dist",
+    "src",
+    "README.md",
+    "components.manifest.json"
+  ],
+  "peerDependencies": {
+    "element-plus": "^2.13.7",
+    "vue": "^3.5.14"
+  },
+  "dependencies": {
+    "file-saver": "2.0.5",
+    "xlsx": "^0.18.5"
+  },
+  "sideEffects": [
+    "**/*.css",
+    "**/*.vue"
+  ],
+  "scripts": {
+    "build": "vite build"
+  },
+  "publishConfig": {
+    "access": "restricted"
+  }
+}
