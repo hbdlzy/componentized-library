@@ -3,6 +3,11 @@
   "version": "0.1.0",
   "description": "Company energy domain component package.",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hbdlzy/componentized-library.git",
+    "directory": "packages/ui-energy"
+  },
   "main": "dist/index.cjs",
   "module": "dist/index.js",
   "types": "src/index.ts",
@@ -24,9 +29,11 @@
     "vue": "^3.5.14"
   },
   "scripts": {
-    "build": "vite build"
+    "build": "vite build",
+    "prepublishOnly": "pnpm build"
   },
   "publishConfig": {
-    "access": "restricted"
+    "access": "restricted",
+    "registry": "https://npm.pkg.github.com"
   }
 }

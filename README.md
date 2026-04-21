@@ -31,6 +31,20 @@ pnpm build
 pnpm docs:dev
 ```
 
+## 推荐的分发方式
+
+当前仓库支持两种分发模式：
+
+- `GitHub Packages`
+  适合希望使用短命令安装的团队，例如 `npm install @hbdlzy/ui-core`
+- `Gitee Git + pnpm path`
+  适合当前不想引入 npm 兼容仓库时先快速落地
+
+如果你们希望让业务项目用最短命令安装，推荐优先使用 GitHub Packages。详细说明见：
+
+- [GitHub Packages 发布说明](./docs/publish-with-github-packages.md)
+- [GitHub Packages 业务项目模板](./templates/vue-vite-github-packages-consumer)
+
 ## 仅使用 Gitee 时怎么安装
 
 普通 Gitee Git 仓库本身不是 npm registry，所以不能直接把下面这种命令当成“只靠 Gitee 就能成功”的默认方案：
@@ -64,11 +78,21 @@ pnpm install
 ## 推荐演进路线
 
 1. 当前阶段：源码放在 Gitee，通过 Git 依赖安装和维护。
-2. 后续阶段：如果公司开通 Gitee 制品库或其他 npm 兼容仓库，再切换为 `pnpm add @hbdlzy/ui-core` 这种包名安装模式。
+2. 推荐阶段：同步到 GitHub，使用 GitHub Packages 发布并安装。
+3. 后续阶段：如果公司开通更适合内部治理的 npm 兼容仓库，再平滑迁移。
 
 ## 构建命令
 
 ```bash
 pnpm packages:build
 pnpm docs:build
+```
+
+## GitHub Packages 本地发布命令
+
+```bash
+pnpm publish:github:tokens
+pnpm publish:github:ui-core
+pnpm publish:github:ui-energy
+pnpm publish:github:all
 ```

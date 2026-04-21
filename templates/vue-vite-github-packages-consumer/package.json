@@ -1,0 +1,21 @@
+{
+  "name": "vue-vite-github-packages-consumer-template",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "@hbdlzy/tokens": "^0.1.0",
+    "@hbdlzy/ui-core": "^0.1.0",
+    "@hbdlzy/ui-energy": "^0.1.0",
+    "element-plus": "^2.13.7",
+    "vue": "^3.5.14"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^2.3.4",
+    "typescript": "^4.9.5",
+    "vite": "^2.9.18"
+  }
+}

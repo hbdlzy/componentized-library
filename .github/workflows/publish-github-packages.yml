@@ -1,0 +1,59 @@
+name: Publish GitHub Packages
+
+on:
+  workflow_dispatch:
+    inputs:
+      target:
+        description: Select package to publish
+        required: true
+        default: all
+        type: choice
+        options:
+          - all
+          - '@hbdlzy/tokens'
+          - '@hbdlzy/ui-core'
+          - '@hbdlzy/ui-energy'
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.22.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: https://npm.pkg.github.com
+          scope: '@hbdlzy'
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build packages
+        run: pnpm packages:build
+
+      - name: Publish selected packages
+        shell: bash
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+
+          if [ "${{ inputs.target }}" = "all" ]; then
+            pnpm run publish:github:tokens
+            pnpm run publish:github:ui-core
+            pnpm run publish:github:ui-energy
+          else
+            pnpm --filter "${{ inputs.target }}" publish --no-git-checks
+          fi

@@ -3,6 +3,10 @@
   "private": true,
   "version": "0.1.0",
   "packageManager": "pnpm@10.22.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hbdlzy/componentized-library.git"
+  },
   "scripts": {
     "install:all": "pnpm install",
     "build": "pnpm packages:build && pnpm docs:build",
@@ -11,7 +15,11 @@
     "ui-core:build": "pnpm --filter @hbdlzy/ui-core build",
     "ui-energy:build": "pnpm --filter @hbdlzy/ui-energy build",
     "docs:dev": "pnpm --filter @hbdlzy/ui-docs dev",
-    "docs:build": "pnpm --filter @hbdlzy/ui-docs build"
+    "docs:build": "pnpm --filter @hbdlzy/ui-docs build",
+    "publish:github:tokens": "pnpm --filter @hbdlzy/tokens publish --no-git-checks",
+    "publish:github:ui-core": "pnpm --filter @hbdlzy/ui-core publish --no-git-checks",
+    "publish:github:ui-energy": "pnpm --filter @hbdlzy/ui-energy publish --no-git-checks",
+    "publish:github:all": "pnpm packages:build && pnpm run publish:github:tokens && pnpm run publish:github:ui-core && pnpm run publish:github:ui-energy"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^2.3.4",
