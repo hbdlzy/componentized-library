@@ -1,11 +1,94 @@
 {
   "name": "@hbdlzy/ui",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "entry": "@hbdlzy/ui",
+  "readme": "README.md",
+  "aiGuide": "AI-USAGE.md",
+  "singleAiEntry": "AI-USAGE.md",
   "installs": [
     "@hbdlzy/tokens",
     "@hbdlzy/ui-core",
     "@hbdlzy/ui-energy"
   ],
-  "description": "Unified install entry for company UI packages."
+  "description": "Unified install entry for company UI packages.",
+  "exports": {
+    "components": [
+      {
+        "name": "BaseTable",
+        "from": "@hbdlzy/ui-core",
+        "importName": "BaseTable",
+        "docs": "../ui-core/src/components/BaseTable/README.md"
+      },
+      {
+        "name": "BaseCard",
+        "from": "@hbdlzy/ui-core",
+        "importName": "BaseCard",
+        "docs": "../ui-core/src/components/BaseCard/README.md"
+      },
+      {
+        "name": "BaseEChart",
+        "from": "@hbdlzy/ui-core",
+        "importName": "BaseEChart",
+        "docs": "../ui-core/src/components/BaseEChart/README.md"
+      },
+      {
+        "name": "BaseExportButton",
+        "from": "@hbdlzy/ui-core",
+        "importName": "BaseExportButton",
+        "docs": "../ui-core/src/components/BaseExportButton/README.md"
+      }
+    ],
+    "utilities": [
+      {
+        "name": "echarts",
+        "from": "@hbdlzy/ui-core",
+        "importName": "echarts",
+        "docs": "../ui-core/src/components/BaseEChart/README.md"
+      },
+      {
+        "name": "exportExcel",
+        "from": "@hbdlzy/ui-core",
+        "importName": "exportExcel",
+        "docs": "../ui-core/src/components/BaseExportButton/README.md"
+      },
+      {
+        "name": "companyTokens",
+        "from": "@hbdlzy/tokens",
+        "importName": "companyTokens",
+        "docs": "../tokens/README.md"
+      }
+    ]
+  },
+  "packages": [
+    {
+      "name": "@hbdlzy/tokens",
+      "docs": "../tokens/README.md",
+      "manifest": "../tokens/package.manifest.json"
+    },
+    {
+      "name": "@hbdlzy/ui-core",
+      "docs": "../ui-core/README.md",
+      "manifest": "../ui-core/components.manifest.json"
+    },
+    {
+      "name": "@hbdlzy/ui-energy",
+      "docs": "../ui-energy/README.md",
+      "manifest": "../ui-energy/components.manifest.json"
+    }
+  ],
+  "aiReadOrder": [
+    "package.manifest.json",
+    "README.md",
+    "AI-USAGE.md",
+    "../ui-core/components.manifest.json",
+    "../ui-core/README.md",
+    "../ui-core/src/components/BaseTable/README.md",
+    "../ui-core/src/components/BaseCard/README.md",
+    "../ui-core/src/components/BaseEChart/README.md",
+    "../ui-core/src/components/BaseExportButton/README.md",
+    "../tokens/package.manifest.json",
+    "../tokens/README.md",
+    "../ui-energy/components.manifest.json",
+    "../ui-energy/README.md"
+  ]
 }

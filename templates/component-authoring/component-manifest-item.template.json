@@ -1,0 +1,16 @@
+﻿{
+  "name": "{{ComponentName}}",
+  "category": "ui-core",
+  "entry": "@hbdlzy/ui-core",
+  "importName": "{{ComponentName}}",
+  "docs": "packages/ui-core/src/components/{{ComponentName}}/README.md",
+  "description": "{{一句话描述组件用途}}",
+  "props": [
+    {
+      "name": "{{propName}}",
+      "type": "{{type}}",
+      "required": false
+    }
+  ],
+  "emits": ["{{eventName}}"]
+}

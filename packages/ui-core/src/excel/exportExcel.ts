@@ -1,4 +1,5 @@
-import * as XLSX from 'xlsx'
+import ExcelJS from 'exceljs'
+import { saveAs } from 'file-saver'
 
 export type ExcelCellValue = string | number | boolean | null | undefined | Date
 
@@ -21,6 +22,12 @@ export interface ExcelExportOptions<Row = Record<string, any>> {
 
 const DEFAULT_SHEET_NAME = 'Sheet1'
 const DEFAULT_COLUMN_WIDTH = 16
+const EXCEL_MIME_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+
+interface ExcelMergeRange {
+  s: { r: number; c: number }
+  e: { r: number; c: number }
+}
 
 function getLeafCount<Row>(column: ExcelExportColumn<Row>): number {
   if (!column.children?.length) {
@@ -74,7 +81,7 @@ function buildHeaderMatrix<Row>(columns: Array<ExcelExportColumn<Row>>) {
   const maxDepth = getMaxDepth(columns)
   const totalLeafCount = columns.reduce((count, column) => count + getLeafCount(column), 0)
   const headerRows = Array.from({ length: maxDepth }, () => Array.from({ length: totalLeafCount }).fill(''))
-  const merges: XLSX.Range[] = []
+  const merges: Array<ExcelMergeRange> = []
   const leafColumns: Array<ExcelExportColumn<Row>> = []
 
   let currentColumnIndex = 0
@@ -133,7 +140,7 @@ function buildColumnWidths<Row>(
     const targetWidth =
       column.width ?? (autoWidth ? Math.max(defaultColumnWidth, headerWidth, dataWidth) : defaultColumnWidth)
 
-    return { wch: targetWidth }
+    return targetWidth
   })
 }
 
@@ -141,7 +148,19 @@ function normalizeFileName(fileName: string) {
   return fileName.endsWith('.xlsx') ? fileName : `${fileName}.xlsx`
 }
 
-export function exportExcel<Row = Record<string, any>>(options: ExcelExportOptions<Row>) {
+function applyColumnWidths(worksheet: ExcelJS.Worksheet, columnWidths: Array<number>) {
+  columnWidths.forEach((width, index) => {
+    worksheet.getColumn(index + 1).width = width
+  })
+}
+
+function applyMerges(worksheet: ExcelJS.Worksheet, merges: Array<ExcelMergeRange>) {
+  merges.forEach(range => {
+    worksheet.mergeCells(range.s.r + 1, range.s.c + 1, range.e.r + 1, range.e.c + 1)
+  })
+}
+
+export async function exportExcel<Row = Record<string, any>>(options: ExcelExportOptions<Row>) {
   const {
     fileName,
     sheetName = DEFAULT_SHEET_NAME,
@@ -157,14 +176,21 @@ export function exportExcel<Row = Record<string, any>>(options: ExcelExportOptio
 
   const { headerRows, leafColumns, merges } = buildHeaderMatrix(columns)
   const dataRows = data.map((row, rowIndex) => leafColumns.map(column => getCellValue(row, rowIndex, column)))
+  const columnWidths = buildColumnWidths(leafColumns, dataRows, defaultColumnWidth, autoWidth)
+  const workbook = new ExcelJS.Workbook()
+  const worksheet = workbook.addWorksheet(sheetName)
 
-  const worksheet = XLSX.utils.aoa_to_sheet([...headerRows, ...dataRows])
-  worksheet['!merges'] = merges
-  worksheet['!cols'] = buildColumnWidths(leafColumns, dataRows, defaultColumnWidth, autoWidth)
+  ;[...headerRows, ...dataRows].forEach(row => {
+    worksheet.addRow(row)
+  })
 
-  const workbook = XLSX.utils.book_new()
-  XLSX.utils.book_append_sheet(workbook, worksheet, sheetName)
-  XLSX.writeFile(workbook, normalizeFileName(fileName))
+  applyMerges(worksheet, merges)
+  applyColumnWidths(worksheet, columnWidths)
+
+  const buffer = await workbook.xlsx.writeBuffer()
+  const blob = new Blob([buffer], { type: EXCEL_MIME_TYPE })
+
+  saveAs(blob, normalizeFileName(fileName))
 }
 
 export default exportExcel

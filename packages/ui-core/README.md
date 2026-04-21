@@ -4,14 +4,37 @@
 
 ## 当前内容
 
+- `BaseTable`
+- `BaseCard`
+- `BaseEChart`
 - `BaseExportButton`
+- `echarts`
 - `exportExcel`
 
 ## 使用方式
 
 ```ts
-import { BaseExportButton, exportExcel } from '@hbdlzy/ui-core'
+import { BaseTable, BaseCard, BaseEChart, BaseExportButton, echarts, exportExcel } from '@hbdlzy/ui-core'
 ```
+
+## 详细文档
+
+- `BaseTable`: [src/components/BaseTable/README.md](./src/components/BaseTable/README.md)
+- `BaseCard`: [src/components/BaseCard/README.md](./src/components/BaseCard/README.md)
+- `BaseEChart`: [src/components/BaseEChart/README.md](./src/components/BaseEChart/README.md)
+- `BaseExportButton`: [src/components/BaseExportButton/README.md](./src/components/BaseExportButton/README.md)
+- AI 清单: [components.manifest.json](./components.manifest.json)
+
+## 当前导出能力
+
+- 组件
+  - `BaseTable`
+  - `BaseCard`
+  - `BaseEChart`
+  - `BaseExportButton`
+- 工具
+  - `echarts`
+  - `exportExcel`
 
 ## 设计原则
 

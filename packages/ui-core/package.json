@@ -1,6 +1,6 @@
 {
   "name": "@hbdlzy/ui-core",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Company shared Vue UI core package.",
   "license": "MIT",
   "repository": {
@@ -30,8 +30,9 @@
     "vue": "^3.5.14"
   },
   "dependencies": {
-    "file-saver": "2.0.5",
-    "xlsx": "^0.18.5"
+    "echarts": "^5.5.1",
+    "exceljs": "^4.4.0",
+    "file-saver": "2.0.5"
   },
   "sideEffects": [
     "**/*.css",

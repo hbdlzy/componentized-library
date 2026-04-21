@@ -17,10 +17,45 @@ npm install @hbdlzy/ui
 ## 使用方式
 
 ```ts
-import { BaseExportButton, companyTokens } from '@hbdlzy/ui'
+import { BaseTable, BaseCard, BaseEChart, BaseExportButton, companyTokens, echarts } from '@hbdlzy/ui'
+```
+
+## 当前汇总
+
+- 设计令牌：`@hbdlzy/tokens`
+- 基础组件：`@hbdlzy/ui-core`
+- 业务域组件：`@hbdlzy/ui-energy`
+
+## 当前可直接使用的组件与工具
+
+- `BaseTable`
+- `BaseEChart`
+- `BaseExportButton`
+- `BaseCard`
+- `echarts`
+- `exportExcel`
+- `companyTokens`
+
+## 详细文档入口
+
+- 统一 AI 读取说明：[AI-USAGE.md](./AI-USAGE.md)
+- 统一清单：[package.manifest.json](./package.manifest.json)
+- `ui-core` 文档：[../ui-core/README.md](../ui-core/README.md)
+- `BaseTable` 文档：[../ui-core/src/components/BaseTable/README.md](../ui-core/src/components/BaseTable/README.md)
+- `BaseEChart` 文档：[../ui-core/src/components/BaseEChart/README.md](../ui-core/src/components/BaseEChart/README.md)
+- `BaseExportButton` 文档：[../ui-core/src/components/BaseExportButton/README.md](../ui-core/src/components/BaseExportButton/README.md)
+- `BaseCard` 文档：[../ui-core/src/components/BaseCard/README.md](../ui-core/src/components/BaseCard/README.md)
+
+## AI 使用指令
+
+在新项目中，可以直接对 AI 使用这句固定指令：
+
+```text
+本项目使用 @hbdlzy/ui 组件库。开始实现前，请先读取 node_modules/@hbdlzy/ui/AI-USAGE.md，并按其中规则建立组件清单。后续优先复用已有公共组件和工具，新增页面默认从 @hbdlzy/ui 导入。
 ```
 
 ## 说明
 
 - 该包内部依赖 `@hbdlzy/tokens`、`@hbdlzy/ui-core`、`@hbdlzy/ui-energy`
 - 导入 `@hbdlzy/ui` 时会自动加载设计变量样式
+- 新项目中如果希望 AI 能稳定复用组件，优先让它先读 `package.manifest.json` 和 `AI-USAGE.md`

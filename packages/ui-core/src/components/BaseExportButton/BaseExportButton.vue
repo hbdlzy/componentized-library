@@ -140,7 +140,7 @@ async function handleExport() {
 
   try {
     if (exportMode.value === 'excel' && props.excelOptions) {
-      exportExcel(props.excelOptions)
+      await exportExcel(props.excelOptions)
 
       if (props.autoMessage) {
         ElMessage.success(props.successMessage)

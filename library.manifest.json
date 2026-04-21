@@ -1,6 +1,33 @@
 {
   "version": 1,
   "updatedAt": "2026-04-21",
+  "indexes": {
+    "humanCatalog": "docs/component-catalog.md",
+    "aiGuide": "docs/ai-consumption-guide.md",
+    "componentAuthoringGuide": "docs/component-authoring-guide.md",
+    "newProjectAgentTemplate": "templates/new-project-ai-consumer/AGENTS.md",
+    "componentAuthoringTemplates": "templates/component-authoring"
+  },
+  "aiReadOrder": [
+    "library.manifest.json",
+    "README.md",
+    "docs/component-catalog.md",
+    "docs/ai-consumption-guide.md",
+    "docs/component-authoring-guide.md",
+    "packages/ui/package.manifest.json",
+    "packages/ui/README.md",
+    "packages/ui/AI-USAGE.md",
+    "packages/ui-core/components.manifest.json",
+    "packages/ui-core/README.md",
+    "packages/ui-core/src/components/BaseTable/README.md",
+    "packages/ui-core/src/components/BaseCard/README.md",
+    "packages/ui-core/src/components/BaseEChart/README.md",
+    "packages/ui-core/src/components/BaseExportButton/README.md",
+    "packages/tokens/package.manifest.json",
+    "packages/tokens/README.md",
+    "packages/ui-energy/components.manifest.json",
+    "packages/ui-energy/README.md"
+  ],
   "workspace": {
     "packageManager": "pnpm@10.22.0",
     "packages": [
