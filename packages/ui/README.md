@@ -1,4 +1,4 @@
-﻿# @hbdlzy/ui
+# @hbdlzy/ui
 
 `@hbdlzy/ui` 是组件库的统一安装入口包。
 
@@ -17,7 +17,21 @@ npm install @hbdlzy/ui
 ## 使用方式
 
 ```ts
-import { BaseTable, BaseCard, BaseEChart, BaseExportButton, companyTokens, echarts } from '@hbdlzy/ui'
+import {
+  BaseTable,
+  BaseCard,
+  BaseEChart,
+  BaseExportButton,
+  OutlinedInput,
+  OutlinedSelect,
+  OutlinedDatePicker,
+  OutlinedDateTimePicker,
+  OutlinedTimePicker,
+  OutlinedCascader,
+  OutlinedTreeSelect,
+  companyTokens,
+  echarts
+} from '@hbdlzy/ui'
 ```
 
 ## 当前汇总
@@ -29,9 +43,16 @@ import { BaseTable, BaseCard, BaseEChart, BaseExportButton, companyTokens, echar
 ## 当前可直接使用的组件与工具
 
 - `BaseTable`
+- `BaseCard`
 - `BaseEChart`
 - `BaseExportButton`
-- `BaseCard`
+- `OutlinedInput`
+- `OutlinedSelect`
+- `OutlinedDatePicker`
+- `OutlinedDateTimePicker`
+- `OutlinedTimePicker`
+- `OutlinedCascader`
+- `OutlinedTreeSelect`
 - `echarts`
 - `exportExcel`
 - `companyTokens`
@@ -42,9 +63,16 @@ import { BaseTable, BaseCard, BaseEChart, BaseExportButton, companyTokens, echar
 - 统一清单：[package.manifest.json](./package.manifest.json)
 - `ui-core` 文档：[../ui-core/README.md](../ui-core/README.md)
 - `BaseTable` 文档：[../ui-core/src/components/BaseTable/README.md](../ui-core/src/components/BaseTable/README.md)
+- `BaseCard` 文档：[../ui-core/src/components/BaseCard/README.md](../ui-core/src/components/BaseCard/README.md)
 - `BaseEChart` 文档：[../ui-core/src/components/BaseEChart/README.md](../ui-core/src/components/BaseEChart/README.md)
 - `BaseExportButton` 文档：[../ui-core/src/components/BaseExportButton/README.md](../ui-core/src/components/BaseExportButton/README.md)
-- `BaseCard` 文档：[../ui-core/src/components/BaseCard/README.md](../ui-core/src/components/BaseCard/README.md)
+- `OutlinedInput` 文档：[../ui-core/src/components/OutlinedInput/README.md](../ui-core/src/components/OutlinedInput/README.md)
+- `OutlinedSelect` 文档：[../ui-core/src/components/OutlinedSelect/README.md](../ui-core/src/components/OutlinedSelect/README.md)
+- `OutlinedDatePicker` 文档：[../ui-core/src/components/OutlinedDatePicker/README.md](../ui-core/src/components/OutlinedDatePicker/README.md)
+- `OutlinedDateTimePicker` 文档：[../ui-core/src/components/OutlinedDateTimePicker/README.md](../ui-core/src/components/OutlinedDateTimePicker/README.md)
+- `OutlinedTimePicker` 文档：[../ui-core/src/components/OutlinedTimePicker/README.md](../ui-core/src/components/OutlinedTimePicker/README.md)
+- `OutlinedCascader` 文档：[../ui-core/src/components/OutlinedCascader/README.md](../ui-core/src/components/OutlinedCascader/README.md)
+- `OutlinedTreeSelect` 文档：[../ui-core/src/components/OutlinedTreeSelect/README.md](../ui-core/src/components/OutlinedTreeSelect/README.md)
 
 ## AI 使用指令
 

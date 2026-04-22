@@ -1,6 +1,6 @@
-﻿# Company UI Library
+# Company UI Library
 
-这是一个独立于业务项目之外的前端公共组件库仓库，适合放到 Gitee 或 GitHub 作为公司内部共享源码仓库。
+这是一个独立于业务项目之外的前端公共组件库仓库，适合放到 GitHub 作为公司内部共享源码仓库。
 
 ## 仓库目标
 
@@ -42,6 +42,7 @@ pnpm docs:dev
 - 组件作者模板目录：[templates/component-authoring](./templates/component-authoring)
 - 安装入口包说明：[packages/ui/README.md](./packages/ui/README.md)
 - 安装入口包 AI 指引：[packages/ui/AI-USAGE.md](./packages/ui/AI-USAGE.md)
+- AI 开发描述文档：[AI开发描述文档.md](./AI开发描述文档.md)
 
 ## AI 使用指令
 
@@ -62,19 +63,31 @@ npm install @hbdlzy/ui
 推荐导入方式：
 
 ```ts
-import { BaseTable, BaseCard, BaseEChart, BaseExportButton, companyTokens, echarts } from '@hbdlzy/ui'
+import {
+  BaseTable,
+  BaseCard,
+  BaseEChart,
+  BaseExportButton,
+  OutlinedInput,
+  OutlinedSelect,
+  OutlinedDatePicker,
+  OutlinedDateTimePicker,
+  OutlinedTimePicker,
+  OutlinedCascader,
+  OutlinedTreeSelect,
+  companyTokens,
+  echarts
+} from '@hbdlzy/ui'
 ```
 
 ## 推荐的分发方式
 
-当前仓库支持三种分发模式：
+当前仓库支持两种分发模式：
 
 - `npmjs.com`
   当前推荐方案，适合希望业务项目真正使用短命令安装的团队
 - `GitHub Packages`
-  适合希望继续走 GitHub 私有或组织包分发的团队
-- `Gitee Git + pnpm path`
-  适合当前不想引入包仓库时先快速落地
+  适合希望继续走 GitHub 组织包分发的团队
 
 如果你们希望让业务项目安装时不再配置 `.npmrc` 和 token，推荐优先使用 `npmjs.com`。详细说明见：
 

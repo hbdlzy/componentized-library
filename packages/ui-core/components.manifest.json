@@ -9,68 +9,28 @@
       "entry": "@hbdlzy/ui-core",
       "importName": "BaseTable",
       "docs": "packages/ui-core/src/components/BaseTable/README.md",
-      "description": "统一封装分页、远程请求、勾选列、索引列、操作列和常见表格列渲染能力的基础表格组件。",
+      "description": "统一封装分页、远程请求、排序参数映射、结果适配和常见列渲染能力的基础表格组件。",
       "props": [
-        {
-          "name": "columns",
-          "type": "BaseTableColumn[]",
-          "required": true
-        },
-        {
-          "name": "data",
-          "type": "Record<string, any>[]",
-          "required": false
-        },
-        {
-          "name": "request",
-          "type": "BaseTableRequestHandler",
-          "required": false
-        },
-        {
-          "name": "requestParams",
-          "type": "Record<string, unknown>",
-          "required": false
-        },
+        { "name": "columns", "type": "BaseTableColumn[]", "required": true },
+        { "name": "data", "type": "Record<string, any>[]", "required": false },
+        { "name": "request", "type": "BaseTableRequestHandler", "required": false },
+        { "name": "requestParams", "type": "Record<string, unknown>", "required": false },
         {
           "name": "resultAdapter",
           "type": "(result: unknown, params: BaseTableRequestParams) => { rows?: Record<string, any>[]; total?: number }",
           "required": false
         },
-        {
-          "name": "defaultSort",
-          "type": "BaseTableSortState",
-          "required": false
-        },
-        {
-          "name": "sortFieldKey",
-          "type": "string",
-          "default": "sortField"
-        },
-        {
-          "name": "sortOrderKey",
-          "type": "string",
-          "default": "sortOrder"
-        },
+        { "name": "defaultSort", "type": "BaseTableSortState", "required": false },
+        { "name": "sortFieldKey", "type": "string", "default": "sortField" },
+        { "name": "sortOrderKey", "type": "string", "default": "sortOrder" },
         {
           "name": "sortMapper",
           "type": "(payload: BaseTableSortPayload) => Record<string, unknown> | void",
           "required": false
         },
-        {
-          "name": "hasSelection",
-          "type": "boolean",
-          "default": false
-        },
-        {
-          "name": "hasIndex",
-          "type": "boolean",
-          "default": false
-        },
-        {
-          "name": "showPagination",
-          "type": "boolean",
-          "default": true
-        }
+        { "name": "hasSelection", "type": "boolean", "default": false },
+        { "name": "hasIndex", "type": "boolean", "default": false },
+        { "name": "showPagination", "type": "boolean", "default": true }
       ],
       "emits": ["row-action", "selection-change", "sort-change", "page-change", "size-change", "loaded"]
     },
@@ -80,58 +40,18 @@
       "entry": "@hbdlzy/ui-core",
       "importName": "BaseCard",
       "docs": "packages/ui-core/src/components/BaseCard/README.md",
-      "description": "统一封装卡片标题区、右侧信息区、导出触发区和常用卡片视觉样式的基础容器组件。",
+      "description": "统一封装卡片标题区、右侧信息区、导出触发区和常用视觉参数的基础容器组件。",
       "props": [
-        {
-          "name": "title",
-          "type": "string",
-          "default": ""
-        },
-        {
-          "name": "metaText",
-          "type": "string",
-          "default": ""
-        },
-        {
-          "name": "showHeader",
-          "type": "boolean",
-          "default": true
-        },
-        {
-          "name": "showTitleMarker",
-          "type": "boolean",
-          "default": true
-        },
-        {
-          "name": "showExport",
-          "type": "boolean",
-          "default": false
-        },
-        {
-          "name": "exportPayload",
-          "type": "unknown",
-          "required": false
-        },
-        {
-          "name": "padding",
-          "type": "string | number",
-          "default": 20
-        },
-        {
-          "name": "borderColor",
-          "type": "string",
-          "default": "var(--border-color)"
-        },
-        {
-          "name": "backgroundColor",
-          "type": "string",
-          "default": "var(--border-bg-color)"
-        },
-        {
-          "name": "markerColor",
-          "type": "string",
-          "default": "var(--el-color-primary)"
-        }
+        { "name": "title", "type": "string", "default": "" },
+        { "name": "metaText", "type": "string", "default": "" },
+        { "name": "showHeader", "type": "boolean", "default": true },
+        { "name": "showTitleMarker", "type": "boolean", "default": true },
+        { "name": "showExport", "type": "boolean", "default": false },
+        { "name": "exportPayload", "type": "unknown", "required": false },
+        { "name": "padding", "type": "string | number", "default": 20 },
+        { "name": "borderColor", "type": "string", "default": "var(--border-color)" },
+        { "name": "backgroundColor", "type": "string", "default": "var(--border-bg-color)" },
+        { "name": "markerColor", "type": "string", "default": "var(--el-color-primary)" }
       ],
       "emits": ["export"]
     },
@@ -141,43 +61,15 @@
       "entry": "@hbdlzy/ui-core",
       "importName": "BaseEChart",
       "docs": "packages/ui-core/src/components/BaseEChart/README.md",
-      "description": "统一封装 ECharts 的初始化、setOption、自动 resize、实例销毁和常用实例方法暴露。",
+      "description": "统一封装 ECharts 初始化、setOption、自动 resize、实例销毁和实例方法暴露。",
       "props": [
-        {
-          "name": "option",
-          "type": "EChartOption",
-          "required": false
-        },
-        {
-          "name": "theme",
-          "type": "string | object",
-          "required": false
-        },
-        {
-          "name": "initOptions",
-          "type": "EChartInitOptions",
-          "required": false
-        },
-        {
-          "name": "setOptionOptions",
-          "type": "boolean | EChartSetOptionOptions",
-          "required": false
-        },
-        {
-          "name": "loading",
-          "type": "boolean",
-          "default": false
-        },
-        {
-          "name": "autoResize",
-          "type": "boolean",
-          "default": true
-        },
-        {
-          "name": "useDefaultColors",
-          "type": "boolean",
-          "default": true
-        }
+        { "name": "option", "type": "EChartOption", "required": false },
+        { "name": "theme", "type": "string | object", "required": false },
+        { "name": "initOptions", "type": "EChartInitOptions", "required": false },
+        { "name": "setOptionOptions", "type": "boolean | EChartSetOptionOptions", "required": false },
+        { "name": "loading", "type": "boolean", "default": false },
+        { "name": "autoResize", "type": "boolean", "default": true },
+        { "name": "useDefaultColors", "type": "boolean", "default": true }
       ],
       "emits": ["ready"]
     },
@@ -189,33 +81,173 @@
       "docs": "packages/ui-core/src/components/BaseExportButton/README.md",
       "description": "统一处理前端 Excel 导出和后端 blob 下载的基础导出按钮。",
       "props": [
-        {
-          "name": "label",
-          "type": "string",
-          "default": "导出"
-        },
-        {
-          "name": "fileName",
-          "type": "string",
-          "default": ""
-        },
-        {
-          "name": "excelOptions",
-          "type": "ExcelExportOptions",
-          "required": false
-        },
-        {
-          "name": "requestHandler",
-          "type": "() => Promise<ExportResponseLike>",
-          "required": false
-        },
-        {
-          "name": "beforeExport",
-          "type": "() => boolean | Promise<boolean>",
-          "required": false
-        }
+        { "name": "label", "type": "string", "default": "导出" },
+        { "name": "fileName", "type": "string", "default": "" },
+        { "name": "excelOptions", "type": "ExcelExportOptions", "required": false },
+        { "name": "requestHandler", "type": "() => Promise<ExportResponseLike>", "required": false },
+        { "name": "beforeExport", "type": "() => boolean | Promise<boolean>", "required": false }
       ],
       "emits": ["start", "success", "error"]
+    },
+    {
+      "name": "OutlinedInput",
+      "category": "ui-core",
+      "entry": "@hbdlzy/ui-core",
+      "importName": "OutlinedInput",
+      "docs": "packages/ui-core/src/components/OutlinedInput/README.md",
+      "description": "统一封装浮动标签、数值校验、属性透传和常用实例方法暴露的表单输入组件。",
+      "props": [
+        { "name": "value", "type": "string | number", "required": false },
+        { "name": "placeholder", "type": "string", "default": "" },
+        { "name": "label", "type": "string", "default": "" },
+        { "name": "typeInput", "type": "string", "default": "text" },
+        { "name": "isNumber", "type": "boolean", "default": false },
+        { "name": "regex", "type": "RegExp", "required": false },
+        { "name": "inputHeight", "type": "number", "default": 40 },
+        { "name": "isBorder", "type": "boolean", "default": false },
+        { "name": "suffixText", "type": "string", "default": "" },
+        { "name": "clearable", "type": "boolean", "default": false },
+        { "name": "showWordLimit", "type": "boolean", "default": true }
+      ],
+      "emits": ["input", "update:value", "warning", "focus", "blur", "change", "clear"]
+    },
+    {
+      "name": "OutlinedSelect",
+      "category": "ui-core",
+      "entry": "@hbdlzy/ui-core",
+      "importName": "OutlinedSelect",
+      "docs": "packages/ui-core/src/components/OutlinedSelect/README.md",
+      "description": "统一封装浮动标签、选项映射、弹层焦点控制和实例方法暴露的表单下拉组件。",
+      "props": [
+        { "name": "value", "type": "string | number | boolean | object | unknown[]", "required": false },
+        { "name": "options", "type": "OutlinedSelectOption[]", "required": false },
+        { "name": "placeholder", "type": "string", "default": "" },
+        { "name": "label", "type": "string", "default": "" },
+        { "name": "multiple", "type": "boolean", "default": false },
+        { "name": "filterable", "type": "boolean", "default": true },
+        { "name": "clearable", "type": "boolean", "default": true },
+        { "name": "collapseTags", "type": "boolean", "default": false },
+        { "name": "keyValue", "type": "string", "default": "value" },
+        { "name": "labelValue", "type": "string", "default": "label" },
+        { "name": "inputHeight", "type": "number", "default": 40 },
+        { "name": "isBorder", "type": "boolean", "default": false }
+      ],
+      "emits": ["input", "update:value", "change", "focus", "blur", "visible-change", "clear"]
+    },
+    {
+      "name": "OutlinedDatePicker",
+      "category": "ui-core",
+      "entry": "@hbdlzy/ui-core",
+      "importName": "OutlinedDatePicker",
+      "docs": "packages/ui-core/src/components/OutlinedDatePicker/README.md",
+      "description": "统一封装浮动标签、日期禁用规则、格式映射和实例方法暴露的表单日期组件。",
+      "props": [
+        { "name": "value", "type": "string | number | Date | Array<string | number | Date>", "required": false },
+        { "name": "placeholder", "type": "string", "default": "" },
+        { "name": "label", "type": "string", "default": "" },
+        { "name": "typeDate", "type": "string", "default": "date" },
+        { "name": "format", "type": "string", "default": "YYYY-MM-DD" },
+        { "name": "valueFormat", "type": "string", "required": false },
+        { "name": "timeValue", "type": "boolean", "default": false },
+        { "name": "disabledDate", "type": "string | number | Date | ((date: Date) => boolean)", "required": false },
+        { "name": "inputHeight", "type": "number", "default": 40 },
+        { "name": "isBorder", "type": "boolean", "default": false }
+      ],
+      "emits": ["input", "update:value", "change", "focus", "blur", "visible-change"]
+    },
+    {
+      "name": "OutlinedDateTimePicker",
+      "category": "ui-core",
+      "entry": "@hbdlzy/ui-core",
+      "importName": "OutlinedDateTimePicker",
+      "docs": "packages/ui-core/src/components/OutlinedDateTimePicker/README.md",
+      "description": "统一封装日期时间组合输入、浮动标签、禁用日期规则和日期时间面板实例方法暴露。",
+      "props": [
+        { "name": "value", "type": "string", "required": false },
+        { "name": "placeholder", "type": "string", "default": "" },
+        { "name": "label", "type": "string", "default": "" },
+        { "name": "inputHeight", "type": "number", "default": 40 },
+        { "name": "isBorder", "type": "boolean", "default": false },
+        { "name": "disabledDate", "type": "string | number | Date | ((date: Date) => boolean)", "required": false },
+        { "name": "separatorText", "type": "string", "default": "-" },
+        { "name": "timePlaceholder", "type": "string", "default": "时间" },
+        { "name": "clearable", "type": "boolean", "default": false }
+      ],
+      "emits": ["input", "update:value", "change", "focus", "blur", "visible-change"]
+    },
+    {
+      "name": "OutlinedTimePicker",
+      "category": "ui-core",
+      "entry": "@hbdlzy/ui-core",
+      "importName": "OutlinedTimePicker",
+      "docs": "packages/ui-core/src/components/OutlinedTimePicker/README.md",
+      "description": "统一封装时间选择控件的单值模式、范围模式、浮动标签和实例方法暴露。",
+      "props": [
+        { "name": "value", "type": "string | number | Date | Array<string | number | Date> | null", "required": false },
+        { "name": "placeholder", "type": "string", "default": "" },
+        { "name": "label", "type": "string", "default": "" },
+        { "name": "disabled", "type": "boolean", "default": false },
+        { "name": "clearable", "type": "boolean", "default": true },
+        { "name": "isRange", "type": "boolean", "default": false },
+        { "name": "startPlaceholder", "type": "string", "default": "开始时间" },
+        { "name": "endPlaceholder", "type": "string", "default": "结束时间" },
+        { "name": "rangeSeparator", "type": "string", "default": "-" },
+        { "name": "format", "type": "string", "default": "HH:mm" },
+        { "name": "valueFormat", "type": "string", "required": false },
+        { "name": "arrowControl", "type": "boolean", "default": false },
+        { "name": "inputHeight", "type": "number", "default": 40 },
+        { "name": "isBorder", "type": "boolean", "default": false }
+      ],
+      "emits": ["input", "update:value", "change", "focus", "blur", "visible-change", "clear"]
+    },
+    {
+      "name": "OutlinedCascader",
+      "category": "ui-core",
+      "entry": "@hbdlzy/ui-core",
+      "importName": "OutlinedCascader",
+      "docs": "packages/ui-core/src/components/OutlinedCascader/README.md",
+      "description": "统一封装级联选择的浮动标签、选项映射、弹层显隐和实例方法暴露。",
+      "props": [
+        { "name": "value", "type": "Array<string | number>", "required": false },
+        { "name": "options", "type": "Record<string, unknown>[]", "required": false },
+        { "name": "clearable", "type": "boolean", "default": false },
+        { "name": "propsValue", "type": "Record<string, unknown>", "required": false },
+        { "name": "placeholder", "type": "string", "default": "" },
+        { "name": "label", "type": "string", "default": "" },
+        { "name": "popperClass", "type": "string", "default": "" },
+        { "name": "disabled", "type": "boolean", "default": false },
+        { "name": "inputHeight", "type": "number", "default": 40 },
+        { "name": "isBorder", "type": "boolean", "default": false },
+        { "name": "filterable", "type": "boolean", "default": true },
+        { "name": "levels", "type": "boolean", "default": true }
+      ],
+      "emits": ["input", "update:value", "change", "focus", "blur", "visible-change"]
+    },
+    {
+      "name": "OutlinedTreeSelect",
+      "category": "ui-core",
+      "entry": "@hbdlzy/ui-core",
+      "importName": "OutlinedTreeSelect",
+      "docs": "packages/ui-core/src/components/OutlinedTreeSelect/README.md",
+      "description": "统一封装树形下拉选择的字段映射、浮动标签、弹层显隐和实例方法暴露。",
+      "props": [
+        { "name": "value", "type": "string | number | boolean | object | Array<string | number | boolean | object>", "required": false },
+        { "name": "data", "type": "OutlinedTreeSelectNode[]", "required": false },
+        { "name": "propsValue", "type": "Record<string, unknown>", "required": false },
+        { "name": "placeholder", "type": "string", "default": "" },
+        { "name": "label", "type": "string", "default": "" },
+        { "name": "disabled", "type": "boolean", "default": false },
+        { "name": "clearable", "type": "boolean", "default": true },
+        { "name": "filterable", "type": "boolean", "default": true },
+        { "name": "multiple", "type": "boolean", "default": false },
+        { "name": "showCheckbox", "type": "boolean", "default": false },
+        { "name": "checkStrictly", "type": "boolean", "default": false },
+        { "name": "nodeKey", "type": "string", "default": "value" },
+        { "name": "keyValue", "type": "string", "default": "value" },
+        { "name": "labelValue", "type": "string", "default": "label" },
+        { "name": "childrenValue", "type": "string", "default": "children" }
+      ],
+      "emits": ["input", "update:value", "change", "focus", "blur", "visible-change", "clear"]
     }
   ],
   "utilities": [

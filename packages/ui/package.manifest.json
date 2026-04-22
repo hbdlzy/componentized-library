@@ -1,6 +1,6 @@
 {
   "name": "@hbdlzy/ui",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "entry": "@hbdlzy/ui",
   "readme": "README.md",
   "aiGuide": "AI-USAGE.md",
@@ -36,6 +36,48 @@
         "from": "@hbdlzy/ui-core",
         "importName": "BaseExportButton",
         "docs": "../ui-core/src/components/BaseExportButton/README.md"
+      },
+      {
+        "name": "OutlinedInput",
+        "from": "@hbdlzy/ui-core",
+        "importName": "OutlinedInput",
+        "docs": "../ui-core/src/components/OutlinedInput/README.md"
+      },
+      {
+        "name": "OutlinedSelect",
+        "from": "@hbdlzy/ui-core",
+        "importName": "OutlinedSelect",
+        "docs": "../ui-core/src/components/OutlinedSelect/README.md"
+      },
+      {
+        "name": "OutlinedDatePicker",
+        "from": "@hbdlzy/ui-core",
+        "importName": "OutlinedDatePicker",
+        "docs": "../ui-core/src/components/OutlinedDatePicker/README.md"
+      },
+      {
+        "name": "OutlinedDateTimePicker",
+        "from": "@hbdlzy/ui-core",
+        "importName": "OutlinedDateTimePicker",
+        "docs": "../ui-core/src/components/OutlinedDateTimePicker/README.md"
+      },
+      {
+        "name": "OutlinedTimePicker",
+        "from": "@hbdlzy/ui-core",
+        "importName": "OutlinedTimePicker",
+        "docs": "../ui-core/src/components/OutlinedTimePicker/README.md"
+      },
+      {
+        "name": "OutlinedCascader",
+        "from": "@hbdlzy/ui-core",
+        "importName": "OutlinedCascader",
+        "docs": "../ui-core/src/components/OutlinedCascader/README.md"
+      },
+      {
+        "name": "OutlinedTreeSelect",
+        "from": "@hbdlzy/ui-core",
+        "importName": "OutlinedTreeSelect",
+        "docs": "../ui-core/src/components/OutlinedTreeSelect/README.md"
       }
     ],
     "utilities": [
@@ -86,6 +128,13 @@
     "../ui-core/src/components/BaseCard/README.md",
     "../ui-core/src/components/BaseEChart/README.md",
     "../ui-core/src/components/BaseExportButton/README.md",
+    "../ui-core/src/components/OutlinedInput/README.md",
+    "../ui-core/src/components/OutlinedSelect/README.md",
+    "../ui-core/src/components/OutlinedDatePicker/README.md",
+    "../ui-core/src/components/OutlinedDateTimePicker/README.md",
+    "../ui-core/src/components/OutlinedTimePicker/README.md",
+    "../ui-core/src/components/OutlinedCascader/README.md",
+    "../ui-core/src/components/OutlinedTreeSelect/README.md",
     "../tokens/package.manifest.json",
     "../tokens/README.md",
     "../ui-energy/components.manifest.json",

@@ -1,4 +1,4 @@
-﻿# AI Usage Guide
+# AI Usage Guide
 
 这个文件是安装了 `@hbdlzy/ui` 的项目里，给 AI 读取组件库的唯一入口文件。
 
@@ -35,6 +35,13 @@ node_modules/@hbdlzy/ui/AI-USAGE.md
   - `BaseCard`
   - `BaseEChart`
   - `BaseExportButton`
+  - `OutlinedInput`
+  - `OutlinedSelect`
+  - `OutlinedDatePicker`
+  - `OutlinedDateTimePicker`
+  - `OutlinedTimePicker`
+  - `OutlinedCascader`
+  - `OutlinedTreeSelect`
   - `echarts`
   - `exportExcel`
   - `companyTokens`
@@ -45,15 +52,36 @@ node_modules/@hbdlzy/ui/AI-USAGE.md
 优先统一从 `@hbdlzy/ui` 导入：
 
 ```ts
-import { BaseTable, BaseCard, BaseEChart, BaseExportButton, companyTokens, echarts } from '@hbdlzy/ui'
+import {
+  BaseTable,
+  BaseCard,
+  BaseEChart,
+  BaseExportButton,
+  OutlinedInput,
+  OutlinedSelect,
+  OutlinedDatePicker,
+  OutlinedDateTimePicker,
+  OutlinedTimePicker,
+  OutlinedCascader,
+  OutlinedTreeSelect,
+  companyTokens,
+  echarts
+} from '@hbdlzy/ui'
 ```
 
 ## 复用规则
 
-- 不要在页面里重复写通用表格的分页、操作列、远程请求承接和勾选暴露逻辑，优先使用 `BaseTable`
+- 不要在页面里重复写通用表格的分页、远程请求承接、排序参数映射和勾选暴露逻辑，优先使用 `BaseTable`
 - 不要在页面里重复写 ECharts 初始化、resize、dispose 逻辑，优先使用 `BaseEChart`
 - 不要在页面里重复写卡片外层容器、标题区、右侧时间和导出触发区，优先使用 `BaseCard`
 - 不要在页面里重复写导出按钮 loading、成功失败提示和文件下载逻辑，优先使用 `BaseExportButton`
+- 不要在页面里重复写浮动标签输入框、数值基础校验和输入框实例方法暴露逻辑，优先使用 `OutlinedInput`
+- 不要在页面里重复写基础下拉的浮动标签、选项映射和焦点态逻辑，优先使用 `OutlinedSelect`
+- 不要在页面里重复写基础日期控件的浮动标签、禁用日期和焦点态逻辑，优先使用 `OutlinedDatePicker`
+- 不要在页面里重复写日期时间组合控件的布局联动、时间自动补全和面板打开逻辑，优先使用 `OutlinedDateTimePicker`
+- 不要在页面里重复写纯时间控件的单值/范围切换、浮动标签和面板打开逻辑，优先使用 `OutlinedTimePicker`
+- 不要在页面里重复写级联选择控件的浮动标签、面板显隐和清空逻辑，优先使用 `OutlinedCascader`
+- 不要在页面里重复写树形下拉选择的字段映射、浮动标签和清空逻辑，优先使用 `OutlinedTreeSelect`
 - 需要渐变色、图形工具时，优先使用统一导出的 `echarts`
 - 需要主题变量时，优先使用 `companyTokens`
 

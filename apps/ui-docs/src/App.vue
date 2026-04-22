@@ -4,17 +4,21 @@
       <p class="hero__eyebrow">Company Shared UI</p>
       <h1>公共组件 Demo 工作台</h1>
       <p class="hero__desc">
-        这个站点用来集中演示当前已经沉淀到组件库里的基础组件，包含可直接运行的交互示例、参数映射示例和常见组合方式。
+        这里集中展示当前已经沉淀到组件库里的基础组件、表单控件和工具能力，方便在接入新项目时直接查看推荐用法。
       </p>
       <div class="hero__actions">
         <span class="hero__chip">统一安装入口：@hbdlzy/ui</span>
-        <span class="hero__chip">当前核心组件：{{ uiCoreComponentCount }} 个</span>
-        <span class="hero__chip">文档包：{{ packages.length }} 个</span>
+        <span class="hero__chip">当前 ui-core 组件：{{ uiCoreComponentCount }} 个</span>
+        <span class="hero__chip">工作区包：{{ packages.length }} 个</span>
       </div>
     </section>
 
     <section class="overview-grid">
-      <article v-for="pkg in packages" :key="pkg.name" class="overview-card">
+      <article
+        v-for="pkg in packages"
+        :key="pkg.name"
+        class="overview-card"
+      >
         <p class="overview-card__label">Workspace Package</p>
         <h2>{{ pkg.name }}</h2>
         <p class="overview-card__path">{{ pkg.path }}</p>
@@ -29,7 +33,9 @@
           <p class="section-heading__eyebrow">BaseCard</p>
           <h2>统一卡片容器</h2>
         </div>
-        <p class="section-heading__desc">演示标题区、右侧信息区、插槽区和内置导出触发行为。</p>
+        <p class="section-heading__desc">
+          演示标题区、右侧信息区、提示区和导出触发区，页面层不需要再重复写统一头部结构。
+        </p>
       </div>
 
       <div class="two-column-grid">
@@ -43,15 +49,21 @@
           @export="handleCardExport"
         >
           <template #header-right>
-            <el-tag type="success">实时</el-tag>
+            <el-tag type="success">
+              实时
+            </el-tag>
           </template>
 
           <template #tip>
-            <p class="mini-tip">适合包裹统计块、图表块和信息卡片。</p>
+            <p class="mini-tip">适合包裹统计块、图表块和详情信息卡片。</p>
           </template>
 
           <div class="metric-grid">
-            <div v-for="item in cardMetrics" :key="item.label" class="metric-tile">
+            <div
+              v-for="item in cardMetrics"
+              :key="item.label"
+              class="metric-tile"
+            >
               <p class="metric-tile__label">{{ item.label }}</p>
               <p class="metric-tile__value">{{ item.value }}</p>
             </div>
@@ -67,7 +79,10 @@
           :header-gap="20"
         >
           <template #title>
-            <el-radio-group v-model="activeCardRange" size="small">
+            <el-radio-group
+              v-model="activeCardRange"
+              size="small"
+            >
               <el-radio-button label="日内" />
               <el-radio-button label="周内" />
               <el-radio-button label="月内" />
@@ -75,11 +90,17 @@
           </template>
 
           <template #header-right>
-            <el-button text @click="showActionMessage('BaseCard 右侧插槽触发')">刷新</el-button>
+            <el-button
+              text
+              @click="showActionMessage('BaseCard 右侧插槽触发')"
+            >
+              刷新
+            </el-button>
           </template>
 
           <p class="demo-paragraph">
-            当前选择：{{ activeCardRange }}。这个示例用来说明 `BaseCard` 可以同时承载标题、标题插槽和右侧操作区，不需要页面层重复写头部结构。
+            当前选择：{{ activeCardRange }}。这个示例用来说明 `BaseCard`
+            可以同时承载标题、标题插槽和右侧操作区，不需要页面层重复包一层卡片头部。
           </p>
         </BaseCard>
       </div>
@@ -91,21 +112,44 @@
           <p class="section-heading__eyebrow">BaseEChart</p>
           <h2>统一图表封装</h2>
         </div>
-        <p class="section-heading__desc">演示 option 驱动渲染、实例暴露方法和统一导出的 echarts 工具。</p>
+        <p class="section-heading__desc">
+          演示 option 驱动渲染、实例方法暴露和统一导出的 echarts 工具。
+        </p>
       </div>
 
       <div class="showcase-card">
         <div class="showcase-toolbar">
           <div class="showcase-toolbar__group">
-            <el-button type="primary" plain @click="randomizeChartData">刷新数据</el-button>
-            <el-button plain @click="resizeChart">触发 resize</el-button>
-            <el-button plain @click="hideChartTip">隐藏 tooltip</el-button>
+            <el-button
+              type="primary"
+              plain
+              @click="randomizeChartData"
+            >
+              刷新数据
+            </el-button>
+            <el-button
+              plain
+              @click="resizeChart"
+            >
+              触发 resize
+            </el-button>
+            <el-button
+              plain
+              @click="hideChartTip"
+            >
+              隐藏 tooltip
+            </el-button>
           </div>
-          <p class="showcase-toolbar__note">图表渐变色通过统一导出的 `echarts.graphic.LinearGradient` 生成。</p>
+          <p class="showcase-toolbar__note">
+            图表渐变色通过统一导出的 `echarts.graphic.LinearGradient` 生成。
+          </p>
         </div>
 
         <div class="chart-stage">
-          <BaseEChart ref="chartRef" :option="chartOption" />
+          <BaseEChart
+            ref="chartRef"
+            :option="chartOption"
+          />
         </div>
       </div>
     </section>
@@ -116,7 +160,9 @@
           <p class="section-heading__eyebrow">BaseExportButton</p>
           <h2>统一导出按钮</h2>
         </div>
-        <p class="section-heading__desc">演示前端 Excel 导出和后端 blob 下载两种常见导出模式。</p>
+        <p class="section-heading__desc">
+          演示前端 Excel 导出和后端 blob 下载两种常见模式。
+        </p>
       </div>
 
       <div class="showcase-card">
@@ -130,8 +176,164 @@
           />
         </div>
         <p class="showcase-toolbar__note">
-          左侧按钮使用前端 Excel 导出，右侧按钮模拟接口返回 blob 文件下载。
+          左侧按钮走前端 Excel 导出，右侧按钮模拟接口返回 blob 文件下载。
         </p>
+      </div>
+    </section>
+
+    <section class="demo-section">
+      <div class="section-heading">
+        <div>
+          <p class="section-heading__eyebrow">OutlinedForm</p>
+          <h2>统一浮动标签表单控件</h2>
+        </div>
+        <p class="section-heading__desc">
+          演示 `OutlinedInput`、`OutlinedSelect`、`OutlinedDatePicker`、`OutlinedDateTimePicker`、
+          `OutlinedTimePicker`、`OutlinedCascader` 和 `OutlinedTreeSelect` 的统一风格、属性透传和实例方法暴露。
+        </p>
+      </div>
+
+      <div class="showcase-card">
+        <div class="outlined-form-grid">
+          <div class="outlined-demo-panel">
+            <OutlinedInput
+              ref="outlinedInputRef"
+              v-model:value="outlinedForm.stationName"
+              placeholder="电站名称"
+              :is-border="true"
+              :input-height="40"
+              clearable
+            />
+
+            <OutlinedSelect
+              ref="outlinedSelectRef"
+              v-model:value="outlinedForm.strategyMode"
+              placeholder="参与方式"
+              :is-border="true"
+              :input-height="40"
+              :options="outlinedSelectOptions"
+            />
+
+            <OutlinedDatePicker
+              ref="outlinedDatePickerRef"
+              v-model:value="outlinedForm.effectDate"
+              placeholder="开始生效日期"
+              :is-border="true"
+              :input-height="40"
+              type-date="date"
+              :disabled-date="'nowDate'"
+            />
+
+            <OutlinedDateTimePicker
+              ref="outlinedDateTimePickerRef"
+              v-model:value="outlinedForm.startAt"
+              placeholder="开始执行日期"
+              time-placeholder="执行时间"
+              :is-border="true"
+              :input-height="40"
+              :disabled-date="'nowDate'"
+              clearable
+            />
+
+            <OutlinedTimePicker
+              ref="outlinedTimePickerRef"
+              v-model:value="outlinedForm.executeRange"
+              label="执行时段"
+              :is-range="true"
+              start-placeholder="开始时间"
+              end-placeholder="结束时间"
+              :is-border="true"
+              :input-height="40"
+              clearable
+            />
+
+            <OutlinedCascader
+              ref="outlinedCascaderRef"
+              v-model:value="outlinedForm.areaPath"
+              placeholder="所属区域"
+              :is-border="true"
+              :input-height="40"
+              :options="outlinedCascaderOptions"
+              :props-value="outlinedCascaderProps"
+              clearable
+              filterable
+            />
+
+            <OutlinedTreeSelect
+              ref="outlinedTreeSelectRef"
+              v-model:value="outlinedForm.parentNodeId"
+              placeholder="选择父节点"
+              :data="outlinedTreeSelectData"
+              :props-value="outlinedTreeSelectProps"
+              :check-strictly="true"
+              :is-border="true"
+              :input-height="40"
+              clearable
+              filterable
+            />
+
+            <OutlinedInput
+              v-model:value="outlinedForm.remark"
+              placeholder="备注"
+              type-input="textarea"
+              :is-border="true"
+              :autosize="{ minRows: 4, maxRows: 4 }"
+              resize="none"
+              maxlength="120"
+            />
+
+            <div class="showcase-toolbar__group">
+              <el-button
+                type="primary"
+                plain
+                @click="focusOutlinedInput"
+              >
+                聚焦输入框
+              </el-button>
+              <el-button
+                plain
+                @click="toggleOutlinedSelect"
+              >
+                展开参与方式
+              </el-button>
+              <el-button
+                plain
+                @click="openOutlinedDatePicker"
+              >
+                打开日期面板
+              </el-button>
+              <el-button
+                plain
+                @click="openOutlinedDateTimePicker"
+              >
+                打开时间面板
+              </el-button>
+              <el-button
+                plain
+                @click="openOutlinedTimePicker"
+              >
+                打开时段面板
+              </el-button>
+              <el-button
+                plain
+                @click="toggleOutlinedCascader"
+              >
+                切换级联面板
+              </el-button>
+              <el-button
+                plain
+                @click="focusOutlinedTreeSelect"
+              >
+                聚焦树选择
+              </el-button>
+            </div>
+          </div>
+
+          <div class="debug-card">
+            <h3>当前表单状态</h3>
+            <pre>{{ outlinedDebug }}</pre>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -142,7 +344,7 @@
           <h2>统一表格封装</h2>
         </div>
         <p class="section-heading__desc">
-          演示工具栏插槽、远程请求、默认排序、请求参数映射、请求结果适配和操作列回调。
+          演示工具栏插槽、远程请求、默认排序、请求参数映射、结果适配和操作列回调。
         </p>
       </div>
 
@@ -167,10 +369,19 @@
               <div class="table-toolbar">
                 <el-form inline>
                   <el-form-item label="名称">
-                    <el-input v-model="tableFilters.keyword" placeholder="请输入名称" clearable />
+                    <el-input
+                      v-model="tableFilters.keyword"
+                      placeholder="请输入名称"
+                      clearable
+                    />
                   </el-form-item>
                   <el-form-item label="状态">
-                    <el-select v-model="tableFilters.status" placeholder="全部状态" clearable style="width: 140px">
+                    <el-select
+                      v-model="tableFilters.status"
+                      placeholder="全部状态"
+                      clearable
+                      style="width: 140px"
+                    >
                       <el-option
                         v-for="option in statusOptions"
                         :key="String(option.value)"
@@ -180,8 +391,15 @@
                     </el-select>
                   </el-form-item>
                   <el-form-item>
-                    <el-button type="primary" @click="tableRef?.resetPage()">查询</el-button>
-                    <el-button @click="resetTableFilters">重置</el-button>
+                    <el-button
+                      type="primary"
+                      @click="reloadTable"
+                    >
+                      查询
+                    </el-button>
+                    <el-button @click="resetTableFilters">
+                      重置
+                    </el-button>
                   </el-form-item>
                 </el-form>
               </div>
@@ -212,14 +430,28 @@ import {
   BaseEChart,
   BaseExportButton,
   BaseTable,
+  OutlinedCascader,
+  OutlinedDatePicker,
+  OutlinedDateTimePicker,
+  OutlinedTimePicker,
+  OutlinedInput,
+  OutlinedSelect,
+  OutlinedTreeSelect,
   echarts,
   type BaseEChartExpose,
   type BaseTableColumn,
   type BaseTableExpose,
   type BaseTableOption,
   type EChartOption,
-  type ExcelExportColumn
-} from '@hbdlzy/ui-core'
+  type ExcelExportColumn,
+  type OutlinedCascaderExpose,
+  type OutlinedDatePickerExpose,
+  type OutlinedDateTimePickerExpose,
+  type OutlinedTimePickerExpose,
+  type OutlinedInputExpose,
+  type OutlinedSelectExpose,
+  type OutlinedTreeSelectExpose
+} from '@hbdlzy/ui'
 import libraryManifest from '../../../library.manifest.json'
 import uiCoreManifest from '../../../packages/ui-core/components.manifest.json'
 
@@ -308,6 +540,116 @@ const chartOption = computed<EChartOption>(() => ({
   ]
 }))
 
+const outlinedInputRef = ref<OutlinedInputExpose | null>(null)
+const outlinedSelectRef = ref<OutlinedSelectExpose | null>(null)
+const outlinedDatePickerRef = ref<OutlinedDatePickerExpose | null>(null)
+const outlinedDateTimePickerRef = ref<OutlinedDateTimePickerExpose | null>(null)
+const outlinedTimePickerRef = ref<OutlinedTimePickerExpose | null>(null)
+const outlinedCascaderRef = ref<OutlinedCascaderExpose | null>(null)
+const outlinedTreeSelectRef = ref<OutlinedTreeSelectExpose | null>(null)
+
+const outlinedForm = reactive({
+  stationName: '华北储能一号站',
+  strategyMode: 'spot',
+  effectDate: '2026-04-22',
+  startAt: '2026-04-22 09:00',
+  executeRange: ['09:00', '18:00'],
+  areaPath: ['north', 'beijing', 'chaoyang'],
+  parentNodeId: 'beijing',
+  remark: '这个示例演示 OutlinedForm 系列的统一浮动标签风格、属性透传和实例方法暴露。'
+})
+
+const outlinedSelectOptions = [
+  { label: '现货', value: 'spot' },
+  { label: '调频', value: 'fm' },
+  { label: '备用', value: 'reserve' }
+]
+
+const outlinedCascaderOptions = [
+  {
+    label: '华北',
+    value: 'north',
+    children: [
+      {
+        label: '北京',
+        value: 'beijing',
+        children: [
+          { label: '朝阳站', value: 'chaoyang' },
+          { label: '通州站', value: 'tongzhou' }
+        ]
+      },
+      {
+        label: '天津',
+        value: 'tianjin',
+        children: [
+          { label: '滨海站', value: 'binhai' }
+        ]
+      }
+    ]
+  },
+  {
+    label: '华东',
+    value: 'east',
+    children: [
+      {
+        label: '上海',
+        value: 'shanghai',
+        children: [
+          { label: '临港站', value: 'lingang' }
+        ]
+      }
+    ]
+  }
+]
+
+const outlinedCascaderProps = {
+  value: 'value',
+  label: 'label',
+  children: 'children'
+}
+
+const outlinedTreeSelectData = [
+  {
+    id: 'north',
+    name: '华北',
+    children: [
+      { id: 'beijing', name: '北京节点' },
+      { id: 'tianjin', name: '天津节点' }
+    ]
+  },
+  {
+    id: 'east',
+    name: '华东',
+    children: [
+      { id: 'shanghai', name: '上海节点' },
+      { id: 'hangzhou', name: '杭州节点' }
+    ]
+  }
+]
+
+const outlinedTreeSelectProps = {
+  value: 'id',
+  label: 'name',
+  children: 'children'
+}
+
+const outlinedDebug = computed(() =>
+  JSON.stringify(
+    {
+      stationName: outlinedForm.stationName,
+      strategyMode: outlinedForm.strategyMode,
+      effectDate: outlinedForm.effectDate,
+      startAt: outlinedForm.startAt,
+      executeRange: outlinedForm.executeRange,
+      areaPath: outlinedForm.areaPath,
+      parentNodeId: outlinedForm.parentNodeId,
+      remark: outlinedForm.remark
+    },
+    null,
+    2
+  )
+)
+
 const statusOptions: BaseTableOption[] = [
   { label: '启用', value: 'enabled', tagType: 'success' },
   { label: '停用', value: 'disabled', tagType: 'info' },
@@ -390,23 +732,17 @@ const allTableRows: DemoTableRow[] = [
   createTableRow(4, '站端实时巡检', '赵六', 'enabled', 124, '2026-04-18 11:15:00', '#7c3aed'),
   createTableRow(5, '运行日报看板', '陈晨', 'enabled', 188, '2026-04-17 09:05:00', '#ef4444'),
   createTableRow(6, '储能策略联动', '孙敏', 'disabled', 86, '2026-04-16 14:45:00', '#0ea5e9'),
-  createTableRow(7, '现货结算汇总', '周舟', 'enabled', 212, '2026-04-15 15:20:00', '#06b6d4'),
-  createTableRow(8, '负荷预测分析', '钱进', 'draft', 118, '2026-04-14 12:35:00', '#84cc16'),
-  createTableRow(9, '告警统计报表', '吴迪', 'enabled', 106, '2026-04-13 16:10:00', '#e11d48'),
-  createTableRow(10, '策略收益回放', '郑源', 'disabled', 154, '2026-04-12 08:20:00', '#2563eb'),
-  createTableRow(11, '机组运行档案', '许宁', 'enabled', 144, '2026-04-11 09:55:00', '#059669'),
-  createTableRow(12, '电价波动分析', '何峰', 'draft', 76, '2026-04-10 13:40:00', '#d97706')
+  createTableRow(7, '现货结算汇总', '周航', 'enabled', 212, '2026-04-15 15:20:00', '#06b6d4'),
+  createTableRow(8, '负荷预测分析', '钱进', 'draft', 118, '2026-04-14 12:35:00', '#84cc16')
 ]
 
-const createMockExportRequest = async () => {
-  return {
-    data: new Blob(
-      ['BaseExportButton docs demo.\n', 'This file is generated by the docs app.\n'],
-      { type: 'text/plain;charset=utf-8' }
-    ),
-    headers: {}
-  }
-}
+const createMockExportRequest = async () => ({
+  data: new Blob(
+    ['BaseExportButton docs demo.\n', 'This file is generated by the docs app.\n'],
+    { type: 'text/plain;charset=utf-8' }
+  ),
+  headers: {}
+})
 
 const requestTableData = async (params: Record<string, unknown>) => {
   lastRequestParams.value = JSON.stringify(params, null, 2)
@@ -451,12 +787,10 @@ const requestTableData = async (params: Record<string, unknown>) => {
   }
 }
 
-const tableResultAdapter = (result: any) => {
-  return {
-    rows: result?.payload?.rows || [],
-    total: Number(result?.payload?.count || 0)
-  }
-}
+const tableResultAdapter = (result: any) => ({
+  rows: result?.payload?.rows || [],
+  total: Number(result?.payload?.count || 0)
+})
 
 const handleTableAction = ({ row, action }: { row: DemoTableRow; action: { type: string } }) => {
   ElMessage.info(`触发 ${action.type}：${row.name}`)
@@ -476,10 +810,14 @@ const handleTableLoaded = (payload: { rows: DemoTableRow[]; total: number; param
   )
 }
 
+const reloadTable = () => {
+  void tableRef.value?.resetPage()
+}
+
 const resetTableFilters = () => {
   tableFilters.keyword = ''
   tableFilters.status = ''
-  void tableRef.value?.resetPage()
+  reloadTable()
 }
 
 const handleCardExport = (payload?: unknown) => {
@@ -502,6 +840,34 @@ const resizeChart = () => {
 const hideChartTip = () => {
   chartRef.value?.dispatchAction({ type: 'hideTip' })
   ElMessage.info('已调用 dispatchAction({ type: "hideTip" })')
+}
+
+const focusOutlinedInput = () => {
+  outlinedInputRef.value?.focus()
+}
+
+const toggleOutlinedSelect = () => {
+  outlinedSelectRef.value?.toggleMenu()
+}
+
+const openOutlinedDatePicker = () => {
+  outlinedDatePickerRef.value?.handleOpen()
+}
+
+const openOutlinedDateTimePicker = () => {
+  outlinedDateTimePickerRef.value?.openTimePanel()
+}
+
+const openOutlinedTimePicker = () => {
+  outlinedTimePickerRef.value?.handleOpen()
+}
+
+const toggleOutlinedCascader = () => {
+  outlinedCascaderRef.value?.togglePopperVisible()
+}
+
+const focusOutlinedTreeSelect = () => {
+  outlinedTreeSelectRef.value?.focus()
 }
 
 function createTableRow(
@@ -658,7 +1024,7 @@ function wait(ms: number) {
 
 .section-heading {
   display: flex;
-  align-items: end;
+  align-items: flex-end;
   justify-content: space-between;
   gap: 16px;
   margin-bottom: 16px;
@@ -686,7 +1052,9 @@ function wait(ms: number) {
   line-height: 1.7;
 }
 
-.two-column-grid {
+.two-column-grid,
+.request-debug-grid,
+.outlined-form-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 16px;
@@ -761,10 +1129,13 @@ function wait(ms: number) {
   width: 100%;
 }
 
-.request-debug-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
+.outlined-demo-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px;
+  border-radius: 14px;
+  background: #f8fbff;
 }
 
 .debug-card {
@@ -798,7 +1169,8 @@ function wait(ms: number) {
   }
 
   .two-column-grid,
-  .request-debug-grid {
+  .request-debug-grid,
+  .outlined-form-grid {
     grid-template-columns: 1fr;
   }
 

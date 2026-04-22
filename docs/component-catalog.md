@@ -1,4 +1,4 @@
-﻿# Component Catalog
+# Component Catalog
 
 这个文档是当前组件库的人类总汇总入口，适合在接入新项目前快速浏览。
 
@@ -13,7 +13,21 @@ npm install @hbdlzy/ui
 推荐导入：
 
 ```ts
-import { BaseTable, BaseCard, BaseEChart, BaseExportButton, companyTokens, echarts } from '@hbdlzy/ui'
+import {
+  BaseTable,
+  BaseCard,
+  BaseEChart,
+  BaseExportButton,
+  OutlinedInput,
+  OutlinedSelect,
+  OutlinedDatePicker,
+  OutlinedDateTimePicker,
+  OutlinedTimePicker,
+  OutlinedCascader,
+  OutlinedTreeSelect,
+  companyTokens,
+  echarts
+} from '@hbdlzy/ui'
 ```
 
 ## 包分层
@@ -46,7 +60,7 @@ import { BaseTable, BaseCard, BaseEChart, BaseExportButton, companyTokens, echar
 
 - `BaseTable`
   详细文档：[packages/ui-core/src/components/BaseTable/README.md](../packages/ui-core/src/components/BaseTable/README.md)
-  用途：统一封装分页、远程请求、勾选列、操作列和常见列渲染能力
+  用途：统一封装分页、远程请求、参数映射、结果适配和常见列渲染能力
 - `BaseCard`
   详细文档：[packages/ui-core/src/components/BaseCard/README.md](../packages/ui-core/src/components/BaseCard/README.md)
   用途：统一封装卡片容器、标题区、右侧信息区和导出触发区
@@ -56,6 +70,27 @@ import { BaseTable, BaseCard, BaseEChart, BaseExportButton, companyTokens, echar
 - `BaseExportButton`
   详细文档：[packages/ui-core/src/components/BaseExportButton/README.md](../packages/ui-core/src/components/BaseExportButton/README.md)
   用途：统一封装前端 Excel 导出和后端文件下载按钮
+- `OutlinedInput`
+  详细文档：[packages/ui-core/src/components/OutlinedInput/README.md](../packages/ui-core/src/components/OutlinedInput/README.md)
+  用途：统一封装浮动标签输入框、数值基础校验和属性透传能力
+- `OutlinedSelect`
+  详细文档：[packages/ui-core/src/components/OutlinedSelect/README.md](../packages/ui-core/src/components/OutlinedSelect/README.md)
+  用途：统一封装浮动标签下拉框、选项映射和焦点态逻辑
+- `OutlinedDatePicker`
+  详细文档：[packages/ui-core/src/components/OutlinedDatePicker/README.md](../packages/ui-core/src/components/OutlinedDatePicker/README.md)
+  用途：统一封装浮动标签日期控件、禁用日期和日期格式映射
+- `OutlinedDateTimePicker`
+  详细文档：[packages/ui-core/src/components/OutlinedDateTimePicker/README.md](../packages/ui-core/src/components/OutlinedDateTimePicker/README.md)
+  用途：统一封装日期时间组合控件、时间自动补全和面板方法暴露
+- `OutlinedTimePicker`
+  详细文档：[packages/ui-core/src/components/OutlinedTimePicker/README.md](../packages/ui-core/src/components/OutlinedTimePicker/README.md)
+  用途：统一封装单值时间控件、时间范围输入和时间面板方法暴露
+- `OutlinedCascader`
+  详细文档：[packages/ui-core/src/components/OutlinedCascader/README.md](../packages/ui-core/src/components/OutlinedCascader/README.md)
+  用途：统一封装级联选择控件、浮动标签、清空能力和面板显隐控制
+- `OutlinedTreeSelect`
+  详细文档：[packages/ui-core/src/components/OutlinedTreeSelect/README.md](../packages/ui-core/src/components/OutlinedTreeSelect/README.md)
+  用途：统一封装树形下拉选择、字段映射、浮动标签和常用树选择参数
 
 当前工具：
 

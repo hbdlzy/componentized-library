@@ -8,9 +8,7 @@
     "build": "vite build"
   },
   "dependencies": {
-    "@hbdlzy/tokens": "workspace:*",
-    "@hbdlzy/ui-core": "workspace:*",
-    "@hbdlzy/ui-energy": "workspace:*",
+    "@hbdlzy/ui": "workspace:*",
     "element-plus": "^2.13.7",
     "vue": "^3.5.14"
   }
