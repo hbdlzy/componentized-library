@@ -17,6 +17,8 @@ npm install @hbdlzy/ui
 ## 使用方式
 
 ```ts
+import '@hbdlzy/ui/style.css'
+
 import {
   BaseTable,
   BaseCard,
@@ -34,7 +36,7 @@ import {
 } from '@hbdlzy/ui'
 ```
 
-## 当前汇总
+## 当前聚合内容
 
 - 设计令牌：`@hbdlzy/tokens`
 - 基础组件：`@hbdlzy/ui-core`
@@ -85,5 +87,5 @@ import {
 ## 说明
 
 - 该包内部依赖 `@hbdlzy/tokens`、`@hbdlzy/ui-core`、`@hbdlzy/ui-energy`
-- 导入 `@hbdlzy/ui` 时会自动加载设计变量样式
+- 推荐在应用入口显式导入 `@hbdlzy/ui/style.css`，统一加载设计变量和基础组件样式
 - 新项目中如果希望 AI 能稳定复用组件，优先让它先读 `package.manifest.json` 和 `AI-USAGE.md`

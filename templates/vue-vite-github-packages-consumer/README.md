@@ -9,8 +9,16 @@
 3. 将 `GITHUB_PACKAGES_TOKEN` 配置到本地环境变量或 CI 环境变量
 4. 执行 `npm install` 或 `pnpm install`
 
+## 最小接入示例
+
+```ts
+import '@hbdlzy/ui/style.css'
+import { BaseTable } from '@hbdlzy/ui'
+```
+
 ## 说明
 
 - 这个模板适用于已经发布到 GitHub Packages 的版本
 - 如果包版本号升级，请同步更新依赖版本范围
 - 推荐统一安装 `@hbdlzy/ui`
+- 推荐在应用入口显式导入 `@hbdlzy/ui/style.css`
