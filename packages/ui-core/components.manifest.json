@@ -28,6 +28,11 @@
           "type": "(payload: BaseTableSortPayload) => Record<string, unknown> | void",
           "required": false
         },
+        {
+          "name": "headerSearch",
+          "type": "boolean | { paramKey?: string; placeholder?: string; width?: string | number; searchText?: string; resetText?: string }",
+          "required": false
+        },
         { "name": "hasSelection", "type": "boolean", "default": false },
         { "name": "hasIndex", "type": "boolean", "default": false },
         { "name": "showPagination", "type": "boolean", "default": true }

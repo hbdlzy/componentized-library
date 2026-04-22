@@ -4,6 +4,14 @@ export type BaseTableColumnKind = 'text' | 'link' | 'actions' | 'image' | 'tag' 
 export type BaseTableSortOrder = 'ascending' | 'descending' | null
 export type BaseTableSortDirection = string | null
 
+export interface BaseTableHeaderSearchConfig {
+  paramKey?: string
+  placeholder?: string
+  width?: BaseTableCssValue
+  searchText?: string
+  resetText?: string
+}
+
 export interface BaseTableOption {
   label: string
   value: string | number | boolean
@@ -31,6 +39,7 @@ export interface BaseTableColumn<Row = Record<string, any>> {
   fixed?: boolean | 'left' | 'right'
   sortable?: boolean | 'custom'
   sortField?: string
+  headerSearch?: boolean | BaseTableHeaderSearchConfig
   showOverflowTooltip?: boolean
   className?: string
   headerClassName?: string
@@ -167,6 +176,9 @@ export interface BaseTableExpose<Row = Record<string, any>> {
   refresh: () => Promise<void>
   setData: (data: Row[]) => void
   resetPage: () => Promise<void>
+  setHeaderSearchValue: (key: string, value: string, shouldReload?: boolean) => Promise<void>
+  resetHeaderSearch: (key?: string) => Promise<void>
+  getHeaderSearchValues: () => Record<string, string>
   clearSelection: () => void
   toggleRowSelection: (row: Row, selected?: boolean) => void
   getSelectionRows: () => Row[]

@@ -1,26 +1,27 @@
 # BaseTable
 
-`BaseTable` 用来统一封装项目里高频出现的表格壳子、分页栏、远程请求、操作列、图片列、标签列和常见表格暴露方法，避免页面层重复写同一套表格基础代码。
+`BaseTable` 用来统一封装项目里高频出现的表格壳子、分页栏、远程请求、排序参数映射、结果适配、表头列搜索和常见列渲染能力，避免页面层重复写同一套 `el-table + el-pagination` 基础代码。
 
 ## 解决的问题
 
-- 页面层不再重复封装 `el-table + el-pagination`
+- 页面层不再重复封装表格容器、分页和加载逻辑
 - 同时支持本地数据模式和远程请求模式
-- 统一收敛勾选列、索引列、操作列、图片列、标签列、输入列
-- 支持列配置驱动和插槽扩展，既能快用，也能保留复杂场景灵活性
-- 提供 `load`、`refresh`、`setData`、`clearSelection` 等常用暴露方法
+- 统一收敛勾选列、序号列、操作列、图片列、标签列、输入列
+- 支持列配置驱动和命名插槽扩展
+- 提供 `load`、`refresh`、`setData`、`resetPage` 等常用方法
+- 支持旧 `TableComponent.vue` 里常见的表头列搜索能力
 
 ## 适用场景
 
 - 列表页、管理页、日志页、明细页
 - 需要统一分页和表格风格的页面
 - 同一项目里会重复出现的通用管理表格
-- 页面层希望把请求逻辑和列配置分开维护
+- 希望把请求逻辑和列配置拆开维护的页面
 
 ## 不适用场景
 
 - 高度强业务定制的复杂表格编辑器
-- 需要虚拟滚动、大数据量渲染专项优化的场景
+- 需要虚拟滚动或超大数据量专门优化的场景
 - 完全脱离 Element Plus Table 行为的表格交互
 
 ## 基础用法
@@ -158,92 +159,34 @@ const handleRowAction = ({ row, action }: { row: RowItem; action: { type: string
 </script>
 ```
 
-### 请求结果适配
+## 请求结果适配
 
-如果接口返回结构不是常见的 `records/list/items + total`，可以直接传 `resultAdapter` 做结果归一化。
+如果接口返回结构不是常见的 `records/list/items + total`，可以直接传 `resultAdapter` 做归一化。
 
-```vue
-<script setup lang="ts">
-import { BaseTable } from '@hbdlzy/ui-core'
-
+```ts
 const resultAdapter = (result: any) => {
   return {
     rows: result?.payload?.rows || [],
     total: Number(result?.payload?.count || 0)
   }
 }
-</script>
-
-<template>
-  <BaseTable
-    :columns="columns"
-    :request="requestTableData"
-    :result-adapter="resultAdapter"
-  />
-</template>
 ```
 
-这样无论接口原始返回是：
+## 远程排序和参数映射
 
-```ts
-{
-  payload: {
-    rows: [],
-    count: 36
-  }
-}
-```
-
-还是别的结构，页面层都可以自己决定如何映射成：
-
-```ts
-{
-  rows: [],
-  total: 36
-}
-```
-
-### 远程排序和参数映射
-
-如果接口需要排序字段和排序方向，可以直接用内置映射能力。
+如果接口需要排序字段和排序方向，可以直接使用内置映射能力。
 
 ```vue
-<script setup lang="ts">
-import { BaseTable, type BaseTableColumn } from '@hbdlzy/ui-core'
-
-interface RowItem {
-  id: number
-  name: string
-  createdAt: string
-}
-
-const columns: BaseTableColumn<RowItem>[] = [
-  {
-    label: '名称',
-    prop: 'name',
-    sortable: true
-  },
-  {
-    label: '创建时间',
-    prop: 'createdAt',
-    sortField: 'created_time',
-    sortable: true
-  }
-]
-</script>
-
-<template>
-  <BaseTable
-    :columns="columns"
-    :request="requestTableData"
-    :default-sort="{ prop: 'createdAt', order: 'descending' }"
-    sort-field-key="orderBy"
-    sort-order-key="orderDirection"
-  />
-</template>
+<BaseTable
+  :columns="columns"
+  :request="requestTableData"
+  :default-sort="{ prop: 'createdAt', order: 'descending' }"
+  sort-field-key="orderBy"
+  sort-order-key="orderDirection"
+/>
 ```
 
-上面这个配置会把请求参数自动映射成：
+请求参数会自动映射成：
 
 ```ts
 {
@@ -254,22 +197,60 @@ const columns: BaseTableColumn<RowItem>[] = [
 }
 ```
 
-如果接口参数更特殊，可以直接传 `sortMapper` 自定义：
+如果接口参数结构更特殊，可以改用 `sortMapper`。
+
+## 表头列搜索
+
+`BaseTable` 现在支持列头搜索能力，用法和旧 `TableComponent.vue` 里的 `isSearch` 很接近，但配置方式更收敛。
+
+### 基础写法
 
 ```ts
-const sortMapper = (payload: { field?: string; direction: string | null }) => {
-  if (!payload.field || !payload.direction) {
-    return {}
+const columns = [
+  {
+    label: '联系人',
+    prop: 'owner',
+    headerSearch: true
   }
+]
+```
 
-  return {
-    sortList: [
-      {
-        property: payload.field,
-        direction: payload.direction === 'asc'
-      }
-    ]
+开启后，这一列的表头会出现搜索图标，点击后会弹出输入框，并提供“搜索 / 重置”操作。
+
+### 高级写法
+
+```ts
+const columns = [
+  {
+    label: '联系人',
+    prop: 'owner',
+    headerSearch: {
+      paramKey: 'contactName',
+      placeholder: '请输入搜索内容',
+      width: 280,
+      searchText: '搜索',
+      resetText: '重置'
+    }
   }
+]
+```
+
+### 行为说明
+
+- 远程模式下，列头搜索值会自动合并到 `request(params)` 的参数里
+- 触发搜索或重置时，会自动把页码重置到第一页
+- 如果配置了 `paramKey`，请求参数会优先使用它
+- 如果没有配置 `paramKey`，默认使用当前列的 `prop`
+- 本地数据模式下，列头搜索会对当前 `data` 做简单文本包含过滤
+- 多个开启搜索的列会按“同时满足”处理
+
+示例请求参数：
+
+```ts
+{
+  currentPage: 1,
+  pageSize: 20,
+  owner: '张三'
 }
 ```
 
@@ -296,9 +277,10 @@ const sortMapper = (payload: { field?: string; direction: string | null }) => {
 - `data`: 本地数据源
 - `request`: 远程请求回调
 - `requestParams`: 请求附加参数
-- `resultAdapter`: 请求结果适配器，用于把接口原始返回映射成 `{ rows, total }`
+- `resultAdapter`: 请求结果适配器，用于把原始结果映射成 `{ rows, total }`
 - `autoLoad`: 有 `request` 时是否挂载后自动请求
 - `reloadOnParamsChange`: `requestParams` 改变时是否自动重载
+- `reloadOnSortChange`: 排序变化时是否自动重载远程数据
 - `rowKey`: 行主键，默认 `id`
 - `height`: 表格高度
 - `border`: 是否显示边框
@@ -311,7 +293,6 @@ const sortMapper = (payload: { field?: string; direction: string | null }) => {
 - `currentPageKey`: 远程请求时页码字段名，默认 `pageNum`
 - `pageSizeKey`: 远程请求时每页条数字段名，默认 `pageSize`
 - `defaultSort`: 默认排序状态
-- `reloadOnSortChange`: 排序变化时是否自动重载远程数据
 - `sortFieldKey`: 排序字段请求参数名，默认 `sortField`
 - `sortOrderKey`: 排序方向请求参数名，默认 `sortOrder`
 - `sortOrderMap`: 排序方向值映射，默认 `{ ascending: 'asc', descending: 'desc' }`
@@ -320,21 +301,15 @@ const sortMapper = (payload: { field?: string; direction: string | null }) => {
 
 ## Column 能力
 
-列配置里当前支持这些高频模式：
+列配置当前支持这些高频模式：
 
 - 默认文本列
 - `kind: 'link'`
-  点击型文本列
 - `kind: 'actions'`
-  操作列，配合 `actions`
 - `kind: 'image'`
-  图片列
 - `kind: 'tag'`
-  标签映射列，配合 `options`
 - `kind: 'html'`
-  HTML 内容列
 - `kind: 'input'`
-  行内输入列
 
 常用字段：
 
@@ -346,6 +321,7 @@ const sortMapper = (payload: { field?: string; direction: string | null }) => {
 - `fixed`
 - `sortable`
 - `sortField`
+- `headerSearch`
 - `showOverflowTooltip`
 - `actions`
 - `options`
@@ -357,42 +333,52 @@ const sortMapper = (payload: { field?: string; direction: string | null }) => {
 
 ## Events
 
-- `selection-change`: 勾选行变化
-- `sort-change`: 排序变化
-  返回 `prop`、`order`、`field`、`direction`
-- `row-action`: 点击操作列按钮
-- `cell-click`: 点击链接型单元格
-- `cell-input`: 行内输入变化
-- `page-change`: 页码变化
-- `size-change`: 每页条数变化
-- `update:pagination`: 分页状态变化
-- `loaded`: 远程数据加载完成
-- `request-error`: 远程请求失败
+- `selection-change`
+- `sort-change`
+- `row-action`
+- `cell-click`
+- `cell-input`
+- `page-change`
+- `size-change`
+- `update:pagination`
+- `loaded`
+- `request-error`
 
 ## Expose
 
-- `load(data?)`: 传数组时直接灌入本地数据，不传时走远程请求
-- `refresh()`: 按当前分页和参数重新请求
-- `setData(data)`: 直接替换当前表格数据
-- `resetPage()`: 页码重置到第一页并重新加载
-- `clearSelection()`: 清空勾选
-- `toggleRowSelection(row, selected?)`: 手动切换某一行勾选状态
-- `getSelectionRows()`: 获取当前勾选行
-- `getRows()`: 获取当前表格行数据
+- `load(data?)`
+- `refresh()`
+- `setData(data)`
+- `resetPage()`
+- `setHeaderSearchValue(key, value, shouldReload?)`
+- `resetHeaderSearch(key?)`
+- `getHeaderSearchValues()`
+- `clearSelection()`
+- `toggleRowSelection(row, selected?)`
+- `getSelectionRows()`
+- `getRows()`
+
+示例：
+
+```ts
+tableRef.value?.setHeaderSearchValue('owner', '张三')
+tableRef.value?.resetHeaderSearch()
+```
 
 ## 从旧 TableComponent 迁移的建议
 
 - 把旧的 `listUrl`、`paramsData` 改成 `request + requestParams`
-- 如果旧接口返回结构不统一，优先通过 `resultAdapter` 适配，不要改公共组件内部解析逻辑
+- 如果旧接口返回结构不统一，优先通过 `resultAdapter` 适配
 - 把旧的 `sortKey`、`sortList` 映射逻辑改成 `sortField`、`sortFieldKey`、`sortOrderKey` 或 `sortMapper`
 - 把旧的 `@handleAction` 改成 `@row-action`
-- 把旧的顶部筛选表单内容移动到 `toolbar` 插槽
-- 业务字典渲染优先用 `kind: 'tag' + options`
-- 如果某列逻辑太特殊，优先用 `cell-${prop}` 插槽，不要继续把业务逻辑塞回公共组件
+- 把旧的顶部筛选表单迁移到 `toolbar` 插槽
+- 把旧的 `isSearch` 迁移成 `headerSearch`
+- 业务字典渲染优先使用 `kind: 'tag' + options`
+- 列渲染逻辑过于特殊时，优先使用 `cell-${prop}` 插槽
 
 ## 推荐约定
 
 - 页面层负责请求参数和接口编排，`BaseTable` 只负责通用表格能力
-- 默认优先使用列配置驱动，只有复杂单元格才用插槽
-- 通用操作列尽量统一成 `row-action`
-- 复杂筛选表单不要内置到表格组件里，统一通过 `toolbar` 插槽扩展
+- 默认优先使用列配置驱动，只有复杂单元格才使用插槽
+- 通用操作列尽量统一收敛到 `row-action`
+- 复杂筛选表单不要内置到表格组件里，统一通过 `toolbar` 扩展

@@ -5,3 +5,4 @@ dist
 coverage
 pnpm-debug.log*
 *.tgz
+packages/**/src/**/*.d.ts

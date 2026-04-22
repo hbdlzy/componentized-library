@@ -1,6 +1,6 @@
 {
   "name": "@hbdlzy/ui-energy",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Company energy domain component package.",
   "license": "MIT",
   "repository": {
@@ -10,12 +10,12 @@
   },
   "main": "dist/index.cjs",
   "module": "dist/index.js",
-  "types": "src/index.ts",
+  "types": "dist/index.d.ts",
   "exports": {
     ".": {
       "import": "./dist/index.js",
       "require": "./dist/index.cjs",
-      "types": "./src/index.ts"
+      "types": "./dist/index.d.ts"
     },
     "./components.manifest.json": "./components.manifest.json"
   },
@@ -29,7 +29,8 @@
     "vue": "^3.5.14"
   },
   "scripts": {
-    "build": "vite build",
+    "build": "vite build && pnpm run build:types",
+    "build:types": "vue-tsc -p tsconfig.build.json --declaration --emitDeclarationOnly",
     "prepublishOnly": "pnpm build"
   },
   "publishConfig": {

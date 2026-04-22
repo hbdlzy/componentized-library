@@ -677,8 +677,11 @@ const tableColumns: BaseTableColumn<DemoTableRow>[] = [
   },
   {
     label: '负责人',
-    prop: 'owner',
-    minWidth: 120
+      prop: 'owner',
+      minWidth: 140,
+      headerSearch: {
+        placeholder: '请输入搜索内容'
+      }
   },
   {
     label: '状态',
@@ -751,6 +754,7 @@ const requestTableData = async (params: Record<string, unknown>) => {
 
   const keyword = String(params.keyword || '').trim().toLowerCase()
   const status = String(params.status || '')
+  const ownerKeyword = String(params.owner || '').trim().toLowerCase()
   const currentPage = Number(params.currentPage || params.pageNum || 1)
   const pageSize = Number(params.pageSize || 20)
   const orderBy = String(params.orderBy || '')
@@ -759,7 +763,8 @@ const requestTableData = async (params: Record<string, unknown>) => {
   let filteredRows = allTableRows.filter((row) => {
     const matchKeyword = !keyword || row.name.toLowerCase().includes(keyword) || row.owner.toLowerCase().includes(keyword)
     const matchStatus = !status || row.status === status
-    return matchKeyword && matchStatus
+    const matchOwner = !ownerKeyword || row.owner.toLowerCase().includes(ownerKeyword)
+    return matchKeyword && matchStatus && matchOwner
   })
 
   if (orderBy && orderDirection) {
@@ -817,7 +822,7 @@ const reloadTable = () => {
 const resetTableFilters = () => {
   tableFilters.keyword = ''
   tableFilters.status = ''
-  reloadTable()
+  void tableRef.value?.resetHeaderSearch()
 }
 
 const handleCardExport = (payload?: unknown) => {

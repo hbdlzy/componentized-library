@@ -75,6 +75,58 @@
           <slot :name="resolveHeaderSlotName(column)" v-bind="headerScope" :column-config="column"></slot>
         </template>
 
+        <template v-else-if="shouldRenderBuiltInHeader(column)" #header>
+          <div class="base-table__header">
+            <span class="base-table__header-label">{{ column.label }}</span>
+
+            <div class="base-table__header-actions">
+              <el-dropdown
+                :ref="bindHeaderSearchDropdown(column)"
+                class="base-table__header-dropdown"
+                trigger="click"
+                :hide-on-click="false"
+                placement="bottom"
+                popper-class="base-table__header-search-dropdown"
+              >
+                <button
+                  class="base-table__header-icon"
+                  :class="{ 'is-active': hasHeaderSearchValue(column) }"
+                  type="button"
+                >
+                  <span class="base-table__header-icon-mark" aria-hidden="true"></span>
+                </button>
+
+                <template #dropdown>
+                  <el-dropdown-menu class="base-table__header-search-menu">
+                    <div
+                      class="base-table__header-search-panel"
+                      :style="{ width: toCssValue(getHeaderSearchWidth(column)) || '280px' }"
+                      @click.stop
+                    >
+                      <el-input
+                        :model-value="getHeaderSearchValue(column)"
+                        :placeholder="getHeaderSearchPlaceholder(column)"
+                        clearable
+                        @update:model-value="updateHeaderSearchValue(column, $event)"
+                        @keyup.enter="handleHeaderSearch(column)"
+                      />
+
+                      <div class="base-table__header-search-footer">
+                        <el-button link type="primary" @click="handleHeaderSearch(column)">
+                          {{ getHeaderSearchSearchText(column) }}
+                        </el-button>
+                        <el-button link @click="handleHeaderSearchReset(column)">
+                          {{ getHeaderSearchResetText(column) }}
+                        </el-button>
+                      </div>
+                    </div>
+                  </el-dropdown-menu>
+                </template>
+              </el-dropdown>
+            </div>
+          </div>
+        </template>
+
         <template #default="scope">
           <slot
             v-if="hasCellSlot(column)"
@@ -163,6 +215,7 @@ import type {
   BaseTableColumn,
   BaseTableCssValue,
   BaseTableExpose,
+  BaseTableHeaderSearchConfig,
   BaseTableLoadedPayload,
   BaseTableOption,
   BaseTablePagination,
@@ -230,8 +283,11 @@ const emit = defineEmits<{
 const slots = useSlots()
 const tableRef = ref<TableInstance>()
 const loading = ref(false)
+const sourceRows = ref<BaseTableRow[]>(normalizeRows(props.data))
 const rows = ref<BaseTableRow[]>(normalizeRows(props.data))
 const selectionRows = ref<BaseTableRow[]>([])
+const headerSearchValues = reactive<Record<string, string>>({})
+const headerSearchDropdownRefs = ref<Record<string, { handleClose?: () => void }>>({})
 const sortState = reactive({
   prop: props.defaultSort?.prop,
   order: props.defaultSort?.order || null
@@ -303,20 +359,18 @@ onMounted(() => {
   }
 
   if (!props.request) {
-    rows.value = normalizeRows(props.data)
-    if (!props.pagination?.total) {
-      paginationState.total = rows.value.length
-      emitPagination()
-    }
+    setData(props.data || [])
   }
 })
 
 function syncPagination(value?: Partial<BaseTablePagination>) {
+  const nextPageSizes = value?.pageSizes
+
   paginationState.currentPage = Number(value?.currentPage || paginationState.currentPage || 1)
   paginationState.pageSize = Number(value?.pageSize || paginationState.pageSize || 20)
   paginationState.total = Number(value?.total || value?.total === 0 ? value.total : paginationState.total || rows.value.length)
-  paginationState.pageSizes = Array.isArray(value?.pageSizes) && value.pageSizes.length
-    ? [...value.pageSizes]
+  paginationState.pageSizes = Array.isArray(nextPageSizes) && nextPageSizes.length
+    ? [...nextPageSizes]
     : [...(paginationState.pageSizes.length ? paginationState.pageSizes : [10, 20, 50, 100])]
 }
 
@@ -336,7 +390,7 @@ async function load(data?: BaseTableRow[]) {
   }
 
   if (!props.request) {
-    setData(props.data || [])
+    applyLocalRows()
     return
   }
 
@@ -365,6 +419,11 @@ async function load(data?: BaseTableRow[]) {
 }
 
 async function refresh() {
+  if (!props.request) {
+    applyLocalRows()
+    return
+  }
+
   await load()
 }
 
@@ -375,11 +434,8 @@ async function resetPage() {
 }
 
 function setData(data: BaseTableRow[]) {
-  rows.value = normalizeRows(data)
-  if (!props.request) {
-    paginationState.total = Number(props.pagination?.total ?? rows.value.length)
-    emitPagination()
-  }
+  sourceRows.value = normalizeRows(data)
+  applyLocalRows()
 }
 
 function clearSelection() {
@@ -471,6 +527,186 @@ function handleInputChange(value: string, row: BaseTableRow, column: BaseTableCo
   })
 }
 
+function shouldRenderBuiltInHeader(column: BaseTableColumn<BaseTableRow>) {
+  return hasHeaderSearch(column)
+}
+
+function hasHeaderSearch(column: BaseTableColumn<BaseTableRow>) {
+  return Boolean(getHeaderSearchConfig(column))
+}
+
+function getHeaderSearchConfig(column: BaseTableColumn<BaseTableRow>): BaseTableHeaderSearchConfig | null {
+  if (!column.headerSearch) {
+    return null
+  }
+
+  if (column.headerSearch === true) {
+    return {}
+  }
+
+  return column.headerSearch
+}
+
+function getHeaderSearchStateKey(column: BaseTableColumn<BaseTableRow>) {
+  return resolveHeaderSearchParamKey(column) || getColumnProp(column) || getColumnKey(column)
+}
+
+function setHeaderSearchDropdownRef(
+  instance: { handleClose?: () => void } | null,
+  column: BaseTableColumn<BaseTableRow>
+) {
+  const stateKey = getHeaderSearchStateKey(column)
+
+  if (!instance) {
+    delete headerSearchDropdownRefs.value[stateKey]
+    return
+  }
+
+  headerSearchDropdownRefs.value[stateKey] = instance
+}
+
+function bindHeaderSearchDropdown(column: BaseTableColumn<BaseTableRow>) {
+  return (instance: { handleClose?: () => void } | null) => {
+    setHeaderSearchDropdownRef(instance, column)
+  }
+}
+
+function resolveHeaderSearchParamKey(column: BaseTableColumn<BaseTableRow>) {
+  const config = getHeaderSearchConfig(column)
+  const legacyParamKey = (column as Record<string, any>).otherProps
+
+  return config?.paramKey || legacyParamKey || getColumnProp(column) || ''
+}
+
+function getHeaderSearchValue(column: BaseTableColumn<BaseTableRow>) {
+  return headerSearchValues[getHeaderSearchStateKey(column)] || ''
+}
+
+function hasHeaderSearchValue(column: BaseTableColumn<BaseTableRow>) {
+  return Boolean(getHeaderSearchValue(column).trim())
+}
+
+function updateHeaderSearchValue(column: BaseTableColumn<BaseTableRow>, value: string) {
+  headerSearchValues[getHeaderSearchStateKey(column)] = normalizeHeaderSearchValue(value)
+}
+
+function getHeaderSearchPlaceholder(column: BaseTableColumn<BaseTableRow>) {
+  return getHeaderSearchConfig(column)?.placeholder || '请输入搜索内容'
+}
+
+function getHeaderSearchWidth(column: BaseTableColumn<BaseTableRow>) {
+  return getHeaderSearchConfig(column)?.width || 280
+}
+
+function getHeaderSearchSearchText(column: BaseTableColumn<BaseTableRow>) {
+  return getHeaderSearchConfig(column)?.searchText || '搜索'
+}
+
+function getHeaderSearchResetText(column: BaseTableColumn<BaseTableRow>) {
+  return getHeaderSearchConfig(column)?.resetText || '重置'
+}
+
+async function handleHeaderSearch(column: BaseTableColumn<BaseTableRow>) {
+  closeHeaderSearch(column)
+  paginationState.currentPage = 1
+  emitPagination()
+
+  if (props.request) {
+    await load()
+    return
+  }
+
+  applyLocalRows()
+}
+
+async function handleHeaderSearchReset(column: BaseTableColumn<BaseTableRow>) {
+  updateHeaderSearchValue(column, '')
+  closeHeaderSearch(column)
+  paginationState.currentPage = 1
+  emitPagination()
+
+  if (props.request) {
+    await load()
+    return
+  }
+
+  applyLocalRows()
+}
+
+function closeHeaderSearch(column: BaseTableColumn<BaseTableRow>) {
+  headerSearchDropdownRefs.value[getHeaderSearchStateKey(column)]?.handleClose?.()
+}
+
+function buildHeaderSearchParams() {
+  return props.columns.reduce<Record<string, unknown>>((result, column) => {
+    if (!hasHeaderSearch(column)) {
+      return result
+    }
+
+    const paramKey = resolveHeaderSearchParamKey(column)
+    const value = getHeaderSearchValue(column).trim()
+
+    if (!paramKey || !value) {
+      return result
+    }
+
+    result[paramKey] = value
+    return result
+  }, {})
+}
+
+function applyLocalRows() {
+  const filteredRows = filterLocalRows(sourceRows.value)
+  rows.value = filteredRows
+  paginationState.total = filteredRows.length
+  emitPagination()
+}
+
+function filterLocalRows(data: BaseTableRow[]) {
+  const activeColumns = props.columns
+    .filter((column) => hasHeaderSearch(column) && hasHeaderSearchValue(column))
+    .map((column) => ({
+      column,
+      keyword: getHeaderSearchValue(column).trim().toLowerCase()
+    }))
+
+  if (!activeColumns.length) {
+    return normalizeRows(data)
+  }
+
+  return normalizeRows(data).filter((row) => {
+    return activeColumns.every(({ column, keyword }) => {
+      const columnProp = getColumnProp(column)
+      if (!columnProp) {
+        return true
+      }
+
+      const value = getCellValue(row, column)
+      return toSearchableText(value).includes(keyword)
+    })
+  })
+}
+
+function normalizeHeaderSearchValue(value: unknown) {
+  if (value === undefined || value === null) {
+    return ''
+  }
+
+  return String(value)
+}
+
+function toSearchableText(value: unknown): string {
+  if (value === undefined || value === null) {
+    return ''
+  }
+
+  if (Array.isArray(value)) {
+    return value.map((item) => toSearchableText(item)).join(' ').toLowerCase()
+  }
+
+  return String(value).toLowerCase()
+}
+
 function buildRequestParams(): BaseTableRequestParams {
   const params: BaseTableRequestParams = {
     ...props.requestParams,
@@ -482,10 +718,12 @@ function buildRequestParams(): BaseTableRequestParams {
 
   const currentColumn = props.columns.find((item) => String(item.prop || '') === String(sortState.prop || ''))
   const sortPayload = buildSortPayload(currentColumn, sortState.prop, sortState.order)
+  const headerSearchParams = buildHeaderSearchParams()
   const sortParams = buildSortParams(sortPayload)
 
   return {
     ...params,
+    ...headerSearchParams,
     ...sortParams
   }
 }
@@ -735,11 +973,78 @@ function toCssValue(value?: BaseTableCssValue) {
   return typeof value === 'number' ? `${value}px` : value
 }
 
+function findHeaderSearchColumn(key: string) {
+  return props.columns.find((column) => {
+    return getHeaderSearchStateKey(column) === key || getColumnProp(column) === key
+  })
+}
+
+async function setHeaderSearchValue(key: string, value: string, shouldReload = true) {
+  const matchedColumn = findHeaderSearchColumn(key)
+  const stateKey = matchedColumn ? getHeaderSearchStateKey(matchedColumn) : key
+
+  headerSearchValues[stateKey] = normalizeHeaderSearchValue(value)
+
+  if (!shouldReload) {
+    return
+  }
+
+  if (matchedColumn) {
+    await handleHeaderSearch(matchedColumn)
+    return
+  }
+
+  paginationState.currentPage = 1
+  emitPagination()
+  if (props.request) {
+    await load()
+    return
+  }
+
+  applyLocalRows()
+}
+
+async function resetHeaderSearch(key?: string) {
+  if (key) {
+    const matchedColumn = findHeaderSearchColumn(key)
+    if (matchedColumn) {
+      await handleHeaderSearchReset(matchedColumn)
+      return
+    }
+
+    delete headerSearchValues[key]
+  } else {
+    Object.keys(headerSearchValues).forEach((stateKey) => {
+      delete headerSearchValues[stateKey]
+    })
+    Object.keys(headerSearchDropdownRefs.value).forEach((stateKey) => {
+      headerSearchDropdownRefs.value[stateKey]?.handleClose?.()
+    })
+  }
+
+  paginationState.currentPage = 1
+  emitPagination()
+
+  if (props.request) {
+    await load()
+    return
+  }
+
+  applyLocalRows()
+}
+
+function getHeaderSearchValues() {
+  return { ...headerSearchValues }
+}
+
 defineExpose<BaseTableExpose>({
   load,
   refresh,
   setData,
   resetPage,
+  setHeaderSearchValue,
+  resetHeaderSearch,
+  getHeaderSearchValues,
   clearSelection,
   toggleRowSelection,
   getSelectionRows,
@@ -779,6 +1084,100 @@ defineExpose<BaseTableExpose>({
   align-items: center;
   gap: 4px;
   flex-wrap: wrap;
+}
+
+.base-table__header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  min-width: 0;
+}
+
+.base-table__header-label {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.base-table__header-actions {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.base-table__header-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--el-text-color-secondary);
+  cursor: pointer;
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.base-table__header-icon:hover,
+.base-table__header-icon.is-active {
+  color: var(--el-color-primary);
+  background: rgba(64, 158, 255, 0.12);
+}
+
+.base-table__header-icon-mark {
+  position: relative;
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  box-sizing: border-box;
+  border: 2px solid currentColor;
+  border-radius: 999px;
+}
+
+.base-table__header-icon-mark::after {
+  content: '';
+  position: absolute;
+  right: -6px;
+  bottom: -4px;
+  width: 7px;
+  height: 2px;
+  border-radius: 999px;
+  background: currentColor;
+  transform: rotate(45deg);
+  transform-origin: center;
+}
+
+.base-table__header-dropdown {
+  display: inline-flex;
+  align-items: center;
+}
+
+.base-table__header-search-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 8px;
+}
+
+:deep(.base-table__header-search-menu) {
+  padding: 0;
+}
+
+:deep(.base-table__header-search-dropdown) {
+  padding: 0;
+  border-radius: 12px;
+}
+
+.base-table__header-search-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .base-table__link {
