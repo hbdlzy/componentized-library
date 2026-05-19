@@ -11,7 +11,7 @@
       :model-value="treeSelectValue"
       :data="data"
       :props="resolvedTreeProps"
-      :placeholder="placeholder"
+      :placeholder="controlPlaceholder"
       :disabled="disabled"
       :clearable="clearable"
       :filterable="filterable"
@@ -28,6 +28,7 @@
       :popper-class="popperClass"
       :node-key="nodeKey"
       :style="treeSelectStyle"
+      :aria-invalid="hasError ? 'true' : undefined"
       @update:model-value="handleModelValueUpdate"
       @focus="handleFocus"
       @blur="handleBlur"
@@ -53,8 +54,19 @@
       class="outlined-tree-select__label"
       :class="labelClasses"
     >
-      {{ floatingLabel }}
+      <span
+        v-if="required"
+        class="outlined-tree-select__required"
+      >*</span>
+      <span>{{ floatingLabel }}</span>
     </div>
+
+    <p
+      v-if="hasError"
+      class="outlined-tree-select__error"
+    >
+      {{ resolvedErrorMessage }}
+    </p>
   </div>
 </template>
 
@@ -101,7 +113,10 @@ const props = withDefaults(defineProps<OutlinedTreeSelectProps>(), {
   inputHeight: 40,
   isBorder: false,
   marginBottom: 20,
-  paddingTop: 20
+  paddingTop: 20,
+  required: false,
+  error: false,
+  errorMessage: ''
 })
 
 const emit = defineEmits<{
@@ -138,7 +153,8 @@ const treeSelectAttrs = computed(() => {
 })
 
 const containerClasses = computed(() => ({
-  'outlined-tree-select--bordered': props.isBorder
+  'outlined-tree-select--bordered': props.isBorder,
+  'outlined-tree-select--error': hasError.value
 }))
 
 const containerStyle = computed(() => ({
@@ -165,6 +181,9 @@ const resolvedTreeProps = computed(() => {
 })
 
 const floatingLabel = computed(() => props.label || props.placeholder || '')
+const controlPlaceholder = computed(() => addRequiredMark(props.placeholder))
+const hasError = computed(() => Boolean(props.error))
+const resolvedErrorMessage = computed(() => props.errorMessage || createRequiredMessage(floatingLabel.value))
 
 const hasContent = computed(() => {
   if (isArrayMode()) {
@@ -263,6 +282,18 @@ function toCssValue(value: OutlinedTreeSelectCssValue | undefined) {
   return value
 }
 
+function addRequiredMark(value: string) {
+  if (!props.required || !value || value.startsWith('*')) {
+    return value
+  }
+
+  return `*${value}`
+}
+
+function createRequiredMessage(label: string) {
+  return label ? `${label}为必填项` : '该项为必填项'
+}
+
 defineExpose<OutlinedTreeSelectExpose>({
   focus: () => {
     treeSelectRef.value?.focus?.()
@@ -296,6 +327,9 @@ defineExpose<OutlinedTreeSelectExpose>({
 .outlined-tree-select__label {
   position: absolute;
   left: -2px;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
   padding: 2px 5px;
   border-radius: 2px;
   background-color: #ffffff;
@@ -325,6 +359,23 @@ defineExpose<OutlinedTreeSelectExpose>({
   color: var(--el-text-color-regular);
 }
 
+.outlined-tree-select--error {
+  --el-input-focus-border-color: var(--el-color-danger);
+  --el-input-hover-border-color: var(--el-color-danger);
+}
+
+.outlined-tree-select__required,
+.outlined-tree-select--error .outlined-tree-select__label,
+.outlined-tree-select__error {
+  color: var(--el-color-danger);
+}
+
+.outlined-tree-select__error {
+  margin: 6px 0 0;
+  font-size: 12px;
+  line-height: 1.2;
+}
+
 :deep(.outlined-tree-select__control.el-select) {
   width: 100%;
 }
@@ -342,13 +393,28 @@ defineExpose<OutlinedTreeSelectExpose>({
   padding-top: 4px;
 }
 
-:deep(.outlined-tree-select--bordered .el-select__wrapper) {
+.outlined-tree-select--bordered :deep(.el-select__wrapper) {
   box-shadow: none;
   border-radius: 0;
   border-bottom: 1px solid #cccccc;
 }
 
-:deep(.outlined-tree-select--bordered .el-select__wrapper.is-focused) {
+.outlined-tree-select--bordered :deep(.el-select__wrapper.is-focused) {
   border-bottom-color: var(--el-color-primary);
+}
+
+.outlined-tree-select--error :deep(.el-select__wrapper) {
+  box-shadow: 0 0 0 1px var(--el-color-danger) inset;
+}
+
+.outlined-tree-select--error :deep(.el-select__wrapper.is-focused),
+.outlined-tree-select--error :deep(.el-select__wrapper.is-focus),
+.outlined-tree-select--error :deep(.el-select__wrapper:hover) {
+  box-shadow: 0 0 0 1px var(--el-color-danger) inset;
+}
+
+.outlined-tree-select--error.outlined-tree-select--bordered :deep(.el-select__wrapper) {
+  box-shadow: 0 0 0 1px var(--el-color-danger) inset;
+  border-bottom-color: transparent;
 }
 </style>

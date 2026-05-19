@@ -12,12 +12,13 @@
       :options="options"
       :props="propsValue"
       :clearable="clearable"
-      :placeholder="placeholder"
+      :placeholder="controlPlaceholder"
       :filterable="filterable"
       :show-all-levels="levels"
       :disabled="disabled"
       :popper-class="popperClass"
       :style="cascaderStyle"
+      :aria-invalid="hasError ? 'true' : undefined"
       @update:model-value="handleModelValueUpdate"
       @focus="handleFocus"
       @blur="handleBlur"
@@ -30,8 +31,19 @@
       class="outlined-cascader__label"
       :class="labelClasses"
     >
-      {{ floatingLabel }}
+      <span
+        v-if="required"
+        class="outlined-cascader__required"
+      >*</span>
+      <span>{{ floatingLabel }}</span>
     </div>
+
+    <p
+      v-if="hasError"
+      class="outlined-cascader__error"
+    >
+      {{ resolvedErrorMessage }}
+    </p>
   </div>
 </template>
 
@@ -63,7 +75,10 @@ const props = withDefaults(defineProps<OutlinedCascaderProps>(), {
   filterable: true,
   levels: true,
   marginBottom: 20,
-  paddingTop: 20
+  paddingTop: 20,
+  required: false,
+  error: false,
+  errorMessage: ''
 })
 
 const emit = defineEmits<{
@@ -99,7 +114,8 @@ const cascaderAttrs = computed(() => {
 })
 
 const containerClasses = computed(() => ({
-  'outlined-cascader--bordered': props.isBorder
+  'outlined-cascader--bordered': props.isBorder,
+  'outlined-cascader--error': hasError.value
 }))
 
 const containerStyle = computed(() => ({
@@ -113,6 +129,9 @@ const cascaderStyle = computed(() => ({
 }))
 
 const floatingLabel = computed(() => props.label || props.placeholder || '')
+const controlPlaceholder = computed(() => addRequiredMark(props.placeholder))
+const hasError = computed(() => Boolean(props.error))
+const resolvedErrorMessage = computed(() => props.errorMessage || createRequiredMessage(floatingLabel.value))
 
 const hasContent = computed(() => cascaderValue.value.length > 0)
 
@@ -178,6 +197,18 @@ function toCssValue(value: OutlinedCascaderCssValue | undefined) {
   return value
 }
 
+function addRequiredMark(value: string) {
+  if (!props.required || !value || value.startsWith('*')) {
+    return value
+  }
+
+  return `*${value}`
+}
+
+function createRequiredMessage(label: string) {
+  return label ? `${label}为必填项` : '该项为必填项'
+}
+
 defineExpose<OutlinedCascaderExpose>({
   focus: () => {
     cascaderRef.value?.togglePopperVisible?.(true)
@@ -205,6 +236,9 @@ defineExpose<OutlinedCascaderExpose>({
 .outlined-cascader__label {
   position: absolute;
   left: -2px;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
   padding: 2px 5px;
   border-radius: 2px;
   background-color: #ffffff;
@@ -234,17 +268,48 @@ defineExpose<OutlinedCascaderExpose>({
   color: var(--el-text-color-regular);
 }
 
+.outlined-cascader--error {
+  --el-input-focus-border-color: var(--el-color-danger);
+  --el-input-hover-border-color: var(--el-color-danger);
+}
+
+.outlined-cascader__required,
+.outlined-cascader--error .outlined-cascader__label,
+.outlined-cascader__error {
+  color: var(--el-color-danger);
+}
+
+.outlined-cascader__error {
+  margin: 6px 0 0;
+  font-size: 12px;
+  line-height: 1.2;
+}
+
 :deep(.outlined-cascader__control .el-input) {
   height: 100%;
 }
 
-:deep(.outlined-cascader--bordered .el-input__wrapper) {
+.outlined-cascader--bordered :deep(.el-input__wrapper) {
   box-shadow: none;
   border-radius: 0;
   border-bottom: 1px solid #cccccc;
 }
 
-:deep(.outlined-cascader--bordered .el-input__wrapper.is-focus) {
+.outlined-cascader--bordered :deep(.el-input__wrapper.is-focus) {
   border-bottom-color: var(--el-color-primary);
+}
+
+.outlined-cascader--error :deep(.el-input__wrapper) {
+  box-shadow: 0 0 0 1px var(--el-color-danger) inset;
+}
+
+.outlined-cascader--error :deep(.el-input.is-focus .el-input__wrapper),
+.outlined-cascader--error :deep(.el-input__wrapper:hover) {
+  box-shadow: 0 0 0 1px var(--el-color-danger) inset;
+}
+
+.outlined-cascader--error.outlined-cascader--bordered :deep(.el-input__wrapper) {
+  box-shadow: 0 0 0 1px var(--el-color-danger) inset;
+  border-bottom-color: transparent;
 }
 </style>

@@ -24,6 +24,9 @@ export interface OutlinedTimePickerProps {
   isBorder?: boolean
   marginBottom?: OutlinedTimePickerCssValue
   paddingTop?: OutlinedTimePickerCssValue
+  required?: boolean
+  error?: boolean
+  errorMessage?: string
 }
 
 export interface OutlinedTimePickerExpose {

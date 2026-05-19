@@ -46,6 +46,9 @@ export interface OutlinedTreeSelectProps {
   isBorder?: boolean
   marginBottom?: OutlinedTreeSelectCssValue
   paddingTop?: OutlinedTreeSelectCssValue
+  required?: boolean
+  error?: boolean
+  errorMessage?: string
 }
 
 export interface OutlinedTreeSelectExpose {

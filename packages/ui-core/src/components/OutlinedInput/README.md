@@ -101,6 +101,9 @@ const remark = ref('')
 - `value`: 当前输入值，推荐通过 `v-model:value` 使用
 - `placeholder`: 输入框占位文案，同时默认作为浮动标签文案
 - `label`: 自定义浮动标签文案，未传时回退到 `placeholder`
+- `required`: 是否显示必填星号，默认 `false`
+- `error`: 是否显示错误态，开启后输入框变红并展示错误文案
+- `errorMessage`: 错误文案，未传时默认使用“字段名为必填项”
 - `disabled`: 是否禁用
 - `regex`: 数值校验正则，仅在 `isNumber` 为 `true` 时生效
 - `maxlength`: 最大输入长度

@@ -37,6 +37,9 @@ export interface OutlinedSelectProps {
   maxCollapseTags?: number
   marginBottom?: OutlinedSelectCssValue
   paddingTop?: OutlinedSelectCssValue
+  required?: boolean
+  error?: boolean
+  errorMessage?: string
 }
 
 export interface OutlinedSelectExpose {

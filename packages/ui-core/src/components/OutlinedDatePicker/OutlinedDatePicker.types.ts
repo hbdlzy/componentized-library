@@ -29,6 +29,9 @@ export interface OutlinedDatePickerProps {
   disabledDate?: OutlinedDatePickerDisabledDate
   marginBottom?: OutlinedDatePickerCssValue
   paddingTop?: OutlinedDatePickerCssValue
+  required?: boolean
+  error?: boolean
+  errorMessage?: string
 }
 
 export interface OutlinedDatePickerExpose {

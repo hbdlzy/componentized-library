@@ -1,74 +1,91 @@
 <template>
   <div
     class="outlined-date-time-picker"
-    :class="[rootClass]"
-    :style="rootStyle"
+    :class="[containerClasses, rootClass]"
+    :style="[containerStyle, rootStyle]"
   >
-    <div
-      class="outlined-date-time-picker__field"
-      :class="fieldClasses"
-      :style="fieldStyle"
-    >
-      <el-date-picker
-        ref="datePickerRef"
-        class="outlined-date-time-picker__control"
-        :model-value="dateValue"
-        type="date"
-        format="YYYY-MM-DD"
-        value-format="YYYY-MM-DD"
-        :placeholder="placeholder"
-        :clearable="clearable"
-        :disabled-date="resolvedDisabledDate"
-        :style="controlStyle"
-        @update:model-value="handleDateUpdate"
-        @focus="handleFocus('date')"
-        @blur="handleBlur('date', $event)"
-        @change="handleDateChange"
-        @visible-change="handleVisibleChange('date', $event)"
-      />
+    <div class="outlined-date-time-picker__inner">
+      <div
+        class="outlined-date-time-picker__field"
+        :class="fieldClasses"
+      >
+        <el-date-picker
+          ref="datePickerRef"
+          class="outlined-date-time-picker__control"
+          :model-value="dateValue"
+          type="date"
+          format="YYYY-MM-DD"
+          value-format="YYYY-MM-DD"
+          :placeholder="datePlaceholder"
+          :clearable="clearable"
+          :disabled-date="resolvedDisabledDate"
+          :style="controlStyle"
+          :aria-invalid="hasError ? 'true' : undefined"
+          @update:model-value="handleDateUpdate"
+          @focus="handleFocus('date')"
+          @blur="handleBlur('date', $event)"
+          @change="handleDateChange"
+          @visible-change="handleVisibleChange('date', $event)"
+        />
+
+        <div
+          v-if="floatingLabel"
+          class="outlined-date-time-picker__label"
+          :class="dateLabelClasses"
+        >
+          <span
+            v-if="required"
+            class="outlined-date-time-picker__required"
+          >*</span>
+          <span>{{ floatingLabel }}</span>
+        </div>
+      </div>
+
+      <span class="outlined-date-time-picker__separator">{{ separatorText }}</span>
 
       <div
-        v-if="floatingLabel"
-        class="outlined-date-time-picker__label"
-        :class="dateLabelClasses"
+        class="outlined-date-time-picker__field"
+        :class="fieldClasses"
       >
-        {{ floatingLabel }}
+        <el-time-picker
+          ref="timePickerRef"
+          class="outlined-date-time-picker__control"
+          :model-value="timeValue"
+          format="HH:mm"
+          value-format="HH:mm"
+          :placeholder="timeControlPlaceholder"
+          :clearable="clearable"
+          :disabled="!dateValue"
+          :disabled-hours="resolvedDisabledHours"
+          :disabled-minutes="resolvedDisabledMinutes"
+          :style="controlStyle"
+          :aria-invalid="hasError ? 'true' : undefined"
+          @update:model-value="handleTimeUpdate"
+          @focus="handleFocus('time')"
+          @blur="handleBlur('time', $event)"
+          @change="handleTimeChange"
+          @visible-change="handleVisibleChange('time', $event)"
+        />
+
+        <div
+          class="outlined-date-time-picker__label"
+          :class="timeLabelClasses"
+        >
+          <span
+            v-if="required"
+            class="outlined-date-time-picker__required"
+          >*</span>
+          <span>{{ timePlaceholder }}</span>
+        </div>
       </div>
     </div>
 
-    <span class="outlined-date-time-picker__separator">{{ separatorText }}</span>
-
-    <div
-      class="outlined-date-time-picker__field"
-      :class="fieldClasses"
-      :style="fieldStyle"
+    <p
+      v-if="hasError"
+      class="outlined-date-time-picker__error"
     >
-      <el-time-picker
-        ref="timePickerRef"
-        class="outlined-date-time-picker__control"
-        :model-value="timeValue"
-        format="HH:mm"
-        value-format="HH:mm"
-        :placeholder="timePlaceholder"
-        :clearable="clearable"
-        :disabled="!dateValue"
-        :disabled-hours="resolvedDisabledHours"
-        :disabled-minutes="resolvedDisabledMinutes"
-        :style="controlStyle"
-        @update:model-value="handleTimeUpdate"
-        @focus="handleFocus('time')"
-        @blur="handleBlur('time', $event)"
-        @change="handleTimeChange"
-        @visible-change="handleVisibleChange('time', $event)"
-      />
-
-      <div
-        class="outlined-date-time-picker__label"
-        :class="timeLabelClasses"
-      >
-        {{ timePlaceholder }}
-      </div>
-    </div>
+      {{ resolvedErrorMessage }}
+    </p>
   </div>
 </template>
 
@@ -99,7 +116,10 @@ const props = withDefaults(defineProps<OutlinedDateTimePickerProps>(), {
   timePlaceholder: '时间',
   clearable: false,
   marginBottom: 20,
-  paddingTop: 20
+  paddingTop: 20,
+  required: false,
+  error: false,
+  errorMessage: ''
 })
 
 const emit = defineEmits<{
@@ -135,18 +155,28 @@ const rootClass = computed(() => attrs.class)
 const rootStyle = computed(() => attrs.style)
 const floatingLabel = computed(() => props.label || props.placeholder || '')
 
-const fieldClasses = computed(() => ({
-  'outlined-date-time-picker__field--bordered': props.isBorder
+const containerClasses = computed(() => ({
+  'outlined-date-time-picker--error': hasError.value
 }))
 
-const fieldStyle = computed(() => ({
+const containerStyle = computed(() => ({
   marginBottom: toCssValue(props.marginBottom),
   paddingTop: toCssValue(props.paddingTop)
+}))
+
+const fieldClasses = computed(() => ({
+  'outlined-date-time-picker__field--bordered': props.isBorder,
+  'outlined-date-time-picker__field--error': hasError.value
 }))
 
 const controlStyle = computed(() => ({
   height: `${props.inputHeight}px`
 }))
+
+const datePlaceholder = computed(() => addRequiredMark(props.placeholder))
+const timeControlPlaceholder = computed(() => addRequiredMark(props.timePlaceholder))
+const hasError = computed(() => Boolean(props.error))
+const resolvedErrorMessage = computed(() => props.errorMessage || createRequiredMessage(floatingLabel.value))
 
 const resolvedDisabledDate = computed(() => createDisabledDateHandler(props.disabledDate))
 
@@ -316,6 +346,18 @@ function toCssValue(value: OutlinedDateTimePickerCssValue | undefined) {
   return value
 }
 
+function addRequiredMark(value: string) {
+  if (!props.required || !value || value.startsWith('*')) {
+    return value
+  }
+
+  return `*${value}`
+}
+
+function createRequiredMessage(label: string) {
+  return label ? `${label}为必填项` : '该项为必填项'
+}
+
 defineExpose<OutlinedDateTimePickerExpose>({
   focusDate: () => {
     datePickerRef.value?.focus?.()
@@ -342,6 +384,10 @@ defineExpose<OutlinedDateTimePickerExpose>({
 
 <style scoped>
 .outlined-date-time-picker {
+  position: relative;
+}
+
+.outlined-date-time-picker__inner {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -360,6 +406,9 @@ defineExpose<OutlinedDateTimePickerExpose>({
 .outlined-date-time-picker__label {
   position: absolute;
   left: -2px;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
   padding: 2px 5px;
   border-radius: 2px;
   background-color: #ffffff;
@@ -389,6 +438,23 @@ defineExpose<OutlinedDateTimePickerExpose>({
   color: var(--el-text-color-regular);
 }
 
+.outlined-date-time-picker--error {
+  --el-input-focus-border-color: var(--el-color-danger);
+  --el-input-hover-border-color: var(--el-color-danger);
+}
+
+.outlined-date-time-picker__required,
+.outlined-date-time-picker--error .outlined-date-time-picker__label,
+.outlined-date-time-picker__error {
+  color: var(--el-color-danger);
+}
+
+.outlined-date-time-picker__error {
+  margin: 6px 0 0;
+  font-size: 12px;
+  line-height: 1.2;
+}
+
 :deep(.outlined-date-time-picker__control.el-date-editor) {
   width: 100%;
 }
@@ -409,13 +475,27 @@ defineExpose<OutlinedDateTimePickerExpose>({
   right: 30px;
 }
 
-:deep(.outlined-date-time-picker__field--bordered .el-input__wrapper) {
+.outlined-date-time-picker__field--bordered :deep(.el-input__wrapper) {
   box-shadow: none;
   border-radius: 0;
   border-bottom: 1px solid #cccccc;
 }
 
-:deep(.outlined-date-time-picker__field--bordered .el-input__wrapper.is-focus) {
+.outlined-date-time-picker__field--bordered :deep(.el-input__wrapper.is-focus) {
   border-bottom-color: var(--el-color-primary);
+}
+
+.outlined-date-time-picker__field--error :deep(.el-input__wrapper) {
+  box-shadow: 0 0 0 1px var(--el-color-danger) inset;
+}
+
+.outlined-date-time-picker__field--error :deep(.el-input__wrapper.is-focus),
+.outlined-date-time-picker__field--error :deep(.el-input__wrapper:hover) {
+  box-shadow: 0 0 0 1px var(--el-color-danger) inset;
+}
+
+.outlined-date-time-picker__field--error.outlined-date-time-picker__field--bordered :deep(.el-input__wrapper) {
+  box-shadow: 0 0 0 1px var(--el-color-danger) inset;
+  border-bottom-color: transparent;
 }
 </style>

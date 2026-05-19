@@ -9,7 +9,7 @@
       v-bind="inputAttrs"
       :model-value="inputValue"
       :type="resolvedType"
-      :placeholder="placeholder"
+      :placeholder="controlPlaceholder"
       :disabled="disabled"
       :maxlength="maxlength"
       :max="max"
@@ -18,6 +18,7 @@
       :show-word-limit="showWordLimit"
       :clearable="clearable"
       :style="inputStyle"
+      :aria-invalid="hasError ? 'true' : undefined"
       @update:model-value="handleModelValueUpdate"
       @focus="handleFocus"
       @blur="handleBlur"
@@ -48,8 +49,19 @@
       class="outlined-input__label"
       :class="labelClasses"
     >
-      {{ floatingLabel }}
+      <span
+        v-if="required"
+        class="outlined-input__required"
+      >*</span>
+      <span>{{ floatingLabel }}</span>
     </div>
+
+    <p
+      v-if="hasError"
+      class="outlined-input__error"
+    >
+      {{ resolvedErrorMessage }}
+    </p>
   </div>
 </template>
 
@@ -84,7 +96,10 @@ const props = withDefaults(defineProps<OutlinedInputProps>(), {
   clearable: false,
   showWordLimit: true,
   marginBottom: 20,
-  paddingTop: 20
+  paddingTop: 20,
+  required: false,
+  error: false,
+  errorMessage: ''
 })
 
 const emit = defineEmits<{
@@ -127,6 +142,7 @@ const hasTextareaAutosize = computed(() => {
 
 const containerClasses = computed(() => ({
   'outlined-input--bordered': props.isBorder,
+  'outlined-input--error': hasError.value,
   'outlined-input--textarea-default': resolvedType.value === 'textarea' && !hasTextareaAutosize.value
 }))
 
@@ -146,6 +162,9 @@ const inputStyle = computed(() => {
 })
 
 const floatingLabel = computed(() => props.label || props.placeholder || '')
+const controlPlaceholder = computed(() => addRequiredMark(props.placeholder))
+const hasError = computed(() => Boolean(props.error))
+const resolvedErrorMessage = computed(() => props.errorMessage || createRequiredMessage(floatingLabel.value))
 
 const hasContent = computed(() => hasFilledValue(inputValue.value))
 
@@ -222,6 +241,18 @@ function toCssValue(value: OutlinedInputCssValue | undefined) {
   return value
 }
 
+function addRequiredMark(value: string) {
+  if (!props.required || !value || value.startsWith('*')) {
+    return value
+  }
+
+  return `*${value}`
+}
+
+function createRequiredMessage(label: string) {
+  return label ? `${label}为必填项` : '该项为必填项'
+}
+
 defineExpose<OutlinedInputExpose>({
   focus: () => {
     inputRef.value?.focus()
@@ -247,6 +278,9 @@ defineExpose<OutlinedInputExpose>({
 .outlined-input__label {
   position: absolute;
   left: -2px;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
   padding: 2px 5px;
   border-radius: 2px;
   background-color: #ffffff;
@@ -276,32 +310,77 @@ defineExpose<OutlinedInputExpose>({
   color: var(--el-text-color-regular);
 }
 
+.outlined-input--error {
+  --el-input-focus-border-color: var(--el-color-danger);
+  --el-input-hover-border-color: var(--el-color-danger);
+}
+
+.outlined-input__required,
+.outlined-input--error .outlined-input__label,
+.outlined-input__error {
+  color: var(--el-color-danger);
+}
+
+.outlined-input__error {
+  margin: 6px 0 0;
+  font-size: 12px;
+  line-height: 1.2;
+}
+
 .outlined-input__suffix-text {
   white-space: nowrap;
 }
 
-:deep(.outlined-input--bordered .el-input__wrapper) {
+.outlined-input--bordered :deep(.el-input__wrapper) {
   box-shadow: none;
   border-radius: 0;
   border-bottom: 1px solid #cccccc;
 }
 
-:deep(.outlined-input--bordered .el-input__wrapper.is-focus) {
+.outlined-input--bordered :deep(.el-input__wrapper.is-focus) {
   border-bottom-color: var(--el-color-primary);
 }
 
-:deep(.outlined-input--bordered .el-textarea__inner) {
+.outlined-input--bordered :deep(.el-textarea__inner) {
   border-width: 0 0 1px;
   border-radius: 0;
   box-shadow: none;
 }
 
-:deep(.outlined-input--bordered .el-textarea__inner:focus) {
+.outlined-input--bordered :deep(.el-textarea__inner:focus) {
   border-bottom-color: var(--el-color-primary);
 }
 
-:deep(.outlined-input--textarea-default .el-textarea__inner) {
+.outlined-input--textarea-default :deep(.el-textarea__inner) {
   min-height: 100px !important;
   max-height: 180px;
+}
+
+.outlined-input--error :deep(.el-input__wrapper) {
+  box-shadow: 0 0 0 1px var(--el-color-danger) inset;
+}
+
+.outlined-input--error :deep(.el-input__wrapper.is-focus),
+.outlined-input--error :deep(.el-input__wrapper:hover) {
+  box-shadow: 0 0 0 1px var(--el-color-danger) inset;
+}
+
+.outlined-input--error :deep(.el-textarea__inner) {
+  box-shadow: 0 0 0 1px var(--el-color-danger) inset;
+}
+
+.outlined-input--error :deep(.el-textarea__inner:focus),
+.outlined-input--error :deep(.el-textarea__inner:hover) {
+  box-shadow: 0 0 0 1px var(--el-color-danger) inset;
+}
+
+.outlined-input--error.outlined-input--bordered :deep(.el-input__wrapper) {
+  box-shadow: 0 0 0 1px var(--el-color-danger) inset;
+  border-bottom-color: transparent;
+}
+
+.outlined-input--error.outlined-input--bordered :deep(.el-textarea__inner) {
+  box-shadow: 0 0 0 1px var(--el-color-danger) inset;
+  border-bottom-color: transparent;
 }
 </style>

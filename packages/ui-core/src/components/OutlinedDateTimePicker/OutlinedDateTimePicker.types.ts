@@ -20,6 +20,9 @@ export interface OutlinedDateTimePickerProps {
   clearable?: boolean
   marginBottom?: OutlinedDateTimePickerCssValue
   paddingTop?: OutlinedDateTimePickerCssValue
+  required?: boolean
+  error?: boolean
+  errorMessage?: string
 }
 
 export interface OutlinedDateTimePickerExpose {

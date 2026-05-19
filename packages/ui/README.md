@@ -31,10 +31,14 @@ import {
   OutlinedTimePicker,
   OutlinedCascader,
   OutlinedTreeSelect,
+  installRipple,
+  uninstallRipple,
   companyTokens,
   echarts
 } from '@hbdlzy/ui'
 ```
+
+导入 `@hbdlzy/ui` 后会自动为项目里的按钮启用 ripple 效果，覆盖原生 `button`、Element Plus `el-button` 以及 radio/checkbox button 形态。局部不需要时，可在按钮或父级元素上添加 `data-hbdl-ripple="false"`。
 
 ## 当前聚合内容
 
@@ -58,6 +62,8 @@ import {
 - `echarts`
 - `exportExcel`
 - `companyTokens`
+- `installRipple`
+- `uninstallRipple`
 
 ## 详细文档入口
 

@@ -45,6 +45,7 @@ node_modules/@hbdlzy/ui/AI-USAGE.md
   - `echarts`
   - `exportExcel`
   - `companyTokens`
+  - 全局按钮 ripple 已随 `@hbdlzy/ui` 入口自动启用，局部关闭可添加 `data-hbdl-ripple="false"`
 - 只有当现有组件无法满足需求时，才考虑新增公共组件
 
 ## 导入约定
@@ -64,6 +65,8 @@ import {
   OutlinedTimePicker,
   OutlinedCascader,
   OutlinedTreeSelect,
+  installRipple,
+  uninstallRipple,
   companyTokens,
   echarts
 } from '@hbdlzy/ui'

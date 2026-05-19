@@ -17,6 +17,9 @@ export interface OutlinedCascaderProps {
   levels?: boolean
   marginBottom?: OutlinedCascaderCssValue
   paddingTop?: OutlinedCascaderCssValue
+  required?: boolean
+  error?: boolean
+  errorMessage?: string
 }
 
 export interface OutlinedCascaderExpose {

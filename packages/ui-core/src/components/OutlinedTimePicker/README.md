@@ -49,6 +49,9 @@ const periodRange = ref<string[]>([])
 | `value` | `string \| number \| Date \| Array<string \| number \| Date> \| null` | `''` | `v-model:value` 绑定值 |
 | `placeholder` | `string` | `''` | 单值模式占位文案，也会作为浮动标签文案 |
 | `label` | `string` | `''` | 自定义浮动标签文案，优先级高于 `placeholder` |
+| `required` | `boolean` | `false` | 是否显示必填星号 |
+| `error` | `boolean` | `false` | 是否显示错误态，开启后时间框变红并展示错误文案 |
+| `errorMessage` | `string` | `''` | 错误文案，未传时默认使用“字段名为必填项” |
 | `disabled` | `boolean` | `false` | 是否禁用 |
 | `clearable` | `boolean` | `true` | 是否允许清空 |
 | `isRange` | `boolean` | `false` | 是否启用时间范围模式 |

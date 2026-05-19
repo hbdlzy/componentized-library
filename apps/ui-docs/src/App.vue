@@ -202,6 +202,9 @@
               placeholder="电站名称"
               :is-border="true"
               :input-height="40"
+              required
+              :error="isOutlinedFieldError('stationName')"
+              :error-message="getOutlinedFieldError('stationName')"
               clearable
             />
 
@@ -212,6 +215,9 @@
               :is-border="true"
               :input-height="40"
               :options="outlinedSelectOptions"
+              required
+              :error="isOutlinedFieldError('strategyMode')"
+              :error-message="getOutlinedFieldError('strategyMode')"
             />
 
             <OutlinedDatePicker
@@ -222,6 +228,9 @@
               :input-height="40"
               type-date="date"
               :disabled-date="'nowDate'"
+              required
+              :error="isOutlinedFieldError('effectDate')"
+              :error-message="getOutlinedFieldError('effectDate')"
             />
 
             <OutlinedDateTimePicker
@@ -232,6 +241,9 @@
               :is-border="true"
               :input-height="40"
               :disabled-date="'nowDate'"
+              required
+              :error="isOutlinedFieldError('startAt')"
+              :error-message="getOutlinedFieldError('startAt')"
               clearable
             />
 
@@ -244,6 +256,9 @@
               end-placeholder="结束时间"
               :is-border="true"
               :input-height="40"
+              required
+              :error="isOutlinedFieldError('executeRange')"
+              :error-message="getOutlinedFieldError('executeRange')"
               clearable
             />
 
@@ -255,6 +270,9 @@
               :input-height="40"
               :options="outlinedCascaderOptions"
               :props-value="outlinedCascaderProps"
+              required
+              :error="isOutlinedFieldError('areaPath')"
+              :error-message="getOutlinedFieldError('areaPath')"
               clearable
               filterable
             />
@@ -268,6 +286,9 @@
               :check-strictly="true"
               :is-border="true"
               :input-height="40"
+              required
+              :error="isOutlinedFieldError('parentNodeId')"
+              :error-message="getOutlinedFieldError('parentNodeId')"
               clearable
               filterable
             />
@@ -283,6 +304,12 @@
             />
 
             <div class="showcase-toolbar__group">
+              <el-button
+                type="primary"
+                @click="saveOutlinedForm"
+              >
+                保存配置
+              </el-button>
               <el-button
                 type="primary"
                 plain
@@ -557,6 +584,41 @@ const outlinedForm = reactive({
   areaPath: ['north', 'beijing', 'chaoyang'],
   parentNodeId: 'beijing',
   remark: '这个示例演示 OutlinedForm 系列的统一浮动标签风格、属性透传和实例方法暴露。'
+})
+
+type OutlinedRequiredFieldKey =
+  | 'stationName'
+  | 'strategyMode'
+  | 'effectDate'
+  | 'startAt'
+  | 'executeRange'
+  | 'areaPath'
+  | 'parentNodeId'
+
+const outlinedFormSubmitted = ref(false)
+
+const outlinedRequiredFields: Array<{ key: OutlinedRequiredFieldKey; label: string }> = [
+  { key: 'stationName', label: '电站名称' },
+  { key: 'strategyMode', label: '参与方式' },
+  { key: 'effectDate', label: '开始生效日期' },
+  { key: 'startAt', label: '开始执行日期' },
+  { key: 'executeRange', label: '执行时段' },
+  { key: 'areaPath', label: '所属区域' },
+  { key: 'parentNodeId', label: '选择父节点' }
+]
+
+const outlinedFormErrors = computed<Partial<Record<OutlinedRequiredFieldKey, string>>>(() => {
+  if (!outlinedFormSubmitted.value) {
+    return {}
+  }
+
+  return outlinedRequiredFields.reduce<Partial<Record<OutlinedRequiredFieldKey, string>>>((errors, field) => {
+    if (!hasOutlinedFormValue(outlinedForm[field.key])) {
+      errors[field.key] = `${field.label}为必填项`
+    }
+
+    return errors
+  }, {})
 })
 
 const outlinedSelectOptions = [
@@ -845,6 +907,29 @@ const resizeChart = () => {
 const hideChartTip = () => {
   chartRef.value?.dispatchAction({ type: 'hideTip' })
   ElMessage.info('已调用 dispatchAction({ type: "hideTip" })')
+}
+
+const saveOutlinedForm = () => {
+  outlinedFormSubmitted.value = true
+
+  if (Object.keys(outlinedFormErrors.value).length > 0) {
+    ElMessage.error('请完善必填项')
+    return
+  }
+
+  ElMessage.success('保存成功')
+}
+
+const isOutlinedFieldError = (key: OutlinedRequiredFieldKey) => Boolean(outlinedFormErrors.value[key])
+
+const getOutlinedFieldError = (key: OutlinedRequiredFieldKey) => outlinedFormErrors.value[key] || ''
+
+function hasOutlinedFormValue(value: unknown) {
+  if (Array.isArray(value)) {
+    return value.length > 0
+  }
+
+  return value !== undefined && value !== null && String(value).trim() !== ''
 }
 
 const focusOutlinedInput = () => {

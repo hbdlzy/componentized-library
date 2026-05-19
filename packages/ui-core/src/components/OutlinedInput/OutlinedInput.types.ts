@@ -21,6 +21,9 @@ export interface OutlinedInputProps {
   showWordLimit?: boolean
   marginBottom?: OutlinedInputCssValue
   paddingTop?: OutlinedInputCssValue
+  required?: boolean
+  error?: boolean
+  errorMessage?: string
 }
 
 export interface OutlinedInputExpose {

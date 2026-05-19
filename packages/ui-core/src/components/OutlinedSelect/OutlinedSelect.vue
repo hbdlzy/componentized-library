@@ -9,7 +9,7 @@
       v-bind="selectAttrs"
       class="outlined-select__control"
       :model-value="selectValue"
-      :placeholder="placeholder"
+      :placeholder="controlPlaceholder"
       :disabled="disabled"
       :multiple="multiple"
       :filterable="filterable"
@@ -18,6 +18,7 @@
       :collapse-tags-tooltip="collapseTagsTooltip"
       :max-collapse-tags="maxCollapseTags"
       :style="selectStyle"
+      :aria-invalid="hasError ? 'true' : undefined"
       @update:model-value="handleModelValueUpdate"
       @focus="handleFocus"
       @blur="handleBlur"
@@ -62,8 +63,19 @@
       class="outlined-select__label"
       :class="labelClasses"
     >
-      {{ floatingLabel }}
+      <span
+        v-if="required"
+        class="outlined-select__required"
+      >*</span>
+      <span>{{ floatingLabel }}</span>
     </div>
+
+    <p
+      v-if="hasError"
+      class="outlined-select__error"
+    >
+      {{ resolvedErrorMessage }}
+    </p>
   </div>
 </template>
 
@@ -103,7 +115,10 @@ const props = withDefaults(defineProps<OutlinedSelectProps>(), {
   noCheck: false,
   maxCollapseTags: 5,
   marginBottom: 20,
-  paddingTop: 20
+  paddingTop: 20,
+  required: false,
+  error: false,
+  errorMessage: ''
 })
 
 const emit = defineEmits<{
@@ -141,7 +156,8 @@ const selectAttrs = computed(() => {
 })
 
 const containerClasses = computed(() => ({
-  'outlined-select--bordered': props.isBorder
+  'outlined-select--bordered': props.isBorder,
+  'outlined-select--error': hasError.value
 }))
 
 const containerStyle = computed(() => ({
@@ -155,6 +171,9 @@ const selectStyle = computed(() => ({
 }))
 
 const floatingLabel = computed(() => props.label || props.placeholder || '')
+const controlPlaceholder = computed(() => addRequiredMark(props.placeholder))
+const hasError = computed(() => Boolean(props.error))
+const resolvedErrorMessage = computed(() => props.errorMessage || createRequiredMessage(floatingLabel.value))
 const hasCustomOptionsSlot = computed(() => Boolean(slots.default))
 
 const hasContent = computed(() => {
@@ -263,6 +282,18 @@ function toCssValue(value: OutlinedSelectCssValue | undefined) {
   return value
 }
 
+function addRequiredMark(value: string) {
+  if (!props.required || !value || value.startsWith('*')) {
+    return value
+  }
+
+  return `*${value}`
+}
+
+function createRequiredMessage(label: string) {
+  return label ? `${label}为必填项` : '该项为必填项'
+}
+
 defineExpose<OutlinedSelectExpose>({
   focus: () => {
     selectRef.value?.focus?.()
@@ -301,6 +332,9 @@ defineExpose<OutlinedSelectExpose>({
 .outlined-select__label {
   position: absolute;
   left: -2px;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
   padding: 2px 5px;
   border-radius: 2px;
   background-color: #ffffff;
@@ -330,6 +364,23 @@ defineExpose<OutlinedSelectExpose>({
   color: var(--el-text-color-regular);
 }
 
+.outlined-select--error {
+  --el-input-focus-border-color: var(--el-color-danger);
+  --el-input-hover-border-color: var(--el-color-danger);
+}
+
+.outlined-select__required,
+.outlined-select--error .outlined-select__label,
+.outlined-select__error {
+  color: var(--el-color-danger);
+}
+
+.outlined-select__error {
+  margin: 6px 0 0;
+  font-size: 12px;
+  line-height: 1.2;
+}
+
 :deep(.outlined-select__control.el-select) {
   width: 100%;
 }
@@ -347,13 +398,28 @@ defineExpose<OutlinedSelectExpose>({
   min-height: inherit;
 }
 
-:deep(.outlined-select--bordered .el-select__wrapper) {
+.outlined-select--bordered :deep(.el-select__wrapper) {
   box-shadow: none;
   border-radius: 0;
   border-bottom: 1px solid #cccccc;
 }
 
-:deep(.outlined-select--bordered .el-select__wrapper.is-focused) {
+.outlined-select--bordered :deep(.el-select__wrapper.is-focused) {
   border-bottom-color: var(--el-color-primary);
+}
+
+.outlined-select--error :deep(.el-select__wrapper) {
+  box-shadow: 0 0 0 1px var(--el-color-danger) inset;
+}
+
+.outlined-select--error :deep(.el-select__wrapper.is-focused),
+.outlined-select--error :deep(.el-select__wrapper.is-focus),
+.outlined-select--error :deep(.el-select__wrapper:hover) {
+  box-shadow: 0 0 0 1px var(--el-color-danger) inset;
+}
+
+.outlined-select--error.outlined-select--bordered :deep(.el-select__wrapper) {
+  box-shadow: 0 0 0 1px var(--el-color-danger) inset;
+  border-bottom-color: transparent;
 }
 </style>

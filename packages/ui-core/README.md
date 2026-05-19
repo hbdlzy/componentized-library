@@ -17,6 +17,7 @@
 - `OutlinedTreeSelect`
 - `echarts`
 - `exportExcel`
+- 全局按钮 ripple：导入包入口后自动启用，覆盖原生 `button`、Element Plus `el-button` 以及 radio/checkbox button 形态
 
 ## 使用方式
 
@@ -33,10 +34,14 @@ import {
   OutlinedTimePicker,
   OutlinedCascader,
   OutlinedTreeSelect,
+  installRipple,
+  uninstallRipple,
   echarts,
   exportExcel
 } from '@hbdlzy/ui-core'
 ```
+
+全局 ripple 会在导入 `@hbdlzy/ui-core` 时自动安装；如某个按钮不需要水波纹，可在按钮或父级元素上添加 `data-hbdl-ripple="false"`。
 
 ## 详细文档
 
@@ -70,6 +75,8 @@ import {
 - 工具
   - `echarts`
   - `exportExcel`
+  - `installRipple`
+  - `uninstallRipple`
 
 ## 设计原则
 

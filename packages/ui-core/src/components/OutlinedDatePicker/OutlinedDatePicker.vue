@@ -12,9 +12,10 @@
       :type="typeDate"
       :format="format"
       :value-format="resolvedValueFormat"
-      :placeholder="placeholder"
+      :placeholder="controlPlaceholder"
       :disabled="disabled"
       :style="pickerStyle"
+      :aria-invalid="hasError ? 'true' : undefined"
       @update:model-value="handleModelValueUpdate"
       @focus="handleFocus"
       @blur="handleBlur"
@@ -27,8 +28,19 @@
       class="outlined-date-picker__label"
       :class="labelClasses"
     >
-      {{ floatingLabel }}
+      <span
+        v-if="required"
+        class="outlined-date-picker__required"
+      >*</span>
+      <span>{{ floatingLabel }}</span>
     </div>
+
+    <p
+      v-if="hasError"
+      class="outlined-date-picker__error"
+    >
+      {{ resolvedErrorMessage }}
+    </p>
   </div>
 </template>
 
@@ -62,7 +74,10 @@ const props = withDefaults(defineProps<OutlinedDatePickerProps>(), {
   isBorder: false,
   disabledDate: undefined,
   marginBottom: 20,
-  paddingTop: 20
+  paddingTop: 20,
+  required: false,
+  error: false,
+  errorMessage: ''
 })
 
 const emit = defineEmits<{
@@ -159,7 +174,8 @@ const pickerAttrs = computed(() => {
 })
 
 const containerClasses = computed(() => ({
-  'outlined-date-picker--bordered': props.isBorder
+  'outlined-date-picker--bordered': props.isBorder,
+  'outlined-date-picker--error': hasError.value
 }))
 
 const containerStyle = computed(() => ({
@@ -172,6 +188,9 @@ const pickerStyle = computed(() => ({
 }))
 
 const floatingLabel = computed(() => props.label || props.placeholder || '')
+const controlPlaceholder = computed(() => addRequiredMark(props.placeholder))
+const hasError = computed(() => Boolean(props.error))
+const resolvedErrorMessage = computed(() => props.errorMessage || createRequiredMessage(floatingLabel.value))
 
 const hasContent = computed(() => hasFilledValue(pickerValue.value))
 
@@ -279,6 +298,18 @@ function toCssValue(value: OutlinedDatePickerCssValue | undefined) {
   return value
 }
 
+function addRequiredMark(value: string) {
+  if (!props.required || !value || value.startsWith('*')) {
+    return value
+  }
+
+  return `*${value}`
+}
+
+function createRequiredMessage(label: string) {
+  return label ? `${label}为必填项` : '该项为必填项'
+}
+
 defineExpose<OutlinedDatePickerExpose>({
   focus: () => {
     pickerRef.value?.focus?.()
@@ -304,6 +335,9 @@ defineExpose<OutlinedDatePickerExpose>({
 .outlined-date-picker__label {
   position: absolute;
   left: -2px;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
   padding: 2px 5px;
   border-radius: 2px;
   background-color: #ffffff;
@@ -333,6 +367,23 @@ defineExpose<OutlinedDatePickerExpose>({
   color: var(--el-text-color-regular);
 }
 
+.outlined-date-picker--error {
+  --el-input-focus-border-color: var(--el-color-danger);
+  --el-input-hover-border-color: var(--el-color-danger);
+}
+
+.outlined-date-picker__required,
+.outlined-date-picker--error .outlined-date-picker__label,
+.outlined-date-picker__error {
+  color: var(--el-color-danger);
+}
+
+.outlined-date-picker__error {
+  margin: 6px 0 0;
+  font-size: 12px;
+  line-height: 1.2;
+}
+
 :deep(.outlined-date-picker__control.el-date-editor) {
   width: 100%;
 }
@@ -353,13 +404,27 @@ defineExpose<OutlinedDatePickerExpose>({
   right: 30px;
 }
 
-:deep(.outlined-date-picker--bordered .el-input__wrapper) {
+.outlined-date-picker--bordered :deep(.el-input__wrapper) {
   box-shadow: none;
   border-radius: 0;
   border-bottom: 1px solid #cccccc;
 }
 
-:deep(.outlined-date-picker--bordered .el-input__wrapper.is-focus) {
+.outlined-date-picker--bordered :deep(.el-input__wrapper.is-focus) {
   border-bottom-color: var(--el-color-primary);
+}
+
+.outlined-date-picker--error :deep(.el-input__wrapper) {
+  box-shadow: 0 0 0 1px var(--el-color-danger) inset;
+}
+
+.outlined-date-picker--error :deep(.el-input__wrapper.is-focus),
+.outlined-date-picker--error :deep(.el-input__wrapper:hover) {
+  box-shadow: 0 0 0 1px var(--el-color-danger) inset;
+}
+
+.outlined-date-picker--error.outlined-date-picker--bordered :deep(.el-input__wrapper) {
+  box-shadow: 0 0 0 1px var(--el-color-danger) inset;
+  border-bottom-color: transparent;
 }
 </style>

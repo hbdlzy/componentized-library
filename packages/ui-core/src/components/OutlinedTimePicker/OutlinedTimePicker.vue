@@ -12,14 +12,15 @@
       :is-range="isRange"
       :format="format"
       :value-format="resolvedValueFormat"
-      :placeholder="placeholder"
-      :start-placeholder="startPlaceholder"
-      :end-placeholder="endPlaceholder"
+      :placeholder="controlPlaceholder"
+      :start-placeholder="controlStartPlaceholder"
+      :end-placeholder="controlEndPlaceholder"
       :range-separator="rangeSeparator"
       :disabled="disabled"
       :clearable="clearable"
       :arrow-control="arrowControl"
       :style="pickerStyle"
+      :aria-invalid="hasError ? 'true' : undefined"
       @update:model-value="handleModelValueUpdate"
       @focus="handleFocus"
       @blur="handleBlur"
@@ -33,8 +34,19 @@
       class="outlined-time-picker__label"
       :class="labelClasses"
     >
-      {{ floatingLabel }}
+      <span
+        v-if="required"
+        class="outlined-time-picker__required"
+      >*</span>
+      <span>{{ floatingLabel }}</span>
     </div>
+
+    <p
+      v-if="hasError"
+      class="outlined-time-picker__error"
+    >
+      {{ resolvedErrorMessage }}
+    </p>
   </div>
 </template>
 
@@ -68,7 +80,10 @@ const props = withDefaults(defineProps<OutlinedTimePickerProps>(), {
   inputHeight: 40,
   isBorder: false,
   marginBottom: 20,
-  paddingTop: 20
+  paddingTop: 20,
+  required: false,
+  error: false,
+  errorMessage: ''
 })
 
 const emit = defineEmits<{
@@ -106,7 +121,8 @@ const pickerAttrs = computed(() => {
 })
 
 const containerClasses = computed(() => ({
-  'outlined-time-picker--bordered': props.isBorder
+  'outlined-time-picker--bordered': props.isBorder,
+  'outlined-time-picker--error': hasError.value
 }))
 
 const containerStyle = computed(() => ({
@@ -119,6 +135,11 @@ const pickerStyle = computed(() => ({
 }))
 
 const floatingLabel = computed(() => props.label || props.placeholder || '')
+const controlPlaceholder = computed(() => addRequiredMark(props.placeholder))
+const controlStartPlaceholder = computed(() => addRequiredMark(props.startPlaceholder))
+const controlEndPlaceholder = computed(() => addRequiredMark(props.endPlaceholder))
+const hasError = computed(() => Boolean(props.error))
+const resolvedErrorMessage = computed(() => props.errorMessage || createRequiredMessage(floatingLabel.value))
 
 const hasContent = computed(() => {
   if (Array.isArray(pickerValue.value)) {
@@ -210,6 +231,18 @@ function toCssValue(value: OutlinedTimePickerCssValue | undefined) {
   return value
 }
 
+function addRequiredMark(value: string) {
+  if (!props.required || !value || value.startsWith('*')) {
+    return value
+  }
+
+  return `*${value}`
+}
+
+function createRequiredMessage(label: string) {
+  return label ? `${label}为必填项` : '该项为必填项'
+}
+
 defineExpose<OutlinedTimePickerExpose>({
   focus: () => {
     pickerRef.value?.focus?.()
@@ -242,6 +275,9 @@ defineExpose<OutlinedTimePickerExpose>({
 .outlined-time-picker__label {
   position: absolute;
   left: -2px;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
   padding: 2px 5px;
   border-radius: 2px;
   background-color: #ffffff;
@@ -271,6 +307,23 @@ defineExpose<OutlinedTimePickerExpose>({
   color: var(--el-text-color-regular);
 }
 
+.outlined-time-picker--error {
+  --el-input-focus-border-color: var(--el-color-danger);
+  --el-input-hover-border-color: var(--el-color-danger);
+}
+
+.outlined-time-picker__required,
+.outlined-time-picker--error .outlined-time-picker__label,
+.outlined-time-picker__error {
+  color: var(--el-color-danger);
+}
+
+.outlined-time-picker__error {
+  margin: 6px 0 0;
+  font-size: 12px;
+  line-height: 1.2;
+}
+
 :deep(.outlined-time-picker__control.el-date-editor) {
   width: 100%;
 }
@@ -291,13 +344,27 @@ defineExpose<OutlinedTimePickerExpose>({
   right: 30px;
 }
 
-:deep(.outlined-time-picker--bordered .el-input__wrapper) {
+.outlined-time-picker--bordered :deep(.el-input__wrapper) {
   box-shadow: none;
   border-radius: 0;
   border-bottom: 1px solid #cccccc;
 }
 
-:deep(.outlined-time-picker--bordered .el-input__wrapper.is-focus) {
+.outlined-time-picker--bordered :deep(.el-input__wrapper.is-focus) {
   border-bottom-color: var(--el-color-primary);
+}
+
+.outlined-time-picker--error :deep(.el-input__wrapper) {
+  box-shadow: 0 0 0 1px var(--el-color-danger) inset;
+}
+
+.outlined-time-picker--error :deep(.el-input__wrapper.is-focus),
+.outlined-time-picker--error :deep(.el-input__wrapper:hover) {
+  box-shadow: 0 0 0 1px var(--el-color-danger) inset;
+}
+
+.outlined-time-picker--error.outlined-time-picker--bordered :deep(.el-input__wrapper) {
+  box-shadow: 0 0 0 1px var(--el-color-danger) inset;
+  border-bottom-color: transparent;
 }
 </style>

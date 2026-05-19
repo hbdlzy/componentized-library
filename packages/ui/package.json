@@ -1,6 +1,6 @@
 {
   "name": "@hbdlzy/ui",
-  "version": "0.1.4",
+  "version": "0.1.7",
   "description": "Company unified UI entry package.",
   "license": "MIT",
   "repository": {
@@ -38,7 +38,10 @@
     "vue": "^3.5.14"
   },
   "sideEffects": [
-    "**/*.css"
+    "**/*.css",
+    "dist/index.js",
+    "dist/index.cjs",
+    "src/index.ts"
   ],
   "scripts": {
     "build": "vite build && pnpm run build:types",

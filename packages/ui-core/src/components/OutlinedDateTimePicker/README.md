@@ -48,6 +48,9 @@ const openDatePanel = () => {
 | `value` | `string` | `''` | `v-model:value` 绑定值，格式为 `YYYY-MM-DD HH:mm` |
 | `placeholder` | `string` | `''` | 日期部分占位文案，也会作为浮动标签主文案 |
 | `label` | `string` | `''` | 自定义浮动标签文案，优先级高于 `placeholder` |
+| `required` | `boolean` | `false` | 是否显示必填星号 |
+| `error` | `boolean` | `false` | 是否显示错误态，开启后日期和时间输入框变红并展示错误文案 |
+| `errorMessage` | `string` | `''` | 错误文案，未传时默认使用“字段名为必填项” |
 | `inputHeight` | `number` | `40` | 输入框高度 |
 | `isBorder` | `boolean` | `false` | 是否启用下边框风格 |
 | `disabledDate` | `string \| number \| Date \| ((date: Date) => boolean)` | `undefined` | 日期禁用规则，支持 `nowDate` |

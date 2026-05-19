@@ -1,3 +1,7 @@
+import { installRipple } from './ripple'
+
+installRipple()
+
 export { echarts } from './echarts'
 export type {
   EChartInitOptions,
@@ -31,3 +35,4 @@ export { default as OutlinedTreeSelect } from './components/OutlinedTreeSelect'
 export * from './components/OutlinedTreeSelect'
 export { exportExcel } from './excel/exportExcel'
 export type { ExcelCellValue, ExcelExportColumn, ExcelExportOptions } from './excel/exportExcel'
+export { installRipple, uninstallRipple } from './ripple'
