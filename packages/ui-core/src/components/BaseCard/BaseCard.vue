@@ -3,7 +3,7 @@
     <div v-if="shouldRenderHeader" class="base-card__header">
       <div class="base-card__header-left">
         <div v-if="hasTitleBlock" class="base-card__title-wrap">
-          <span v-if="showTitleMarker" class="base-card__title-marker"></span>
+          <span v-if="shouldShowTitleMarker" class="base-card__title-marker"></span>
           <slot v-if="$slots['title-label']" name="title-label"></slot>
           <h4 v-else class="base-card__title">{{ title }}</h4>
         </div>
@@ -50,6 +50,7 @@ const props = withDefaults(defineProps<BaseCardProps>(), {
   showHeader: true,
   showRight: true,
   showTitleMarker: true,
+  hideTitleMarker: false,
   showExport: false,
   exportText: '导出',
   exportDisabled: false,
@@ -84,6 +85,7 @@ const slots = useSlots()
 const hasTitleBlock = computed(() => Boolean(props.title) || Boolean(slots['title-label']))
 const hasTitleExtra = computed(() => Boolean(slots.title))
 const hasRightExtra = computed(() => Boolean(slots['header-right']))
+const shouldShowTitleMarker = computed(() => props.showTitleMarker && !props.hideTitleMarker)
 
 const hasRightSection = computed(
   () => props.showRight && (hasRightExtra.value || Boolean(props.metaText) || props.showExport)

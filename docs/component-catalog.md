@@ -13,11 +13,13 @@ npm install @hbdlzy/ui
 推荐导入：
 
 ```ts
+import HbdlUI from '@hbdlzy/ui'
 import {
   BaseTable,
   BaseCard,
   BaseEChart,
   BaseExportButton,
+  SvgIcon,
   OutlinedInput,
   OutlinedSelect,
   OutlinedDatePicker,
@@ -25,9 +27,16 @@ import {
   OutlinedTimePicker,
   OutlinedCascader,
   OutlinedTreeSelect,
+  Ripple,
   companyTokens,
   echarts
 } from '@hbdlzy/ui'
+```
+
+全局注册：
+
+```ts
+createApp(App).use(HbdlUI).mount('#app')
 ```
 
 ## 包分层
@@ -70,6 +79,9 @@ import {
 - `BaseExportButton`
   详细文档：[packages/ui-core/src/components/BaseExportButton/README.md](../packages/ui-core/src/components/BaseExportButton/README.md)
   用途：统一封装前端 Excel 导出和后端文件下载按钮
+- `SvgIcon`
+  详细文档：[packages/ui-core/src/components/SvgIcon/README.md](../packages/ui-core/src/components/SvgIcon/README.md)
+  用途：统一展示 SVG symbol sprite 和外链 SVG 图标
 - `OutlinedInput`
   详细文档：[packages/ui-core/src/components/OutlinedInput/README.md](../packages/ui-core/src/components/OutlinedInput/README.md)
   用途：统一封装浮动标签输入框、数值基础校验和属性透传能力
@@ -98,6 +110,9 @@ import {
   用途：统一导出的 echarts 对象，给页面层直接调用 `graphic` 等能力
 - `exportExcel`
   用途：纯前端 Excel 导出工具
+- `Ripple`
+  详细文档：[packages/ui-core/src/ripple/README.md](../packages/ui-core/src/ripple/README.md)
+  用途：全局点击涟漪效果，导入 `@hbdlzy/ui` 后自动启用，也可通过 `app.use(Ripple)` 显式安装
 
 ### `@hbdlzy/ui-energy`
 

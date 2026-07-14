@@ -14,7 +14,10 @@ export default defineConfig({
       fileName: format => format === 'es' ? 'index.js' : 'index.cjs'
     },
     rollupOptions: {
-      external: ['vue', 'element-plus', 'echarts', 'exceljs', 'file-saver']
+      external: ['vue', 'element-plus', 'echarts', 'exceljs', 'file-saver'],
+      output: {
+        exports: 'named'
+      }
     }
   }
 })

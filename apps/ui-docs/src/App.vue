@@ -1,5 +1,14 @@
 <template>
   <main class="docs-home">
+    <svg class="svg-demo-sprite" aria-hidden="true">
+      <symbol id="icon-filter" viewBox="0 0 24 24">
+        <path d="M4 5.75C4 5.34 4.34 5 4.75 5h14.5a.75.75 0 0 1 .55 1.26l-5.55 6.02v5.1a.75.75 0 0 1-.36.64l-3.3 2a.75.75 0 0 1-1.14-.64v-7.1L4.2 6.26A.75.75 0 0 1 4 5.75Z" />
+      </symbol>
+      <symbol id="icon-f_2" viewBox="0 0 24 24">
+        <path d="M10.5 5.75a4.75 4.75 0 1 1-1.12 9.36l-3.5 3.5a1 1 0 0 1-1.42-1.42l3.5-3.5a4.75 4.75 0 0 1 2.54-7.94Zm0 2a2.75 2.75 0 1 0 0 5.5 2.75 2.75 0 0 0 0-5.5Zm5.2 8.54 3.84 3.84a1 1 0 1 1-1.42 1.42l-3.84-3.84a1 1 0 0 1 1.42-1.42Z" />
+      </symbol>
+    </svg>
+
     <section class="hero">
       <p class="hero__eyebrow">Company Shared UI</p>
       <h1>公共组件 Demo 工作台</h1>
@@ -25,6 +34,126 @@
         <p class="overview-card__desc">文档：{{ pkg.docs }}</p>
         <p class="overview-card__desc">Manifest：{{ pkg.manifest }}</p>
       </article>
+    </section>
+
+    <section class="demo-section">
+      <div class="section-heading">
+        <div>
+          <p class="section-heading__eyebrow">Ripple</p>
+          <h2>全局点击涟漪</h2>
+        </div>
+        <p class="section-heading__desc">
+          文档站通过 `@hbdlzy/ui` 主入口自动启用，业务项目全局引入后按钮会获得统一点击反馈。
+        </p>
+      </div>
+
+      <div class="showcase-card">
+        <div class="ripple-demo-grid">
+          <article class="ripple-demo-item">
+            <h3>Element Plus 按钮</h3>
+            <p>适用于 `el-button`、radio button 和 checkbox button。</p>
+            <div class="ripple-demo-actions">
+              <el-button type="primary">
+                主要操作
+              </el-button>
+              <el-button plain>
+                次要操作
+              </el-button>
+            </div>
+          </article>
+
+          <article class="ripple-demo-item">
+            <h3>原生按钮</h3>
+            <p>适用于原生 `button` 和带 `role="button"` 的类按钮元素。</p>
+            <div class="ripple-demo-actions">
+              <button
+                type="button"
+                class="native-ripple-button"
+              >
+                原生按钮
+              </button>
+              <span
+                role="button"
+                tabindex="0"
+                class="role-ripple-button"
+              >
+                类按钮
+              </span>
+            </div>
+          </article>
+
+          <article class="ripple-demo-item">
+            <h3>局部控制</h3>
+            <p>支持局部关闭，也可以用 CSS 变量调整涟漪颜色。</p>
+            <div class="ripple-demo-actions">
+              <el-button data-hbdl-ripple="false">
+                关闭涟漪
+              </el-button>
+              <el-button class="custom-ripple-button">
+                自定义颜色
+              </el-button>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="demo-section">
+      <div class="section-heading">
+        <div>
+          <p class="section-heading__eyebrow">SvgIcon</p>
+          <h2>SVG 图标展示</h2>
+        </div>
+        <p class="section-heading__desc">
+          兼容 symbol sprite 和外链 SVG，旧项目的 `icon-class`、`class-name` 写法可以直接迁移。
+        </p>
+      </div>
+
+      <div class="showcase-card">
+        <div class="svg-demo-grid">
+          <article class="svg-demo-item">
+            <div class="svg-demo-item__icon">
+              <SvgIcon
+                icon-class="filter"
+                class-name="svg-demo-icon"
+                aria-label="筛选"
+              />
+            </div>
+            <div>
+              <h3>筛选图标</h3>
+              <p>#icon-filter</p>
+            </div>
+          </article>
+
+          <article class="svg-demo-item">
+            <div class="svg-demo-item__icon svg-demo-item__icon--green">
+              <SvgIcon
+                icon-class="f_2 "
+                class-name="svg-demo-icon"
+                aria-label="搜索"
+              />
+            </div>
+            <div>
+              <h3>搜索图标</h3>
+              <p>#icon-f_2</p>
+            </div>
+          </article>
+
+          <article class="svg-demo-item">
+            <div class="svg-demo-item__icon svg-demo-item__icon--orange">
+              <SvgIcon
+                :icon-class="externalSvgIcon"
+                class-name="svg-demo-icon"
+                aria-label="外链图标"
+              />
+            </div>
+            <div>
+              <h3>外链图标</h3>
+              <p>mask currentColor</p>
+            </div>
+          </article>
+        </div>
+      </div>
     </section>
 
     <section class="demo-section">
@@ -387,8 +516,10 @@
             :default-sort="{ prop: 'createdAt', order: 'descending' }"
             sort-field-key="orderBy"
             sort-order-key="orderDirection"
+            :has-selection="true"
             :has-index="true"
             border
+            @selection-change="handleTableSelectionChange"
             @row-action="handleTableAction"
             @loaded="handleTableLoaded"
           >
@@ -457,6 +588,7 @@ import {
   BaseEChart,
   BaseExportButton,
   BaseTable,
+  SvgIcon,
   OutlinedCascader,
   OutlinedDatePicker,
   OutlinedDateTimePicker,
@@ -493,6 +625,8 @@ interface DemoTableRow {
   name: string
   owner: string
   status: 'enabled' | 'disabled' | 'draft'
+  regionPath: string[]
+  categories: string[]
   capacity: number
   createdAt: string
   cover: string
@@ -514,6 +648,11 @@ const cardMetrics = [
 ]
 
 const activeCardRange = ref('日内')
+const externalSvgIcon = createSvgIconUrl(`
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M12 3.5 19.36 8v8L12 20.5 4.64 16V8L12 3.5Zm0 2.34L6.64 9.1v5.8L12 18.16l5.36-3.26V9.1L12 5.84Zm0 3.16a3 3 0 1 1 0 6 3 3 0 0 1 0-6Z"/>
+  </svg>
+`)
 
 const columns: Array<ExcelExportColumn<DemoExportRow>> = [
   { label: '姓名', key: 'name', width: 16 },
@@ -718,6 +857,61 @@ const statusOptions: BaseTableOption[] = [
   { label: '草稿', value: 'draft', tagType: 'warning' }
 ]
 
+const regionOptions: BaseTableOption[] = [
+  {
+    label: '华北',
+    value: 'north',
+    children: [
+      {
+        label: '北京',
+        value: 'beijing',
+        children: [
+          { label: '朝阳区', value: 'chaoyang' },
+          { label: '通州区', value: 'tongzhou' }
+        ]
+      },
+      {
+        label: '天津',
+        value: 'tianjin',
+        children: [
+          { label: '滨海新区', value: 'binhai' }
+        ]
+      }
+    ]
+  },
+  {
+    label: '华东',
+    value: 'east',
+    children: [
+      {
+        label: '上海',
+        value: 'shanghai',
+        children: [
+          { label: '临港新区', value: 'lingang' },
+          { label: '浦东新区', value: 'pudong' }
+        ]
+      },
+      {
+        label: '浙江',
+        value: 'zhejiang',
+        children: [
+          { label: '杭州', value: 'hangzhou' },
+          { label: '宁波', value: 'ningbo' }
+        ]
+      }
+    ]
+  }
+]
+
+const categoryOptions: BaseTableOption[] = [
+  { label: '市场资讯', value: 'market', tagType: 'primary' },
+  { label: '运行日报', value: 'operation', tagType: 'success' },
+  { label: '收益分析', value: 'revenue', tagType: 'warning' },
+  { label: '设备巡检', value: 'inspection', tagType: 'info' }
+]
+
+const regionLabelMap = flattenOptionLabelMap(regionOptions)
+
 const tableRef = ref<BaseTableExpose<DemoTableRow> | null>(null)
 const tableFilters = reactive<DemoTableFilters>({
   keyword: '',
@@ -739,23 +933,61 @@ const tableColumns: BaseTableColumn<DemoTableRow>[] = [
   },
   {
     label: '负责人',
-      prop: 'owner',
-      minWidth: 140,
-      headerSearch: {
-        placeholder: '请输入搜索内容'
-      }
+    prop: 'owner',
+    minWidth: 140,
+    align: 'center',
+    headerSearch: {
+      placeholder: '请输入搜索内容'
+    }
   },
   {
     label: '状态',
     prop: 'status',
     kind: 'tag',
     minWidth: 120,
-    options: statusOptions
+    options: statusOptions,
+    headerSearch: {
+      type: 'select',
+      placeholder: '请选择状态',
+      options: statusOptions,
+      width: 220,
+      filterable: true,
+      searchText: '筛选'
+    }
+  },
+  {
+    label: '所在区域',
+    prop: 'regionPath',
+    minWidth: 190,
+    formatter: (row) => row.regionPath.map((item) => regionLabelMap[item] || item).join(' / '),
+    headerSearch: {
+      type: 'cascader',
+      placeholder: '请选择区域',
+      options: regionOptions,
+      width: 420,
+      searchText: '筛选'
+    }
+  },
+  {
+    label: '资讯分类',
+    prop: 'categories',
+    kind: 'tag',
+    minWidth: 190,
+    options: categoryOptions,
+    headerSearch: {
+      type: 'select',
+      multiple: true,
+      placeholder: '请选择分类',
+      options: categoryOptions,
+      width: 280,
+      filterable: true,
+      searchText: '筛选'
+    }
   },
   {
     label: '容量(MWh)',
     prop: 'capacity',
-    align: 'right',
+    align: 'center',
     sortable: true,
     sortField: 'capacity_mwh',
     minWidth: 130
@@ -765,7 +997,14 @@ const tableColumns: BaseTableColumn<DemoTableRow>[] = [
     prop: 'createdAt',
     sortable: true,
     sortField: 'created_time',
-    minWidth: 180
+    minWidth: 180,
+    headerSearch: {
+      type: 'datetimerange',
+      paramKey: 'createdAtRange',
+      startPlaceholder: '开始',
+      endPlaceholder: '结束',
+      searchText: '筛选'
+    }
   },
   {
     label: '封面',
@@ -791,14 +1030,14 @@ const tableColumns: BaseTableColumn<DemoTableRow>[] = [
 ]
 
 const allTableRows: DemoTableRow[] = [
-  createTableRow(1, '华北调峰策略', '张三', 'enabled', 168, '2026-04-21 08:30:00', '#1d63ff'),
-  createTableRow(2, '华东市场复盘', '李四', 'disabled', 132, '2026-04-20 17:30:00', '#10b981'),
-  createTableRow(3, '调频收益分析', '王五', 'draft', 96, '2026-04-19 10:30:00', '#f97316'),
-  createTableRow(4, '站端实时巡检', '赵六', 'enabled', 124, '2026-04-18 11:15:00', '#7c3aed'),
-  createTableRow(5, '运行日报看板', '陈晨', 'enabled', 188, '2026-04-17 09:05:00', '#ef4444'),
-  createTableRow(6, '储能策略联动', '孙敏', 'disabled', 86, '2026-04-16 14:45:00', '#0ea5e9'),
-  createTableRow(7, '现货结算汇总', '周航', 'enabled', 212, '2026-04-15 15:20:00', '#06b6d4'),
-  createTableRow(8, '负荷预测分析', '钱进', 'draft', 118, '2026-04-14 12:35:00', '#84cc16')
+  createTableRow(1, '华北调峰策略', '张三', 'enabled', ['north', 'beijing', 'chaoyang'], ['market', 'operation'], 168, '2026-04-21 08:30:00', '#1d63ff'),
+  createTableRow(2, '华东市场复盘', '李四', 'disabled', ['east', 'shanghai', 'lingang'], ['market', 'revenue'], 132, '2026-04-20 17:30:00', '#10b981'),
+  createTableRow(3, '调频收益分析', '王五', 'draft', ['north', 'tianjin', 'binhai'], ['revenue'], 96, '2026-04-19 10:30:00', '#f97316'),
+  createTableRow(4, '站端实时巡检', '赵六', 'enabled', ['east', 'zhejiang', 'hangzhou'], ['inspection', 'operation'], 124, '2026-04-18 11:15:00', '#7c3aed'),
+  createTableRow(5, '运行日报看板', '陈晨', 'enabled', ['north', 'beijing', 'tongzhou'], ['operation'], 188, '2026-04-17 09:05:00', '#ef4444'),
+  createTableRow(6, '储能策略联动', '孙敏', 'disabled', ['east', 'zhejiang', 'ningbo'], ['market', 'inspection'], 86, '2026-04-16 14:45:00', '#0ea5e9'),
+  createTableRow(7, '现货结算汇总', '周航', 'enabled', ['east', 'shanghai', 'pudong'], ['market', 'revenue'], 212, '2026-04-15 15:20:00', '#06b6d4'),
+  createTableRow(8, '负荷预测分析', '钱进', 'draft', ['north', 'beijing', 'chaoyang'], ['operation', 'inspection'], 118, '2026-04-14 12:35:00', '#84cc16')
 ]
 
 const createMockExportRequest = async () => ({
@@ -817,6 +1056,9 @@ const requestTableData = async (params: Record<string, unknown>) => {
   const keyword = String(params.keyword || '').trim().toLowerCase()
   const status = String(params.status || '')
   const ownerKeyword = String(params.owner || '').trim().toLowerCase()
+  const regionPath = Array.isArray(params.regionPath) ? params.regionPath.map((item) => String(item)) : []
+  const categories = Array.isArray(params.categories) ? params.categories.map((item) => String(item)) : []
+  const createdAtRange = Array.isArray(params.createdAtRange) ? params.createdAtRange.map((item) => String(item)) : []
   const currentPage = Number(params.currentPage || params.pageNum || 1)
   const pageSize = Number(params.pageSize || 20)
   const orderBy = String(params.orderBy || '')
@@ -826,7 +1068,11 @@ const requestTableData = async (params: Record<string, unknown>) => {
     const matchKeyword = !keyword || row.name.toLowerCase().includes(keyword) || row.owner.toLowerCase().includes(keyword)
     const matchStatus = !status || row.status === status
     const matchOwner = !ownerKeyword || row.owner.toLowerCase().includes(ownerKeyword)
-    return matchKeyword && matchStatus && matchOwner
+    const matchRegion = !regionPath.length || regionPath.every((item, index) => row.regionPath[index] === item)
+    const matchCategories = !categories.length || categories.every((item) => row.categories.includes(item))
+    const matchCreatedAt = !createdAtRange.length ||
+      (row.createdAt >= String(createdAtRange[0] || '') && row.createdAt <= String(createdAtRange[1] || ''))
+    return matchKeyword && matchStatus && matchOwner && matchRegion && matchCategories && matchCreatedAt
   })
 
   if (orderBy && orderDirection) {
@@ -863,12 +1109,25 @@ const handleTableAction = ({ row, action }: { row: DemoTableRow; action: { type:
   ElMessage.info(`触发 ${action.type}：${row.name}`)
 }
 
+const handleTableSelectionChange = (rows: DemoTableRow[]) => {
+  lastLoadedSummary.value = JSON.stringify(
+    {
+      selectedRows: rows.length,
+      selectedNames: rows.map((row) => row.name)
+    },
+    null,
+    2
+  )
+}
+
 const handleTableLoaded = (payload: { rows: DemoTableRow[]; total: number; params: Record<string, unknown> }) => {
   lastLoadedSummary.value = JSON.stringify(
     {
       currentRows: payload.rows.length,
       total: payload.total,
       firstRow: payload.rows[0]?.name || null,
+      regionPath: payload.params.regionPath || null,
+      categories: payload.params.categories || null,
       sortField: payload.params.orderBy || null,
       sortOrder: payload.params.orderDirection || null
     },
@@ -965,6 +1224,8 @@ function createTableRow(
   name: string,
   owner: string,
   status: DemoTableRow['status'],
+  regionPath: string[],
+  categories: string[],
   capacity: number,
   createdAt: string,
   color: string
@@ -974,10 +1235,24 @@ function createTableRow(
     name,
     owner,
     status,
+    regionPath,
+    categories,
     capacity,
     createdAt,
     cover: createSvgCover(name, color)
   }
+}
+
+function flattenOptionLabelMap(options: BaseTableOption[]) {
+  return options.reduce<Record<string, string>>((result, option) => {
+    result[String(option.value)] = option.label
+
+    if (option.children?.length) {
+      Object.assign(result, flattenOptionLabelMap(option.children))
+    }
+
+    return result
+  }, {})
 }
 
 function createSvgCover(label: string, color: string) {
@@ -988,6 +1263,10 @@ function createSvgCover(label: string, color: string) {
     </svg>
   `
 
+  return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`
+}
+
+function createSvgIconUrl(svg: string) {
   return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`
 }
 
@@ -1186,6 +1465,123 @@ function wait(ms: number) {
   padding: 20px;
 }
 
+.svg-demo-sprite {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.svg-demo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.svg-demo-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+  padding: 16px;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 14px;
+  background: #f8fbff;
+}
+
+.svg-demo-item__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 48px;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  color: #1d63ff;
+  background: rgba(29, 99, 255, 0.1);
+}
+
+.svg-demo-item__icon--green {
+  color: #059669;
+  background: rgba(5, 150, 105, 0.1);
+}
+
+.svg-demo-item__icon--orange {
+  color: #ea580c;
+  background: rgba(234, 88, 12, 0.1);
+}
+
+.svg-demo-icon {
+  font-size: 22px;
+}
+
+.svg-demo-item h3 {
+  margin: 0 0 6px;
+  font-size: 16px;
+}
+
+.svg-demo-item p {
+  margin: 0;
+  color: var(--company-color-text-secondary);
+  line-height: 1.6;
+  word-break: break-all;
+}
+
+.ripple-demo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.ripple-demo-item {
+  min-width: 0;
+  padding: 18px;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 14px;
+  background: #f8fbff;
+}
+
+.ripple-demo-item h3 {
+  margin: 0 0 8px;
+  font-size: 16px;
+}
+
+.ripple-demo-item p {
+  margin: 0 0 14px;
+  color: var(--company-color-text-secondary);
+  line-height: 1.7;
+}
+
+.ripple-demo-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.native-ripple-button,
+.role-ripple-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 34px;
+  padding: 0 14px;
+  border: 1px solid rgba(29, 99, 255, 0.24);
+  border-radius: 4px;
+  background: #ffffff;
+  color: var(--company-color-primary);
+  font: inherit;
+  cursor: pointer;
+}
+
+.role-ripple-button {
+  background: #eff6ff;
+}
+
+.custom-ripple-button {
+  --hbdl-ripple-color: #f97316;
+}
+
 .showcase-toolbar {
   display: flex;
   align-items: center;
@@ -1260,7 +1656,9 @@ function wait(ms: number) {
 
   .two-column-grid,
   .request-debug-grid,
-  .outlined-form-grid {
+  .outlined-form-grid,
+  .ripple-demo-grid,
+  .svg-demo-grid {
     grid-template-columns: 1fr;
   }
 

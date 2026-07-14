@@ -11,6 +11,7 @@ export interface BaseCardProps {
   showHeader?: boolean
   showRight?: boolean
   showTitleMarker?: boolean
+  hideTitleMarker?: boolean
   showExport?: boolean
   exportText?: string
   exportDisabled?: boolean

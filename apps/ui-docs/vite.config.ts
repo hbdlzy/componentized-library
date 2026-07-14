@@ -8,7 +8,8 @@ export default defineConfig({
     alias: {
       '@hbdlzy/tokens': path.resolve(__dirname, '../../packages/tokens/src/index.ts'),
       '@hbdlzy/ui-core': path.resolve(__dirname, '../../packages/ui-core/src/index.ts'),
-      '@hbdlzy/ui-energy': path.resolve(__dirname, '../../packages/ui-energy/src/index.ts')
+      '@hbdlzy/ui-energy': path.resolve(__dirname, '../../packages/ui-energy/src/index.ts'),
+      '@hbdlzy/ui': path.resolve(__dirname, '../../packages/ui/src/index.ts')
     }
   }
 })

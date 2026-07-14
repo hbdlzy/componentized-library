@@ -2,6 +2,12 @@
   "package": "@hbdlzy/ui-core",
   "version": 1,
   "updatedAt": "2026-04-21",
+  "plugin": {
+    "name": "HbdlUICore",
+    "importName": "default",
+    "entry": "@hbdlzy/ui-core",
+    "description": "Vue 插件入口，调用 app.use(HbdlUICore) 可全局注册 ui-core 组件并启用全局点击涟漪。"
+  },
   "components": [
     {
       "name": "BaseTable",
@@ -30,12 +36,13 @@
         },
         {
           "name": "headerSearch",
-          "type": "boolean | { paramKey?: string; placeholder?: string; width?: string | number; searchText?: string; resetText?: string }",
+          "type": "boolean | { type?: 'input' | 'select' | 'cascader' | 'date' | 'daterange' | 'datetime' | 'datetimerange' | 'time' | 'timerange'; paramKey?: string; placeholder?: string; startPlaceholder?: string; endPlaceholder?: string; rangeSeparator?: string; format?: string; valueFormat?: string; width?: string | number; searchText?: string; resetText?: string; options?: BaseTableOption[]; multiple?: boolean; clearable?: boolean; filterable?: boolean; optionChildrenKey?: string }",
           "required": false
         },
         { "name": "hasSelection", "type": "boolean", "default": false },
         { "name": "hasIndex", "type": "boolean", "default": false },
-        { "name": "showPagination", "type": "boolean", "default": true }
+        { "name": "showPagination", "type": "boolean", "default": true },
+        { "name": "paginationPosition", "type": "'top-right' | 'bottom-right'", "default": "top-right" }
       ],
       "emits": ["row-action", "selection-change", "sort-change", "page-change", "size-change", "loaded"]
     },
@@ -51,6 +58,7 @@
         { "name": "metaText", "type": "string", "default": "" },
         { "name": "showHeader", "type": "boolean", "default": true },
         { "name": "showTitleMarker", "type": "boolean", "default": true },
+        { "name": "hideTitleMarker", "type": "boolean", "default": false },
         { "name": "showExport", "type": "boolean", "default": false },
         { "name": "exportPayload", "type": "unknown", "required": false },
         { "name": "padding", "type": "string | number", "default": 20 },
@@ -93,6 +101,21 @@
         { "name": "beforeExport", "type": "() => boolean | Promise<boolean>", "required": false }
       ],
       "emits": ["start", "success", "error"]
+    },
+    {
+      "name": "SvgIcon",
+      "category": "ui-core",
+      "entry": "@hbdlzy/ui-core",
+      "importName": "SvgIcon",
+      "docs": "packages/ui-core/src/components/SvgIcon/README.md",
+      "description": "统一展示 SVG symbol sprite 和外链 SVG 图标，兼容旧项目 icon-class、class-name 写法。",
+      "props": [
+        { "name": "iconClass", "type": "string", "required": true },
+        { "name": "className", "type": "string", "default": "" },
+        { "name": "prefix", "type": "string", "default": "icon" },
+        { "name": "ariaLabel", "type": "string", "default": "" }
+      ],
+      "emits": []
     },
     {
       "name": "OutlinedInput",
@@ -290,11 +313,19 @@
     {
       "name": "installRipple",
       "entry": "@hbdlzy/ui-core",
-      "description": "安装全局按钮 ripple 效果；包入口会自动调用，可用于手动恢复。"
+      "docs": "packages/ui-core/src/ripple/README.md",
+      "description": "安装全局点击涟漪效果；包入口会自动调用，可用于手动恢复。"
+    },
+    {
+      "name": "Ripple",
+      "entry": "@hbdlzy/ui-core",
+      "docs": "packages/ui-core/src/ripple/README.md",
+      "description": "Vue 插件形式的全局点击涟漪能力，可通过 app.use(Ripple) 显式安装。"
     },
     {
       "name": "uninstallRipple",
       "entry": "@hbdlzy/ui-core",
+      "docs": "packages/ui-core/src/ripple/README.md",
       "description": "卸载全局按钮 ripple 事件监听。"
     }
   ]

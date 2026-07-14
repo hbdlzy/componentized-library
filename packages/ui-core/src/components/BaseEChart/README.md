@@ -134,3 +134,36 @@ const gradient = new echarts.graphic.LinearGradient(0, 0, 0, 1, [
 - 页面层只维护 `option`，不要重复写 `echarts.init`
 - 默认走 `BaseEChart + option`，只有确实需要时再通过 `ref` 调暴露方法
 - 渐变色、图形工具优先从 `@hbdlzy/ui-core` 导出的 `echarts` 使用
+
+## AI 使用指引
+
+AI 在生成 ECharts 图表页面时，应优先使用 `BaseEChart`，不要在页面组件里重复写 `echarts.init`、`setOption`、`resize`、`dispose` 和窗口尺寸监听。
+
+推荐优先从统一入口导入：
+
+```ts
+import { BaseEChart, echarts, type EChartOption, type BaseEChartExpose } from '@hbdlzy/ui'
+```
+
+如果当前只安装了核心包，也可以从 `@hbdlzy/ui-core` 导入。
+
+AI 生成代码时按下面顺序判断：
+
+1. 父容器必须给出明确高度，再放入 `<BaseEChart :option="option" />`
+2. 图表配置统一维护在 `option` 或 `computed option` 中
+3. 需要渐变色、图形工具时，使用统一导出的 `echarts`
+4. 需要手动刷新、隐藏 tooltip、派发 action 时，再通过 `ref<BaseEChartExpose>` 调用暴露方法
+5. 后端数据变化时，只更新 `option` 数据，不重新初始化图表实例
+
+AI 不应该做这些事：
+
+- 不要在业务页面直接调用 `echarts.init(dom)`
+- 不要手动注册 `window.resize` 来处理普通图表自适应
+- 不要在页面卸载时重复写 `dispose`，组件已处理
+- 不要把接口请求逻辑放进 `BaseEChart`，页面层负责取数，图表组件只接收 `option`
+
+生成代码前建议同时读取：
+
+- `packages/ui-core/components.manifest.json`
+- `packages/ui-core/src/components/BaseEChart/BaseEChart.types.ts`
+- 本 README 的 `Props / Events / Expose` 部分

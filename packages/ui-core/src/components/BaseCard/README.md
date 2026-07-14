@@ -110,6 +110,7 @@ const handleExport = (payload?: unknown) => {
 - `showHeader`: 是否显示标题区
 - `showRight`: 是否显示右侧容器
 - `showTitleMarker`: 是否显示标题左侧竖杠
+- `hideTitleMarker`: 是否隐藏标题左侧竖杠，隐藏后标题会贴到标题区最前面；优先级高于 `showTitleMarker`
 - `showExport`: 是否显示内置导出按钮
 - `exportText`: 导出按钮文案，默认 `导出`
 - `exportDisabled`: 是否禁用导出按钮
@@ -162,3 +163,36 @@ const handleExport = (payload?: unknown) => {
 - 只要不是强业务容器，就尽量不要在页面层重复写卡片壳子
 - 简单场景直接用 `title + 默认插槽`
 - 需要扩展时优先使用 `title` 和 `header-right` 插槽，而不是复制组件结构
+
+## AI 使用指引
+
+AI 在生成页面时，如果遇到统计块、图表块、列表块、详情块等需要统一外壳的区域，应优先使用 `BaseCard`，不要在页面里重新手写卡片标题、左侧竖杠、右侧时间和导出区域。
+
+推荐优先从统一入口导入：
+
+```ts
+import { BaseCard } from '@hbdlzy/ui'
+```
+
+如果当前只安装了核心包，也可以从 `@hbdlzy/ui-core` 导入。
+
+AI 生成代码时按下面顺序判断：
+
+1. 只有标题和内容时，使用 `title + 默认插槽`
+2. 标题右侧有更新时间、单位、按钮时，优先使用 `metaText`、`header-right` 插槽
+3. 标题旁有单选、筛选、标签时，优先使用 `title` 插槽
+4. 内容顶部有单位提示或说明时，优先使用 `tip` 插槽
+5. 需要导出入口时，优先使用 `showExport + @export`，复杂导出可配合 `BaseExportButton`
+
+AI 不应该做这些事：
+
+- 不要复制 `BaseCard` 的 DOM 和 CSS 到业务页面
+- 不要在每个页面重复实现标题左侧标记、卡片边框、标题区 flex 布局
+- 不要为了一个右侧按钮而重写整个卡片结构，优先用插槽扩展
+- 不要把接口请求、图表初始化、表格逻辑塞进 `BaseCard`，这些能力应由 `BaseEChart`、`BaseTable` 或业务页面负责
+
+生成代码前建议同时读取：
+
+- `packages/ui-core/components.manifest.json`
+- `packages/ui-core/src/components/BaseCard/BaseCard.types.ts`
+- 本 README 的 `Props / Slots / Events` 部分

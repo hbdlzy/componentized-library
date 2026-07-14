@@ -1,6 +1,70 @@
+import type { App, Component, Plugin } from 'vue'
 import { installRipple } from './ripple'
+import BaseCard from './components/BaseCard'
+import BaseTable from './components/BaseTable'
+import BaseEChart from './components/BaseEChart'
+import BaseExportButton from './components/BaseExportButton'
+import SvgIcon from './components/SvgIcon'
+import OutlinedInput from './components/OutlinedInput'
+import OutlinedSelect from './components/OutlinedSelect'
+import OutlinedDatePicker from './components/OutlinedDatePicker'
+import OutlinedDateTimePicker from './components/OutlinedDateTimePicker'
+import OutlinedTimePicker from './components/OutlinedTimePicker'
+import OutlinedCascader from './components/OutlinedCascader'
+import OutlinedTreeSelect from './components/OutlinedTreeSelect'
 
 installRipple()
+
+const componentEntries: Array<[string, Component]> = [
+  ['BaseCard', BaseCard],
+  ['BaseTable', BaseTable],
+  ['BaseEChart', BaseEChart],
+  ['BaseExportButton', BaseExportButton],
+  ['SvgIcon', SvgIcon],
+  ['OutlinedInput', OutlinedInput],
+  ['OutlinedSelect', OutlinedSelect],
+  ['OutlinedDatePicker', OutlinedDatePicker],
+  ['OutlinedDateTimePicker', OutlinedDateTimePicker],
+  ['OutlinedTimePicker', OutlinedTimePicker],
+  ['OutlinedCascader', OutlinedCascader],
+  ['OutlinedTreeSelect', OutlinedTreeSelect]
+]
+
+export const uiCoreComponents = componentEntries.map(([name, component]) => ({
+  name,
+  component
+}))
+
+export function installUiCore(app: App) {
+  componentEntries.forEach(([name, component]) => {
+    app.component(name, component)
+  })
+
+  installRipple(app)
+}
+
+export const HbdlUICore: Plugin = {
+  install: installUiCore
+}
+
+export default HbdlUICore
+
+declare module 'vue' {
+  export interface GlobalComponents {
+    BaseCard: typeof BaseCard
+    BaseTable: typeof BaseTable
+    BaseEChart: typeof BaseEChart
+    BaseExportButton: typeof BaseExportButton
+    SvgIcon: typeof SvgIcon
+    OutlinedInput: typeof OutlinedInput
+    OutlinedSelect: typeof OutlinedSelect
+    OutlinedDatePicker: typeof OutlinedDatePicker
+    OutlinedDateTimePicker: typeof OutlinedDateTimePicker
+    OutlinedTimePicker: typeof OutlinedTimePicker
+    OutlinedCascader: typeof OutlinedCascader
+    OutlinedTreeSelect: typeof OutlinedTreeSelect
+  }
+}
 
 export { echarts } from './echarts'
 export type {
@@ -11,28 +75,31 @@ export type {
   EChartResizeOptions,
   EChartSetOptionOptions
 } from './echarts'
-export { default as BaseCard } from './components/BaseCard'
+export { BaseCard }
 export * from './components/BaseCard'
-export { default as BaseTable } from './components/BaseTable'
+export { BaseTable }
 export * from './components/BaseTable'
-export { default as BaseEChart } from './components/BaseEChart'
+export { BaseEChart }
 export * from './components/BaseEChart'
-export { default as BaseExportButton } from './components/BaseExportButton'
+export { BaseExportButton }
 export * from './components/BaseExportButton'
-export { default as OutlinedInput } from './components/OutlinedInput'
+export { SvgIcon }
+export * from './components/SvgIcon'
+export { OutlinedInput }
 export * from './components/OutlinedInput'
-export { default as OutlinedSelect } from './components/OutlinedSelect'
+export { OutlinedSelect }
 export * from './components/OutlinedSelect'
-export { default as OutlinedDatePicker } from './components/OutlinedDatePicker'
+export { OutlinedDatePicker }
 export * from './components/OutlinedDatePicker'
-export { default as OutlinedDateTimePicker } from './components/OutlinedDateTimePicker'
+export { OutlinedDateTimePicker }
 export * from './components/OutlinedDateTimePicker'
-export { default as OutlinedTimePicker } from './components/OutlinedTimePicker'
+export { OutlinedTimePicker }
 export * from './components/OutlinedTimePicker'
-export { default as OutlinedCascader } from './components/OutlinedCascader'
+export { OutlinedCascader }
 export * from './components/OutlinedCascader'
-export { default as OutlinedTreeSelect } from './components/OutlinedTreeSelect'
+export { OutlinedTreeSelect }
 export * from './components/OutlinedTreeSelect'
 export { exportExcel } from './excel/exportExcel'
 export type { ExcelCellValue, ExcelExportColumn, ExcelExportOptions } from './excel/exportExcel'
-export { installRipple, uninstallRipple } from './ripple'
+export { Ripple, installRipple, uninstallRipple } from './ripple'
+export type { RipplePlugin, RippleTeardown } from './ripple'

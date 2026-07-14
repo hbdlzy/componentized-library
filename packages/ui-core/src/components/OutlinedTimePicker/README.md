@@ -94,3 +94,36 @@ const periodRange = ref<string[]>([])
 - 组件只负责通用时间选择壳子，不直接耦合业务时段规则、起止合法性判断或接口结构
 - 更复杂的业务约束，比如“结束时间必须晚于开始时间”，应由页面层或业务组件负责
 - 如果后续某个业务强依赖固定时段模板，建议在业务包里再封一层，不要反向污染 `ui-core`
+
+## AI 使用指引
+
+AI 在生成时间选择项时，如果页面需要浮动标签、单时间点或时间范围输入，应优先使用 `OutlinedTimePicker`。
+
+推荐优先从统一入口导入：
+
+```ts
+import { OutlinedTimePicker, type OutlinedTimePickerExpose } from '@hbdlzy/ui'
+```
+
+如果当前只安装了核心包，也可以从 `@hbdlzy/ui-core` 导入。
+
+AI 生成代码时按下面顺序判断：
+
+1. 单时间点使用默认单值模式
+2. 起止时间使用 `isRange`，并传 `startPlaceholder`、`endPlaceholder`
+3. 展示格式用 `format`，提交格式用 `valueFormat`
+4. 需要下边框风格，传 `:is-border="true"`
+5. 需要手动打开、关闭、清空时，使用 `ref<OutlinedTimePickerExpose>`
+
+AI 不应该做这些事：
+
+- 不要用两个普通 `el-time-picker` 重复拼时间范围样式
+- 不要在基础组件里写“结束时间必须晚于开始时间”等业务判断
+- 不要把固定时段模板写进 `ui-core`
+- 不要用它处理日期时间组合，日期时间组合用 `OutlinedDateTimePicker`
+
+生成代码前建议同时读取：
+
+- `packages/ui-core/components.manifest.json`
+- `packages/ui-core/src/components/OutlinedTimePicker/OutlinedTimePicker.types.ts`
+- 本 README 的 `Props / Emits / Expose` 部分

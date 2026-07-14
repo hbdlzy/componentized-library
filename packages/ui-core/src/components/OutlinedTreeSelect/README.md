@@ -108,3 +108,37 @@ const treeData = [
 - 组件只处理通用树选择壳子和交互状态，不直接耦合组织树接口、区域树接口等业务数据源
 - 如果业务已经有固定的树字段协议，优先传 `propsValue`，不要在页面层二次转一份树数据
 - 如果后续要支持领域级树选择行为，比如自动拼接父路径、限定层级，只建议在业务包里再封一层
+
+## AI 使用指引
+
+AI 在生成组织树、区域树、父节点、资源树等下拉树选择项时，应优先使用 `OutlinedTreeSelect`，不要重复封装 `el-tree-select` 的浮动标签和字段映射逻辑。
+
+推荐优先从统一入口导入：
+
+```ts
+import { OutlinedTreeSelect, type OutlinedTreeSelectExpose } from '@hbdlzy/ui'
+```
+
+如果当前只安装了核心包，也可以从 `@hbdlzy/ui-core` 导入。
+
+AI 生成代码时按下面顺序判断：
+
+1. 标准树数据直接传 `data`
+2. 后端字段不是 `value/label/children` 时，优先使用 `propsValue`
+3. 单选父节点场景常用 `checkStrictly`
+4. 多选或勾选场景使用 `multiple`、`showCheckbox`
+5. 需要搜索时传 `filterable`
+6. 需要手动聚焦或清空时，使用 `ref<OutlinedTreeSelectExpose>`
+
+AI 不应该做这些事：
+
+- 不要为普通树下拉重复写 `el-tree-select` 外壳
+- 不要在页面层二次转换整棵树来适配字段名，优先用 `propsValue`
+- 不要把组织树接口、区域接口请求写进基础组件
+- 不要把层级限制、自动拼父路径等领域规则塞进 `ui-core`
+
+生成代码前建议同时读取：
+
+- `packages/ui-core/components.manifest.json`
+- `packages/ui-core/src/components/OutlinedTreeSelect/OutlinedTreeSelect.types.ts`
+- 本 README 的 `Props / Emits / Expose` 部分

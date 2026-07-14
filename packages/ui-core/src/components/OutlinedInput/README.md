@@ -155,3 +155,37 @@ const remark = ref('')
 - 新页面优先使用 `v-model:value`
 - 需要浮动标签输入框时优先复用 `OutlinedInput`
 - 数值输入优先使用 `isNumber + regex` 收敛基础校验，不要在页面层重复写相同逻辑
+
+## AI 使用指引
+
+AI 在生成表单输入项时，如果页面需要浮动标签、统一高度、下边框风格或兼容旧项目 `v-model:value`，应优先使用 `OutlinedInput`。
+
+推荐优先从统一入口导入：
+
+```ts
+import { OutlinedInput, type OutlinedInputExpose } from '@hbdlzy/ui'
+```
+
+如果当前只安装了核心包，也可以从 `@hbdlzy/ui-core` 导入。
+
+AI 生成代码时按下面顺序判断：
+
+1. 普通文本输入使用 `v-model:value + placeholder`
+2. 需要浮动标签和占位文案不同，额外传 `label`
+3. 需要下边框风格，传 `:is-border="true"`
+4. 数值输入优先使用 `isNumber + regex + @warning`
+5. textarea 场景传 `type-input="textarea"`，并透传 `autosize`、`resize`、`rows`
+6. 需要手动聚焦、清空、选中文本时，使用 `ref<OutlinedInputExpose>`
+
+AI 不应该做这些事：
+
+- 不要重复手写浮动标签 DOM 和样式
+- 不要在多个页面复制相同的数值正则校验逻辑
+- 不要直接操作内部 `el-input` DOM，优先使用暴露方法
+- 不要为了 `prefix`、`suffix`、`append`、`prepend` 重新封装输入框，优先使用插槽
+
+生成代码前建议同时读取：
+
+- `packages/ui-core/components.manifest.json`
+- `packages/ui-core/src/components/OutlinedInput/OutlinedInput.types.ts`
+- 本 README 的 `Props / Events / Slots / Expose` 部分

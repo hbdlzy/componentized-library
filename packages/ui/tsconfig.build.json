@@ -2,7 +2,15 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "baseUrl": ".",
-    "paths": {},
+    "moduleResolution": "Node16",
+    "paths": {
+      "@hbdlzy/tokens": ["../tokens/dist/index.d.ts"],
+      "@hbdlzy/tokens/*": ["../tokens/dist/*"],
+      "@hbdlzy/ui-core": ["../ui-core/dist/index.d.ts"],
+      "@hbdlzy/ui-core/*": ["../ui-core/dist/*"],
+      "@hbdlzy/ui-energy": ["../ui-energy/dist/index.d.ts"],
+      "@hbdlzy/ui-energy/*": ["../ui-energy/dist/*"]
+    },
     "declaration": true,
     "emitDeclarationOnly": true,
     "declarationMap": false,

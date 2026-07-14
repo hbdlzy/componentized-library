@@ -3,13 +3,42 @@ export type BaseTableAlign = 'left' | 'center' | 'right'
 export type BaseTableColumnKind = 'text' | 'link' | 'actions' | 'image' | 'tag' | 'html' | 'input'
 export type BaseTableSortOrder = 'ascending' | 'descending' | null
 export type BaseTableSortDirection = string | null
+export type BaseTableHeaderSearchType =
+  | 'input'
+  | 'select'
+  | 'cascader'
+  | 'date'
+  | 'daterange'
+  | 'datetime'
+  | 'datetimerange'
+  | 'time'
+  | 'timerange'
+export type BaseTableHeaderSearchPrimitiveValue = string | number | boolean
+export type BaseTableHeaderSearchPathValue = BaseTableHeaderSearchPrimitiveValue[]
+export type BaseTableHeaderSearchValue =
+  | BaseTableHeaderSearchPrimitiveValue
+  | BaseTableHeaderSearchPrimitiveValue[]
 
 export interface BaseTableHeaderSearchConfig {
+  type?: BaseTableHeaderSearchType
   paramKey?: string
   placeholder?: string
+  startPlaceholder?: string
+  endPlaceholder?: string
+  rangeSeparator?: string
+  format?: string
+  valueFormat?: string
   width?: BaseTableCssValue
   searchText?: string
   resetText?: string
+  options?: BaseTableOption[]
+  multiple?: boolean
+  clearable?: boolean
+  filterable?: boolean
+  optionValueKey?: string
+  optionLabelKey?: string
+  optionDisabledKey?: string
+  optionChildrenKey?: string
 }
 
 export interface BaseTableOption {
@@ -17,6 +46,8 @@ export interface BaseTableOption {
   value: string | number | boolean
   tagType?: '' | 'success' | 'warning' | 'info' | 'danger' | 'primary'
   color?: string
+  disabled?: boolean
+  children?: BaseTableOption[]
 }
 
 export interface BaseTableAction<Row = Record<string, any>> {
@@ -68,6 +99,8 @@ export interface BaseTablePagination {
   total: number
   pageSizes: number[]
 }
+
+export type BaseTablePaginationPosition = 'top-right' | 'bottom-right'
 
 export interface BaseTableRequestParams {
   currentPage: number
@@ -134,6 +167,7 @@ export interface BaseTableProps<Row = Record<string, any>> {
   selectionWidth?: BaseTableCssValue
   rowSelectable?: (row: Row, index: number) => boolean
   pagination?: Partial<BaseTablePagination>
+  paginationPosition?: BaseTablePaginationPosition
   currentPageKey?: string
   pageSizeKey?: string
   defaultSort?: BaseTableSortState
@@ -176,9 +210,9 @@ export interface BaseTableExpose<Row = Record<string, any>> {
   refresh: () => Promise<void>
   setData: (data: Row[]) => void
   resetPage: () => Promise<void>
-  setHeaderSearchValue: (key: string, value: string, shouldReload?: boolean) => Promise<void>
+  setHeaderSearchValue: (key: string, value: BaseTableHeaderSearchValue, shouldReload?: boolean) => Promise<void>
   resetHeaderSearch: (key?: string) => Promise<void>
-  getHeaderSearchValues: () => Record<string, string>
+  getHeaderSearchValues: () => Record<string, BaseTableHeaderSearchValue>
   clearSelection: () => void
   toggleRowSelection: (row: Row, selected?: boolean) => void
   getSelectionRows: () => Row[]

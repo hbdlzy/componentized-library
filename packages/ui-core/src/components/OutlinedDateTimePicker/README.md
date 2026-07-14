@@ -89,3 +89,36 @@ const openDatePanel = () => {
 - 组件内部只处理输入壳子、标签浮层、日期禁用和时间联动，不直接耦合接口、表单校验器或业务规则
 - 如果只选了日期但没有选时间，组件会在日期确认时自动补一个当前 `HH:mm`
 - 页面层如果需要更复杂的日期时间协议，建议继续在外层包业务组件，不要把业务判断塞回 `ui-core`
+
+## AI 使用指引
+
+AI 在生成“日期 + 时间”组合输入时，应优先使用 `OutlinedDateTimePicker`，不要在页面里重复拼两个控件、同步两个值和处理面板状态。
+
+推荐优先从统一入口导入：
+
+```ts
+import { OutlinedDateTimePicker, type OutlinedDateTimePickerExpose } from '@hbdlzy/ui'
+```
+
+如果当前只安装了核心包，也可以从 `@hbdlzy/ui-core` 导入。
+
+AI 生成代码时按下面顺序判断：
+
+1. 需要一个字符串值 `YYYY-MM-DD HH:mm` 时使用本组件
+2. 日期文案用 `placeholder`，时间文案用 `timePlaceholder`
+3. 需要限制今天之前不可选时，使用 `:disabled-date="'nowDate'"`
+4. 需要清空时传 `clearable`
+5. 需要手动打开日期或时间面板时，使用 `ref<OutlinedDateTimePickerExpose>`
+
+AI 不应该做这些事：
+
+- 不要在页面里手写两个独立控件再拼接字符串
+- 不要重复实现“选日期后自动补当前时间”的逻辑
+- 不要把复杂业务日期协议塞进基础组件，必要时在业务包再封一层
+- 不要用它替代纯日期或纯时间控件，纯日期用 `OutlinedDatePicker`，纯时间用 `OutlinedTimePicker`
+
+生成代码前建议同时读取：
+
+- `packages/ui-core/components.manifest.json`
+- `packages/ui-core/src/components/OutlinedDateTimePicker/OutlinedDateTimePicker.types.ts`
+- 本 README 的 `Props / Emits / Expose` 部分

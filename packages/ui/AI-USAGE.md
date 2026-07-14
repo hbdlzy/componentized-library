@@ -35,6 +35,7 @@ node_modules/@hbdlzy/ui/AI-USAGE.md
   - `BaseCard`
   - `BaseEChart`
   - `BaseExportButton`
+  - `SvgIcon`
   - `OutlinedInput`
   - `OutlinedSelect`
   - `OutlinedDatePicker`
@@ -45,12 +46,22 @@ node_modules/@hbdlzy/ui/AI-USAGE.md
   - `echarts`
   - `exportExcel`
   - `companyTokens`
-  - 全局按钮 ripple 已随 `@hbdlzy/ui` 入口自动启用，局部关闭可添加 `data-hbdl-ripple="false"`
+  - `Ripple`
+  - 全局点击涟漪已随 `@hbdlzy/ui` 入口自动启用，局部关闭可添加 `data-hbdl-ripple="false"`
 - 只有当现有组件无法满足需求时，才考虑新增公共组件
 
 ## 导入约定
 
-优先统一从 `@hbdlzy/ui` 导入：
+应用入口优先全局安装：
+
+```ts
+import HbdlUI from '@hbdlzy/ui'
+import '@hbdlzy/ui/style.css'
+
+createApp(App).use(HbdlUI).mount('#app')
+```
+
+页面里需要类型、工具或局部注册时，优先统一从 `@hbdlzy/ui` 导入：
 
 ```ts
 import {
@@ -58,6 +69,7 @@ import {
   BaseCard,
   BaseEChart,
   BaseExportButton,
+  SvgIcon,
   OutlinedInput,
   OutlinedSelect,
   OutlinedDatePicker,
@@ -65,11 +77,18 @@ import {
   OutlinedTimePicker,
   OutlinedCascader,
   OutlinedTreeSelect,
+  Ripple,
   installRipple,
   uninstallRipple,
   companyTokens,
   echarts
 } from '@hbdlzy/ui'
+```
+
+只接入点击涟漪时，也可以使用细粒度入口：
+
+```ts
+import { Ripple, installRipple, uninstallRipple } from '@hbdlzy/ui/ripple'
 ```
 
 ## 复用规则
@@ -78,6 +97,7 @@ import {
 - 不要在页面里重复写 ECharts 初始化、resize、dispose 逻辑，优先使用 `BaseEChart`
 - 不要在页面里重复写卡片外层容器、标题区、右侧时间和导出触发区，优先使用 `BaseCard`
 - 不要在页面里重复写导出按钮 loading、成功失败提示和文件下载逻辑，优先使用 `BaseExportButton`
+- 不要在页面里重复写 SVG symbol 或外链 SVG 图标展示壳子，优先使用 `SvgIcon`
 - 不要在页面里重复写浮动标签输入框、数值基础校验和输入框实例方法暴露逻辑，优先使用 `OutlinedInput`
 - 不要在页面里重复写基础下拉的浮动标签、选项映射和焦点态逻辑，优先使用 `OutlinedSelect`
 - 不要在页面里重复写基础日期控件的浮动标签、禁用日期和焦点态逻辑，优先使用 `OutlinedDatePicker`
@@ -87,6 +107,7 @@ import {
 - 不要在页面里重复写树形下拉选择的字段映射、浮动标签和清空逻辑，优先使用 `OutlinedTreeSelect`
 - 需要渐变色、图形工具时，优先使用统一导出的 `echarts`
 - 需要主题变量时，优先使用 `companyTokens`
+- 需要全局点击反馈时，优先使用已内置的 `Ripple` / `installRipple`，不要重复写 `v-ripple` 指令或按钮动画 DOM
 
 ## 维护组件库时
 

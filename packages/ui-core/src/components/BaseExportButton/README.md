@@ -119,3 +119,37 @@ const requestHandler = async () => {
 ## 相关能力
 
 - 工具函数：`@hbdlzy/ui-core` 中的 `exportExcel`
+
+## AI 使用指引
+
+AI 在生成导出入口时，应优先使用 `BaseExportButton` 或 `exportExcel`，不要在每个页面重复写导出按钮 loading、二进制下载、成功失败提示和前端 Excel 生成逻辑。
+
+推荐优先从统一入口导入：
+
+```ts
+import { BaseExportButton, type ExcelExportOptions } from '@hbdlzy/ui'
+```
+
+如果当前只安装了核心包，也可以从 `@hbdlzy/ui-core` 导入。
+
+AI 生成代码时按下面顺序判断：
+
+1. 前端已有完整表格数据时，优先使用 `excelOptions`
+2. 后端返回文件流时，优先使用 `requestHandler + fileName`
+3. 导出前需要校验筛选条件时，使用 `beforeExport`
+4. 页面需要感知结果时，监听 `start`、`success`、`error`
+5. 只需要工具函数而不是按钮时，直接使用 `exportExcel`
+
+AI 不应该做这些事：
+
+- 不要同时传 `excelOptions` 和 `requestHandler`
+- 不要在页面里重复写 `Blob`、`URL.createObjectURL`、临时 `a` 标签下载逻辑
+- 不要在多个页面复制同一套导出 loading 和消息提示
+- 不要把业务查询流程塞进组件，查询参数应由页面层准备好后再触发导出
+
+生成代码前建议同时读取：
+
+- `packages/ui-core/components.manifest.json`
+- `packages/ui-core/src/components/BaseExportButton/BaseExportButton.types.ts`
+- `packages/ui-core/src/excel/exportExcel.ts`
+- 本 README 的 `Props / Events / 约束` 部分

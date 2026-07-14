@@ -1,3 +1,5 @@
+import type { App } from 'vue'
+
 const HBDL_RIPPLE_KEY = '__HBDL_UI_RIPPLE__'
 const RIPPLE_STYLE_ID = 'hbdl-ui-ripple-style'
 const RIPPLE_HOST_CLASS = 'hbdl-ripple-host'
@@ -74,7 +76,13 @@ type RippleWindow = Window & {
 
 const noop = () => undefined
 
-export function installRipple() {
+export type RippleTeardown = () => void
+
+export interface RipplePlugin {
+  install: (app?: App) => RippleTeardown
+}
+
+export function installRipple(_app?: App): RippleTeardown {
   if (!canUseDOM()) {
     return noop
   }
@@ -111,6 +119,12 @@ export function uninstallRipple() {
   const rippleWindow = window as RippleWindow
   rippleWindow[HBDL_RIPPLE_KEY]?.teardown()
 }
+
+export const Ripple: RipplePlugin = {
+  install: installRipple
+}
+
+export default Ripple
 
 function canUseDOM() {
   return typeof window !== 'undefined' && typeof document !== 'undefined'

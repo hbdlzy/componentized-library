@@ -92,3 +92,37 @@ const areaOptions = [
 - 组件只负责通用级联选择壳子和交互状态，不直接耦合区域接口、组织树接口等业务数据源
 - 页面层如果需要多选级联、懒加载或复杂回填逻辑，优先先通过 `propsValue` 和插值配置解决
 - 如果业务需要固定某种树结构，可以在业务包里再封一层领域组件，而不是反向污染 `ui-core`
+
+## AI 使用指引
+
+AI 在生成区域、组织、站点、分类等级联选择项时，应优先使用 `OutlinedCascader`，不要重复封装 `el-cascader` 的浮动标签、面板显隐和清空逻辑。
+
+推荐优先从统一入口导入：
+
+```ts
+import { OutlinedCascader, type OutlinedCascaderExpose } from '@hbdlzy/ui'
+```
+
+如果当前只安装了核心包，也可以从 `@hbdlzy/ui-core` 导入。
+
+AI 生成代码时按下面顺序判断：
+
+1. 选项为标准 `label/value/children` 时直接传 `options`
+2. 后端字段不同，优先通过 `propsValue` 映射，不要先复制转换一份树
+3. 需要搜索时传 `filterable`
+4. 需要展示完整路径时保持 `levels` 为 `true`
+5. 需要下边框风格，传 `:is-border="true"`
+6. 需要手动打开、关闭、清空时，使用 `ref<OutlinedCascaderExpose>`
+
+AI 不应该做这些事：
+
+- 不要为普通级联选择重复写 `el-cascader` 外壳
+- 不要把区域接口、组织接口请求逻辑写进基础组件
+- 不要为了字段映射在页面层重复转换大树，优先使用 `propsValue`
+- 不要把业务固定层级、路径拼接规则塞回 `ui-core`
+
+生成代码前建议同时读取：
+
+- `packages/ui-core/components.manifest.json`
+- `packages/ui-core/src/components/OutlinedCascader/OutlinedCascader.types.ts`
+- 本 README 的 `Props / Emits / Expose` 部分

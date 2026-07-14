@@ -138,3 +138,37 @@ const form = reactive({
 - 普通日期和日期时间选择器优先使用 `OutlinedDatePicker`
 - 默认通过 `typeDate + format` 收敛常见场景
 - 自定义日期禁用规则优先使用 `disabledDate`，不要在页面层重复封装相同逻辑
+
+## AI 使用指引
+
+AI 在生成日期选择项时，如果页面需要浮动标签、统一高度、日期禁用规则或兼容旧项目 `v-model:value`，应优先使用 `OutlinedDatePicker`。
+
+推荐优先从统一入口导入：
+
+```ts
+import { OutlinedDatePicker, type OutlinedDatePickerExpose } from '@hbdlzy/ui'
+```
+
+如果当前只安装了核心包，也可以从 `@hbdlzy/ui-core` 导入。
+
+AI 生成代码时按下面顺序判断：
+
+1. 普通日期使用 `type-date="date"` 和默认 `YYYY-MM-DD`
+2. 日期时间使用 `type-date="datetime"`，同步设置 `format` 和必要的 `valueFormat`
+3. 日期范围继续透传 Element Plus 原生 `type` 能力时，要确认 `value` 类型为数组
+4. 禁止选择今天之前的日期时，优先使用 `:disabled-date="'nowDate'"`
+5. 更复杂禁用规则传函数，不要在页面里包一层重复组件
+6. 需要手动打开或关闭面板时，使用 `ref<OutlinedDatePickerExpose>`
+
+AI 不应该做这些事：
+
+- 不要重新封装基础 `el-date-picker` 只为实现浮动标签
+- 不要在多个页面复制相同的禁用日期判断
+- 不要混用 `format` 和 `valueFormat` 导致展示值、提交值不一致
+- 不要把业务接口逻辑塞进日期组件
+
+生成代码前建议同时读取：
+
+- `packages/ui-core/components.manifest.json`
+- `packages/ui-core/src/components/OutlinedDatePicker/OutlinedDatePicker.types.ts`
+- 本 README 的 `Props / Events / Expose / 透传规则` 部分

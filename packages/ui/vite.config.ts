@@ -18,7 +18,10 @@ export default defineConfig({
         '@hbdlzy/tokens',
         '@hbdlzy/ui-core',
         '@hbdlzy/ui-energy'
-      ]
+      ],
+      output: {
+        exports: 'named'
+      }
     }
   }
 })

@@ -1,6 +1,6 @@
 {
   "name": "@hbdlzy/ui",
-  "version": "0.1.7",
+  "version": "0.1.11",
   "entry": "@hbdlzy/ui",
   "readme": "README.md",
   "aiGuide": "AI-USAGE.md",
@@ -11,6 +11,12 @@
     "@hbdlzy/ui-energy"
   ],
   "description": "Unified install entry for company UI packages.",
+  "plugin": {
+    "name": "HbdlUI",
+    "importName": "default",
+    "entry": "@hbdlzy/ui",
+    "description": "Vue 插件入口，调用 app.use(HbdlUI) 可全局注册当前组件库已有组件并启用全局点击涟漪。"
+  },
   "exports": {
     "components": [
       {
@@ -36,6 +42,12 @@
         "from": "@hbdlzy/ui-core",
         "importName": "BaseExportButton",
         "docs": "../ui-core/src/components/BaseExportButton/README.md"
+      },
+      {
+        "name": "SvgIcon",
+        "from": "@hbdlzy/ui-core",
+        "importName": "SvgIcon",
+        "docs": "../ui-core/src/components/SvgIcon/README.md"
       },
       {
         "name": "OutlinedInput",
@@ -100,16 +112,22 @@
         "docs": "../tokens/README.md"
       },
       {
+        "name": "Ripple",
+        "from": "@hbdlzy/ui-core",
+        "importName": "Ripple",
+        "docs": "../ui-core/src/ripple/README.md"
+      },
+      {
         "name": "installRipple",
         "from": "@hbdlzy/ui-core",
         "importName": "installRipple",
-        "docs": "../ui-core/README.md"
+        "docs": "../ui-core/src/ripple/README.md"
       },
       {
         "name": "uninstallRipple",
         "from": "@hbdlzy/ui-core",
         "importName": "uninstallRipple",
-        "docs": "../ui-core/README.md"
+        "docs": "../ui-core/src/ripple/README.md"
       }
     ]
   },
@@ -136,10 +154,12 @@
     "AI-USAGE.md",
     "../ui-core/components.manifest.json",
     "../ui-core/README.md",
+    "../ui-core/src/ripple/README.md",
     "../ui-core/src/components/BaseTable/README.md",
     "../ui-core/src/components/BaseCard/README.md",
     "../ui-core/src/components/BaseEChart/README.md",
     "../ui-core/src/components/BaseExportButton/README.md",
+    "../ui-core/src/components/SvgIcon/README.md",
     "../ui-core/src/components/OutlinedInput/README.md",
     "../ui-core/src/components/OutlinedSelect/README.md",
     "../ui-core/src/components/OutlinedDatePicker/README.md",

@@ -167,3 +167,37 @@ const tagOptions = [
 - 新页面优先使用 `v-model:value`
 - 常规下拉优先传 `options`
 - 只有需要复杂远程搜索或强定制选项时，才考虑使用 `default` 插槽完全接管
+
+## AI 使用指引
+
+AI 在生成基础下拉选择项时，如果页面需要浮动标签、统一高度、选项字段映射或兼容旧项目 `v-model:value`，应优先使用 `OutlinedSelect`。
+
+推荐优先从统一入口导入：
+
+```ts
+import { OutlinedSelect, type OutlinedSelectExpose, type OutlinedSelectOption } from '@hbdlzy/ui'
+```
+
+如果当前只安装了核心包，也可以从 `@hbdlzy/ui-core` 导入。
+
+AI 生成代码时按下面顺序判断：
+
+1. 常规下拉使用 `options: [{ label, value }]`
+2. 后端字段不是 `label/value` 时，使用 `keyValue`、`labelValue`
+3. 多选时传 `multiple`，需要收起标签时传 `collapseTags`
+4. 需要搜索时使用默认 `filterable`，需要关闭时显式传 `:filterable="false"`
+5. 需要下边框风格，传 `:is-border="true"`
+6. 需要完全自定义选项内容时，再使用默认插槽
+
+AI 不应该做这些事：
+
+- 不要为普通下拉重复写一组 `el-select + el-option`
+- 不要为了字段映射先在页面层复制转换一份 options，优先用 `keyValue`、`labelValue`
+- 不要手写浮动标签和面板展开状态逻辑
+- 不要把强业务远程搜索逻辑塞进基础组件，应在页面层准备数据或使用透传属性
+
+生成代码前建议同时读取：
+
+- `packages/ui-core/components.manifest.json`
+- `packages/ui-core/src/components/OutlinedSelect/OutlinedSelect.types.ts`
+- 本 README 的 `Props / Events / Slots / Expose` 部分
